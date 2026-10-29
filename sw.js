@@ -1,4 +1,4 @@
-/* WithYou offline shell. Map tiles and external walking directions need an internet connection. */
+/* carey offline shell. Map tiles and external walking directions need an internet connection. */
 const CACHE_NAME = 'withyou-shell-v1';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [

@@ -1,7 +1,7 @@
 {
-  "name": "WithYou — A little help, right when you need it",
-  "short_name": "WithYou",
-  "description": "A calm, friendly daily companion for memories, reminders, people and directions home.",
+  "name": "carey — A little help, right when you need it",
+  "short_name": "carey",
+  "description": "A calm, friendly daily companion for familiar people, moments, medicines, reminders and directions home.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

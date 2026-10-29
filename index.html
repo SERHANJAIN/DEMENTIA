@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#243b53">
-  <meta name="description" content="WithYou is a calm, friendly daily companion for memories, reminders, people and directions home.">
+  <meta name="description" content="carey is a calm, friendly daily companion for memories, reminders, people and directions home.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="WithYou">
+  <meta name="apple-mobile-web-app-title" content="carey">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>WithYou — A little help, right when you need it</title>
+  <title>carey — A little help, right when you need it</title>
   <style>
     :root {
       --navy: #243b53;
@@ -32,46 +32,49 @@
       --danger: #9b302b;
       --shadow: 0 4px 18px rgba(36,59,83,.08);
       --radius: 20px;
-      --tap: 58px;
+      --tap: 50px;
+      --daily-background: linear-gradient(145deg, #f5f6ee 0%, #e8f0eb 52%, #f9eee5 100%);
     }
     * { box-sizing: border-box; }
     html { background: var(--paper); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body { margin: 0; color: var(--ink); font-family: "Atkinson Hyperlegible", "Trebuchet MS", Verdana, Arial, sans-serif; font-size: 18px; line-height: 1.5; background: var(--paper); min-height: 100vh; }
+    body { margin: 0; color: var(--ink); font-family: "Atkinson Hyperlegible", "Trebuchet MS", Verdana, Arial, sans-serif; font-size: 16px; line-height: 1.42; background: var(--daily-background); background-attachment: fixed; min-height: 100vh; transition: background 500ms ease; }
     button, input, textarea, select { font: inherit; }
     button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
     button { cursor: pointer; }
     a { color: var(--navy); }
     :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-    .shell { max-width: 780px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
-    .topbar { padding: max(14px, env(safe-area-inset-top)) 18px 14px; background: var(--paper); display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid rgba(36,59,83,.08); position: sticky; top: 0; z-index: 20; }
+    .shell { max-width: 780px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: transparent; }
+    .topbar { padding: max(8px, env(safe-area-inset-top)) 12px 8px; background: rgba(248,247,242,.9); backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid rgba(36,59,83,.08); position: sticky; top: 0; z-index: 20; }
     .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .brand-mark { width: 46px; height: 46px; flex: 0 0 46px; display: grid; place-items: center; border-radius: 15px; background: var(--navy); color: white; }
-    .brand-name { font-size: 23px; line-height: 1.12; font-weight: 800; letter-spacing: -.4px; }
-    .brand-tagline { font-size: 13px; color: var(--muted); line-height: 1.25; margin-top: 3px; }
+    .brand-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 13px; background: var(--navy); color: white; }
+    .brand-name { font-size: 22px; line-height: 1.12; font-weight: 800; letter-spacing: -.35px; }
+    .brand-tagline { font-size: 12px; color: var(--muted); line-height: 1.25; margin-top: 2px; }
     .top-actions { display: flex; align-items: center; gap: 8px; }
-    .icon-button { min-width: 48px; min-height: 48px; border: 1px solid var(--line); border-radius: 15px; background: var(--white); color: var(--navy); display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; font-weight: 700; }
-    main { flex: 1; padding: 22px 18px calc(34px + env(safe-area-inset-bottom)); }
+    .icon-button { min-width: 42px; min-height: 42px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); color: var(--navy); display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 7px 10px; font-weight: 700; }
+    .speaker-button { width: 40px; height: 40px; flex: 0 0 40px; padding: 0; border: 1px solid rgba(36,59,83,.14); border-radius: 50%; background: #fff; color: var(--navy); display: inline-grid; place-items: center; box-shadow: 0 2px 8px rgba(36,59,83,.06); }
+    .speaker-button:active { transform: scale(.96); }
+    main { flex: 1; padding: 14px 12px calc(24px + env(safe-area-inset-bottom)); }
     .eyebrow { color: var(--sage-deep); text-transform: uppercase; font-weight: 800; font-size: 13px; letter-spacing: .09em; margin: 0 0 6px; }
     h1, h2, h3, p { margin-top: 0; }
-    h1 { font-size: clamp(29px, 6vw, 38px); line-height: 1.14; letter-spacing: -.6px; margin-bottom: 10px; font-weight: 800; }
-    h2 { font-size: 25px; line-height: 1.2; margin-bottom: 8px; letter-spacing: -.3px; }
-    h3 { font-size: 20px; line-height: 1.25; margin-bottom: 7px; }
-    p { margin-bottom: 14px; }
+    h1 { font-size: clamp(25px, 5.5vw, 34px); line-height: 1.12; letter-spacing: -.45px; margin-bottom: 7px; font-weight: 800; }
+    h2 { font-size: 21px; line-height: 1.2; margin-bottom: 7px; letter-spacing: -.25px; }
+    h3 { font-size: 17px; line-height: 1.24; margin-bottom: 5px; }
+    p { margin-bottom: 10px; }
     .muted { color: var(--muted); }
-    .small { font-size: 15px; }
-    .lead { font-size: 20px; color: #465969; }
-    .view-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+    .small { font-size: 13px; }
+    .lead { font-size: 16px; color: #465969; }
+    .view-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
     .view-head .head-copy { min-width: 0; }
-    .back-button { display: inline-flex; align-items: center; gap: 7px; background: transparent; border: 0; color: var(--navy); font-weight: 800; min-height: 44px; padding: 4px 0 12px; margin-bottom: 8px; }
-    .home-intro { padding: 5px 0 22px; }
+    .back-button { display: inline-flex; align-items: center; gap: 7px; background: transparent; border: 0; color: var(--navy); font-weight: 800; min-height: 38px; padding: 2px 0 8px; margin-bottom: 5px; }
+    .home-intro { padding: 2px 0 10px; }
     .home-intro h1 { max-width: 570px; }
     .home-intro .lead { max-width: 600px; margin-bottom: 0; }
-    .home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
-    .home-card { min-height: 132px; border: 1px solid rgba(36,59,83,.08); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left; color: var(--ink); box-shadow: var(--shadow); gap: 12px; transition: transform .12s ease, box-shadow .12s ease; }
+    .home-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .home-card { min-height: 78px; border: 1px solid rgba(36,59,83,.08); border-radius: 15px; padding: 8px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--ink); box-shadow: 0 2px 8px rgba(36,59,83,.055); gap: 5px; transition: transform .12s ease, box-shadow .12s ease; }
     .home-card:active { transform: scale(.985); box-shadow: none; }
-    .home-card .card-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 16px; }
-    .home-card .card-label { font-size: 19px; line-height: 1.22; font-weight: 800; display: block; }
-    .home-card .card-sub { display: block; font-size: 14px; line-height: 1.35; color: #4f5f6b; margin-top: 5px; font-weight: 500; }
+    .home-card .card-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 11px; }
+    .home-card .card-label { font-size: 13px; line-height: 1.18; font-weight: 800; display: block; }
+    .home-card .card-sub { display: none; }
     .tone-navy { background: var(--navy-soft); }
     .tone-navy .card-icon { background: var(--navy); color: #fff; }
     .tone-sage { background: #e8f0e7; }
@@ -87,7 +90,7 @@
     .notice { display: flex; align-items: flex-start; gap: 12px; padding: 15px 16px; border-radius: 17px; background: #eef2f4; margin: 20px 0; }
     .notice-icon { color: var(--navy); margin-top: 2px; flex: 0 0 auto; }
     .notice p:last-child { margin-bottom: 0; }
-    .panel { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin: 14px 0; box-shadow: 0 2px 8px rgba(36,59,83,.035); }
+    .panel { background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 17px; padding: 14px; margin: 10px 0; box-shadow: 0 2px 8px rgba(36,59,83,.035); }
     .panel.soft-sage { background: #edf4ec; border-color: #d8e6d6; }
     .panel.soft-peach { background: #fbefe7; border-color: #f2ddd0; }
     .panel.soft-teal { background: #e9f4f2; border-color: #d1e7e2; }
@@ -112,8 +115,8 @@
     .form-actions { margin-top: 20px; }
     .empty { padding: 25px 18px; text-align: center; border: 2px dashed #d5dee2; border-radius: var(--radius); background: rgba(255,255,255,.55); }
     .empty .empty-icon { display: inline-grid; place-items: center; width: 55px; height: 55px; background: var(--teal); border-radius: 18px; color: var(--teal-deep); margin-bottom: 12px; }
-    .item-list { display: flex; flex-direction: column; gap: 12px; }
-    .item { background: white; border: 1px solid var(--line); border-radius: 17px; padding: 15px; display: flex; gap: 13px; align-items: flex-start; }
+    .item-list { display: flex; flex-direction: column; gap: 9px; }
+    .item { background: rgba(255,255,255,.96); border: 1px solid var(--line); border-radius: 15px; padding: 11px; display: flex; gap: 10px; align-items: flex-start; }
     .item .item-main { min-width: 0; flex: 1; }
     .item .item-actions { display: flex; flex-direction: column; gap: 7px; min-width: 88px; }
     .item h3 { overflow-wrap: anywhere; }
@@ -156,37 +159,90 @@
     .check-label { display: flex; align-items: flex-start; gap: 10px; font-size: 16px; }
     .check-label input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--sage-deep); }
     .small-link { display: inline-flex; min-height: 44px; align-items: center; color: var(--navy); font-weight: 800; }
-    .summary-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
-    .summary-cell { background: white; border: 1px solid var(--line); border-radius: 15px; padding: 14px; }
+    .summary-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+    .summary-cell { background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 13px; padding: 10px; }
     .summary-number { font-size: 27px; font-weight: 800; color: var(--navy); display: block; }
     .summary-label { font-size: 14px; color: var(--muted); }
-    .install-banner { margin-top: 22px; }
+    .identity-home { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .identity-copy { flex: 1; min-width: 0; }
+    .identity-copy .eyebrow { margin-bottom: 2px; font-size: 11px; }
+    .identity-copy h1 { font-size: clamp(23px, 5vw, 31px); margin-bottom: 3px; }
+    .identity-details { font-size: 12px; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+    .identity-link { background: transparent; border: 0; border-bottom: 1px solid rgba(36,59,83,.35); color: var(--navy); font-size: 12px; font-weight: 800; padding: 2px 0; margin-top: 3px; }
+    .companion-avatar { width: 66px; height: 66px; flex: 0 0 66px; display: inline-block; border-radius: 50%; overflow: hidden; background: #e3efeb; box-shadow: 0 3px 12px rgba(36,59,83,.1); }
+    .companion-avatar.large { width: 90px; height: 90px; flex-basis: 90px; }
+    .companion-avatar.small-avatar { width: 44px; height: 44px; flex-basis: 44px; }
+    .avatar-bob { animation: gentleBob 4s ease-in-out infinite; transform-origin: center; }
+    .avatar-eye { transform-box: fill-box; transform-origin: center; animation: gentleBlink 5.2s ease-in-out infinite; }
+    @keyframes gentleBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1.7px); } }
+    @keyframes gentleBlink { 0%, 91%, 95%, 100% { transform: scaleY(1); } 93% { transform: scaleY(.12); } }
+    .companion-options { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin: 12px 0; }
+    .companion-choice { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 8px; border: 2px solid #dbe3e9; background: rgba(255,255,255,.92); border-radius: 15px; cursor: pointer; color: var(--ink); text-align: center; }
+    .companion-choice:has(input:checked) { border-color: var(--teal-deep); background: #e9f4f2; box-shadow: 0 0 0 2px rgba(40,107,108,.1); }
+    .companion-choice input { position: absolute; top: 8px; left: 8px; width: 18px; height: 18px; accent-color: var(--teal-deep); }
+    .companion-choice strong { font-size: 15px; }
+    .today-priority { background: rgba(255,255,255,.76); border: 1px solid rgba(36,59,83,.1); border-radius: 17px; padding: 10px; margin: 8px 0 11px; box-shadow: 0 3px 12px rgba(36,59,83,.04); }
+    .today-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .today-heading h2 { margin: 0; font-size: 18px; }
+    .today-heading .date-small { font-size: 11px; color: var(--muted); }
+    .today-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+    .today-list { background: rgba(248,247,242,.78); border-radius: 12px; padding: 7px; min-width: 0; }
+    .today-list-title { display: flex; align-items: center; gap: 5px; color: var(--navy); font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+    .today-item { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 5px 0; border-top: 1px solid rgba(36,59,83,.08); }
+    .today-item:first-of-type { border-top: 0; }
+    .today-item-copy { min-width: 0; flex: 1; }
+    .today-item-name { font-size: 12px; line-height: 1.2; font-weight: 800; overflow-wrap: anywhere; margin: 0; }
+    .today-item-meta { font-size: 11px; color: var(--muted); line-height: 1.2; margin-top: 2px; }
+    .today-check { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 10px; border: 1px solid #b9cfc0; background: #e8f0e7; color: #426b54; display: grid; place-items: center; padding: 0; }
+    .today-check.done { background: #426b54; color: white; }
+    .today-footer { display: flex; gap: 8px; margin-top: 6px; }
+    .today-footer button { background: transparent; border: 0; padding: 3px 0; font-size: 11px; font-weight: 800; color: var(--navy); }
+    .guardian-strip { width: 100%; min-height: 46px; display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 14px; border: 1px solid #d0e3d1; background: #e8f0e7; color: #294f38; text-decoration: none; font-weight: 800; margin: 8px 0; }
+    .guardian-strip .guardian-copy { flex: 1; min-width: 0; }
+    .guardian-strip .guardian-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #4b6b56; }
+    .guardian-strip .guardian-name { display: block; font-size: 14px; line-height: 1.2; overflow-wrap: anywhere; }
+    .guardian-strip .guardian-number { display: block; font-size: 11px; font-weight: 500; }
+    .moments-gallery { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+    .moment-tile { overflow: hidden; padding: 0; border: 1px solid rgba(36,59,83,.12); border-radius: 15px; background: rgba(255,255,255,.96); box-shadow: 0 2px 8px rgba(36,59,83,.05); min-width: 0; }
+    .moment-image { display: block; width: 100%; aspect-ratio: 1 / .82; object-fit: cover; background: #e4efeb; }
+    .moment-image-placeholder { display: grid; place-items: center; width: 100%; aspect-ratio: 1/.82; background: linear-gradient(140deg,#e2efea,#f9e6d8); color: #426b54; }
+    .moment-copy { padding: 9px; }
+    .moment-title { font-size: 14px; line-height: 1.2; font-weight: 800; margin: 0 0 4px; overflow-wrap: anywhere; }
+    .moment-note { font-size: 12px; color: var(--muted); line-height: 1.3; margin: 0 0 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; }
+    .moment-actions { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .moment-actions .speaker-button { width: 34px; height: 34px; flex-basis: 34px; }
+    .home-section-label { font-size: 12px; color: var(--muted); margin: 4px 0 2px; }
+    .settings-choice-row { display: flex; align-items: center; gap: 10px; }
+    .settings-choice-row .companion-choice { flex: 1; }
+    @media (max-width: 360px) { .today-columns { grid-template-columns: 1fr; } .companion-avatar { width: 58px; height: 58px; flex-basis: 58px; } .identity-details { font-size: 11px; } }
     @media (min-width: 640px) {
-      main { padding: 28px 26px 48px; }
+      main { padding: 20px 26px 40px; }
       .topbar { padding-left: 26px; padding-right: 26px; }
-      .home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
-      .home-card { min-height: 147px; padding: 18px; }
+      .home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+      .home-card { min-height: 84px; padding: 9px; }
+      .home-card .card-label { font-size: 14px; }
       .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .map { height: 380px; }
+      .moments-gallery { grid-template-columns: repeat(3,minmax(0,1fr)); }
     }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
   <div class="shell">
     <header class="topbar">
-      <div class="brand" role="img" aria-label="WithYou — A little help, right when you need it">
+      <div class="brand" role="img" aria-label="carey — A little help, right when you need it">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 48 48" width="31" height="31" fill="none"><path d="M7 22.5 24 8l17 14.5v17H7v-17Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="M18.2 28.5c0-2.7 2-4.4 4.2-4.4 1 0 1.9.5 2.6 1.4.7-.9 1.6-1.4 2.7-1.4 2.2 0 4.1 1.7 4.1 4.4 0 3.4-6.8 7.7-6.8 7.7s-6.8-4.3-6.8-7.7Z" fill="#F9E7D9" stroke="#F9E7D9" stroke-width="1.3" stroke-linejoin="round"/></svg>
         </span>
         <span>
-          <span class="brand-name">WithYou</span>
+          <span class="brand-name">carey</span>
           <span class="brand-tagline">A little help, right when you need it.</span>
         </span>
       </div>
       <div class="top-actions">
-        <button class="icon-button" type="button" data-action="speak-home" aria-label="Read this page aloud" title="Read aloud"><span id="voice-icon"></span><span class="small">Read aloud</span></button>
+        <button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear carey" title="Hear carey"><span id="voice-icon"></span></button>
       </div>
     </header>
     <main id="main" aria-live="polite"></main>
@@ -197,7 +253,7 @@
   <script>
   (() => {
     'use strict';
-    const DB_NAME = 'withyou-local';
+    const DB_NAME = 'withyou-local'; // Kept stable so existing saved data survives the app rename.
     const DB_VERSION = 1;
     const STATE_KEY = 'app-state';
     const main = document.getElementById('main');
@@ -245,7 +301,8 @@
     };
     const ic = (name, size=24) => `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.info}</svg>`;
     const defaultState = () => ({
-      profile: { name:'', homeAddress:'', phone:'', email:'', emergencyName:'', emergencyPhone:'', emergencyServiceNumber:'112', doctorName:'', doctorPhone:'', caregiverPin:'' },
+      profile: { name:'', homeAddress:'', phone:'', email:'', emergencyName:'', emergencyPhone:'', emergencyServiceNumber:'112', doctorName:'', doctorPhone:'', policeNumber:'112', fireNumber:'101', womenHelplineNumber:'181', menHelplineNumber:'', caregiverPin:'' },
+      preferences: { companionGender:'', companionChosen:false },
       contacts: [], memories: [], medicines: [], appointments: [], tasks: []
     });
     let state = defaultState();
@@ -258,7 +315,6 @@
     let homeCoords = null;
     let leafletMap = null;
     let firedReminders = new Set();
-    let deferredInstallPrompt = null;
     let toastTimer = null;
 
     function openDb() {
@@ -277,24 +333,28 @@
       try { db = await openDb(); } catch (e) { db = null; }
       try {
         const loaded = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null');
-        if (loaded && loaded.profile) state = loaded;
+        if (loaded && loaded.profile) { const base=defaultState(); state={...base,...loaded,profile:{...base.profile,...loaded.profile},preferences:{...base.preferences,...(loaded.preferences||{})},contacts:Array.isArray(loaded.contacts)?loaded.contacts:[],memories:Array.isArray(loaded.memories)?loaded.memories:[],medicines:Array.isArray(loaded.medicines)?loaded.medicines:[],appointments:Array.isArray(loaded.appointments)?loaded.appointments:[],tasks:Array.isArray(loaded.tasks)?loaded.tasks:[]}; }
       } catch (e) { console.warn('Saved data could not be read.', e); }
       render();
       if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => {});
       setInterval(checkDueReminders, 30000);
+      setInterval(applyDailyBackground, 15 * 60 * 1000);
       checkDueReminders();
     }
     function showToast(message) {
       toastEl.textContent = message; toastEl.classList.remove('hidden'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>toastEl.classList.add('hidden'), 4600);
     }
     function speak(message) {
-      if (!('speechSynthesis' in window)) { showToast('Spoken directions are not available on this phone.'); return; }
+      if (!('speechSynthesis' in window)) { showToast('Spoken help is not available on this phone.'); return; }
       window.speechSynthesis.cancel();
+      const gender = state.preferences?.companionGender === 'man' ? 'man' : 'woman';
       const utterance = new SpeechSynthesisUtterance(message);
-      utterance.rate = 0.82; utterance.pitch = 1.02; utterance.volume = 1;
+      utterance.rate = 0.78; utterance.pitch = gender === 'man' ? 0.94 : 1.02; utterance.volume = 1;
       const voices = window.speechSynthesis.getVoices();
-      const englishVoice = voices.find(v => /^en(-|_)/i.test(v.lang) && /female|samantha|ava|karen|moira/i.test(v.name)) || voices.find(v => /^en(-|_)/i.test(v.lang));
-      if (englishVoice) utterance.voice = englishVoice;
+      const english = voices.filter(v => /^en(-|_)/i.test(v.lang));
+      const genderPattern = gender === 'man' ? /male|man|daniel|alex|david|george|guy|fred|aaron|mark|oliver|james/i : /female|woman|samantha|ava|karen|moira|zira|serena| victoria|tessa|susan|aria|jenny/i;
+      const localeVoice = english.find(v => /en[-_]in/i.test(v.lang) && genderPattern.test(v.name)) || english.find(v => genderPattern.test(v.name)) || english.find(v => /en[-_]in/i.test(v.lang)) || english[0];
+      if (localeVoice) utterance.voice = localeVoice;
       window.speechSynthesis.speak(utterance);
     }
     function dateLabel(iso) { if (!iso) return ''; const d = new Date(`${iso}T12:00:00`); return d.toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long', year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined}); }
@@ -306,7 +366,7 @@
       currentView='family'; render(); return false;
     }
     function topTitle(title, subtitle='') {
-      return `<button class="back-button" data-action="go" data-view="home">${ic('arrow',19)} Back to home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">WithYou</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div></div>`;
+      return `<button class="back-button" data-action="go" data-view="home">${ic('arrow',19)} Back to home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">carey</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div>${renderAvatar(state.preferences?.companionGender || 'woman',false,true)}</div>`;
     }
     function button(label, action, opts={}) {
       const cls = opts.class || 'secondary'; const iconName = opts.icon ? ic(opts.icon,21) : '';
@@ -316,51 +376,102 @@
     function card(label, sub, view, iconName, tone) {
       return `<button type="button" class="home-card tone-${tone}" data-action="go" data-view="${view}"><span class="card-icon">${ic(iconName,27)}</span><span><span class="card-label">${esc(label)}</span><span class="card-sub">${esc(sub)}</span></span></button>`;
     }
+    function renderAvatar(gender='woman', large=false, small=false) {
+      const man = gender === 'man';
+      const hair = man
+        ? '<path d="M22 45C20 23 34 11 51 11c18 0 30 12 29 34l-7-7-3-10c-9 8-24 10-39 8l-4 9Z" fill="#6C4E3D"/>'
+        : '<path d="M21 47C15 20 31 8 50 8c21 0 36 15 30 43l-3 20-10 5 2-24-5-24c-8 9-24 12-38 8l-1 19 2 21-10-6Z" fill="#674B45"/>';
+      const mouth = man ? 'M39 66Q50 73 61 66' : 'M39 65Q50 75 61 65';
+      return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${man?'companion-man':'companion-woman'}" aria-hidden="true"><svg viewBox="0 0 100 100" width="100%" height="100%" role="presentation"><circle cx="50" cy="50" r="50" fill="#E1EFEB"/><g class="avatar-bob">${hair}<ellipse cx="50" cy="48" rx="25" ry="31" fill="#DDAA89"/><path d="M24 45Q18 40 24 34M76 45Q82 40 76 34" fill="none" stroke="#C78E72" stroke-width="4" stroke-linecap="round"/><path d="M35 43Q41 40 45 43M55 43Q60 40 65 43" fill="none" stroke="#6B5147" stroke-width="2.2" stroke-linecap="round"/><g class="avatar-eye" fill="#263746"><ellipse cx="40" cy="49" rx="2.5" ry="3.2"/><ellipse cx="60" cy="49" rx="2.5" ry="3.2"/></g><circle cx="34" cy="58" r="4" fill="#D98D7D" opacity=".42"/><circle cx="66" cy="58" r="4" fill="#D98D7D" opacity=".42"/><path d="${mouth}" fill="none" stroke="#8C4E49" stroke-width="2.4" stroke-linecap="round"/><path d="M32 31Q50 18 68 31" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".35"/></g></svg></span>`;
+    }
+    function speakerButton(message, label, extraClass='') {
+      return `<button type="button" class="speaker-button ${extraClass}" data-action="speak" data-text="${esc(message)}" aria-label="${esc(label)}" title="${esc(label)}">${ic('volume',19)}</button>`;
+    }
+    function applyDailyBackground() {
+      const d = new Date();
+      const day = Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()) - Date.UTC(d.getFullYear(),0,0)) / 86400000) % 7;
+      const moods = [
+        'linear-gradient(145deg,#f6f6ed 0%,#e5efeb 55%,#f9eee4 100%)',
+        'linear-gradient(145deg,#f4f5eb 0%,#e5eede 52%,#edf4f1 100%)',
+        'linear-gradient(145deg,#f5f4ed 0%,#e3edf0 54%,#f7ede5 100%)',
+        'linear-gradient(145deg,#faf0e7 0%,#f4e5dc 45%,#e5f0eb 100%)',
+        'linear-gradient(145deg,#f6f5ed 0%,#e8ebf3 50%,#edf4ed 100%)',
+        'linear-gradient(145deg,#f7f3e9 0%,#f7e7d9 46%,#e7f1eb 100%)',
+        'linear-gradient(145deg,#f5f4ea 0%,#e1efec 50%,#f5e8ec 100%)'
+      ];
+      document.documentElement.style.setProperty('--daily-background', moods[day]);
+    }
+
     function render() {
-      document.title = 'WithYou — A little help, right when you need it';
+      document.title = 'carey — A little help, right when you need it';
       voiceIconEl.innerHTML = ic('volume',20);
-      if (!state.profile.name || !state.profile.homeAddress) { currentView='setup'; main.innerHTML=renderSetup(); return; }
+      applyDailyBackground();
+      if (!state.profile.name || !state.profile.homeAddress || !state.preferences?.companionChosen) { currentView='setup'; main.innerHTML=renderSetup(); return; }
       const renderers = {
         home: renderHome, setup: renderSetup, route: renderRoute, contacts: renderContacts, memories: renderMemories,
         medicines: renderMedicines, appointments: renderAppointments, tasks: renderTasks, about: renderAbout,
-        emergency: renderEmergency, family: renderFamily, 'memory-form': renderMemoryForm, 'contact-form': renderContactForm,
+        emergency: renderEmergency, family: renderFamily, settings: renderSettings, 'memory-form': renderMemoryForm, 'contact-form': renderContactForm,
         'medicine-form': renderMedicineForm, 'appointment-form': renderAppointmentForm, 'task-form': renderTaskForm,
-        'profile-form': renderProfileForm, 'install-help': renderInstallHelp
+        'profile-form': renderProfileForm
       };
       main.innerHTML = (renderers[currentView] || renderHome)();
       if (currentView==='route' && routeCoords) drawMap();
     }
     function renderSetup() {
-      return `<div class="home-intro"><p class="eyebrow">Welcome to WithYou</p><h1>Let’s make this feel like home.</h1><p class="lead">A few details will help WithYou show you the way home and keep important people and information close by.</p></div>
-        <div class="panel soft-sage"><div class="status-line">${ic('shield',22)} Your details stay on this device in this starter version.</div><p class="small muted" style="margin-bottom:0">You can change these details later in Family & setup.</p></div>
-        <form data-form="setup" class="panel"><h2>About you</h2><div class="form-grid">
-          <div class="field"><label for="setup-name">What name do you like to be called?</label><input id="setup-name" name="name" autocomplete="name" required maxlength="100" placeholder="Your name"></div>
-          <div class="field"><label for="setup-home">Your home address</label><textarea id="setup-home" name="homeAddress" autocomplete="street-address" required maxlength="300" placeholder="House number, street, area, city"></textarea><span class="hint">This helps the map find your home.</span></div>
-        </div><div class="form-section"><h3>People who can help</h3><p class="small muted">Add anyone you would like to contact. You can fill in these details later.</p></div>
-          <div class="form-grid two"><div class="field"><label for="setup-phone">Your phone number</label><input id="setup-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number"></div><div class="field"><label for="setup-email">Your email</label><input id="setup-email" name="email" type="email" autocomplete="email" placeholder="Email address"></div>
-          <div class="field"><label for="setup-emergency-name">Main helper’s name</label><input id="setup-emergency-name" name="emergencyName" placeholder="Name of family member"></div><div class="field"><label for="setup-emergency-phone">Main helper’s phone</label><input id="setup-emergency-phone" name="emergencyPhone" type="tel" placeholder="Phone number"></div></div>
+      const selected = state.preferences?.companionGender === 'man' ? 'man' : state.preferences?.companionGender === 'woman' ? 'woman' : '';
+      const avatarChoice = selected || 'woman';
+      return `<div class="home-intro"><p class="eyebrow">Welcome to carey</p><div class="identity-home"><div class="identity-copy"><h1>Let’s make this feel like home.</h1><p class="lead">We’ll keep the important things close by.</p></div>${renderAvatar(avatarChoice,true)}</div></div>
+        <form data-form="setup" class="panel"><h2>Who would you like by your side?</h2><div class="companion-options">
+          <label class="companion-choice"><input type="radio" name="companionGender" value="woman" ${selected==='woman'?'checked':''} required>${renderAvatar('woman')}<strong>Woman</strong></label>
+          <label class="companion-choice"><input type="radio" name="companionGender" value="man" ${selected==='man'?'checked':''} required>${renderAvatar('man')}<strong>Man</strong></label>
+        </div><div class="form-section"><h3>About you</h3></div><div class="form-grid">
+          <div class="field"><label for="setup-name">What name do you like to be called?</label><input id="setup-name" name="name" value="${esc(state.profile.name)}" autocomplete="name" required maxlength="100" placeholder="Your name"></div>
+          <div class="field"><label for="setup-home">Your home address</label><textarea id="setup-home" name="homeAddress" autocomplete="street-address" required maxlength="300" placeholder="House number, street, area, city">${esc(state.profile.homeAddress)}</textarea><span class="hint">This helps the map find your home.</span></div>
+        </div><div class="form-section"><h3>Your guardian</h3><p class="small muted">Their number will be easy to call from the home screen.</p></div>
+          <div class="form-grid two"><div class="field"><label for="setup-phone">Your phone number</label><input id="setup-phone" name="phone" value="${esc(state.profile.phone)}" type="tel" autocomplete="tel" placeholder="Phone number"></div><div class="field"><label for="setup-email">Your email</label><input id="setup-email" name="email" value="${esc(state.profile.email)}" type="email" autocomplete="email" placeholder="Email address"></div>
+          <div class="field"><label for="setup-emergency-name">Guardian’s name</label><input id="setup-emergency-name" name="emergencyName" value="${esc(state.profile.emergencyName)}" placeholder="Name of family member"></div><div class="field"><label for="setup-emergency-phone">Guardian’s phone</label><input id="setup-emergency-phone" name="emergencyPhone" value="${esc(state.profile.emergencyPhone)}" type="tel" placeholder="Phone number"></div></div>
           <div class="form-actions"><button class="primary" type="submit">Save and continue ${ic('arrow',20)}</button></div>
-        </form><p class="footer-note">WithYou is here to support you, one step at a time.</p>`;
+        </form>`;
     }
     function renderHome() {
-      const hour = new Date().getHours(); const hello = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      const pendingTasks = state.tasks.filter(t => (t.repeat==='daily' || !t.date || t.date >= todayStr()) && !(t.completedDates||[]).includes(todayStr())).length;
-      const untaken = state.medicines.filter(m => !(m.takenDates||[]).includes(todayStr())).length;
-      return `<div class="home-intro"><p class="eyebrow">${esc(new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><p class="lead">I’m glad you’re here. What would you like help with today?</p><div style="margin-top:15px"><button type="button" class="secondary small-button" data-action="speak-home">${ic('volume',20)} Read this page aloud</button></div></div>
-        ${(pendingTasks || untaken) ? `<div class="summary-strip"><div class="summary-cell"><span class="summary-number">${pendingTasks}</span><span class="summary-label">Daily reminders to check</span><button class="small-link" data-action="go" data-view="tasks" type="button">Open reminders ${ic('arrow',16)}</button></div><div class="summary-cell"><span class="summary-number">${untaken}</span><span class="summary-label">Medicines not marked taken today</span><button class="small-link" data-action="go" data-view="medicines" type="button">Open medicines ${ic('arrow',16)}</button></div></div>` : ''}
-        <div class="home-grid">
-          ${card('Find my way home','A simple map and directions','route','map','navy')}
-          ${card('People I know','Names and family contacts','contacts','users','sage')}
-          ${card('My memories','Familiar faces and stories','memories','heart','peach')}
-          ${card('My medicines','What to take and when','medicines','pill','teal')}
-          ${card('Doctor visits','Appointments and dates','appointments','calendar','sand')}
-          ${card('Daily reminders','Little things to do today','tasks','check','sage')}
-          ${card('About me','Important personal details','about','user','teal')}
-          ${card('Emergency help','Call someone for help','emergency','siren','rose')}
-          ${card('Family & setup','Update details and backups','family','settings','navy')}
+      const now = new Date();
+      const hour = now.getHours(); const hello = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+      const p = state.profile;
+      const today = todayStr();
+      const meds = state.medicines.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+      const todoMeds = meds.filter(m => !(m.takenDates||[]).includes(today));
+      const tasks = state.tasks.filter(t => (t.repeat==='daily' || !t.date || t.date>=today) && !(t.completedDates||[]).includes(today)).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+      const guardianPhone = p.emergencyPhone || '';
+      const guardianName = p.emergencyName || 'Your guardian';
+      const renderMedRow = m => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(m.name)}</p><div class="today-item-meta">${esc(m.time?timeLabel(m.time):'No time set')}${m.dose?` · ${esc(m.dose)}`:''}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(m.name)} taken today" title="Mark taken" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic('check',17)}</button></div>`;
+      const renderTaskRow = t => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(t.title)}</p><div class="today-item-meta">${esc(t.time?timeLabel(t.time):(t.repeat==='daily'?'Any time today':'Today'))}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(t.title)} done" title="Mark done" data-action="toggle-task" data-id="${esc(t.id)}">${ic('check',17)}</button></div>`;
+      const medRows = todoMeds.slice(0,2).map(renderMedRow).join('');
+      const taskRows = tasks.slice(0,2).map(renderTaskRow).join('');
+      const medEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${meds.length?'All checked for today':'No medicines added'}</p><div class="today-item-meta">${meds.length?'You’re doing well.':'A family member can add them.'}</div></div></div>`;
+      const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All done for today':'No reminders yet'}</p><div class="today-item-meta">${state.tasks.length?'One step at a time.':'A family member can add them.'}</div></div></div>`;
+      return `<div class="home-intro">
+          <div class="identity-home">
+            ${renderAvatar(state.preferences?.companionGender || 'woman')}
+            <div class="identity-copy"><p class="eyebrow">${esc(now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><div class="identity-details">${esc(p.homeAddress)}${p.phone?` · ${esc(p.phone)}`:''}</div><button class="identity-link" type="button" data-action="go" data-view="about">My details ${ic('arrow',12)}</button></div>
+            ${speakerButton(`Hello ${sayName()}. ${hello}. I'm glad you're here. What would you like help with today?`,'Hear greeting')}
+          </div>
         </div>
-        <div class="notice"><span class="notice-icon">${ic('heart',23)}</span><div><h3 style="margin-bottom:4px">You don’t have to remember everything.</h3><p class="small">Take your time. Choose one thing, and we’ll do it together.</p><button class="small-link" type="button" data-action="speak" data-text="Hello, ${esc(sayName())}. You don't have to remember everything. Take your time. Choose one thing, and we'll do it together.">Read this message aloud ${ic('volume',17)}</button></div></div>
-        <div class="install-banner panel"><div class="panel-title-row"><div><h3>Keep WithYou close by</h3><p class="small muted" style="margin-bottom:0">Add it to your phone’s home screen like an app.</p></div>${ic('star',26)}</div><button class="secondary" data-action="install-help" type="button">${ic('plus',20)} How to add WithYou to my phone</button></div>`;
+        ${guardianPhone ? `<a class="guardian-strip" href="tel:${esc(guardianPhone)}" aria-label="Call guardian ${esc(guardianName)}"><span>${ic('phone',22)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><span>${ic('arrow',18)}</span></a>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span>${ic('phone',22)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span>${ic('arrow',18)}</span></button>`}
+        <section class="today-priority" aria-label="Today's medicines and reminders">
+          <div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
+          <div class="today-columns">
+            <div class="today-list"><div class="today-list-title">${ic('pill',16)} Medicines</div>${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">${todoMeds.length>2?`See ${todoMeds.length-2} more`: 'All medicines'} ${ic('arrow',12)}</button></div></div>
+            <div class="today-list"><div class="today-list-title">${ic('check',16)} Daily reminders</div>${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">${tasks.length>2?`See ${tasks.length-2} more`: 'All reminders'} ${ic('arrow',12)}</button></div></div>
+          </div>
+        </section>
+        <div class="home-grid" aria-label="Main features">
+          ${card('Find home','Map and walking directions','route','map','navy')}
+          ${card('Contacts','Names and familiar faces','contacts','users','sage')}
+          ${card('Moments','Photos and kind notes','memories','image','peach')}
+          ${card('Doctor visits','Calendar and appointments','appointments','calendar','sand')}
+          ${card('Emergency help','People and services to call','emergency','siren','rose')}
+          ${card('Settings','Choose your companion','settings','settings','teal')}
+        </div>`;
     }
     function renderRoute() {
       const address = state.profile.homeAddress;
@@ -373,34 +484,34 @@
       const mapContent = current ? `<div id="map" class="map" role="img" aria-label="Map showing your location and home"></div>` : `<div class="map-placeholder">${ic('map',34)}<div style="margin-left:12px;text-align:left"><strong style="display:block;color:var(--ink)">Your map will appear here</strong><span class="small">Tap “Find me on the map” to show where you are.</span></div></div>`;
       const mapUrl = directionsUrl();
       return `${topTitle('Let’s find home','We’ll take this one step at a time.')}
-        <div class="panel soft-navy"><div class="status-line">${ic('home',22)} <span>Home address</span></div><p style="font-size:20px;font-weight:800;margin-bottom:15px">${esc(address)}</p><button class="secondary" type="button" data-action="speak" data-text="Your home address is ${esc(address)}.">${ic('volume',20)} Read address aloud</button></div>
+        <div class="panel soft-navy"><div class="status-line">${ic('home',22)} <span>Home address</span></div><p style="font-size:20px;font-weight:800;margin-bottom:15px">${esc(address)}</p>${speakerButton(`Your home address is ${address}.`,'Hear home address')}</div>
         <button class="primary" type="button" data-action="locate">${ic('pin',23)} Find me on the map</button>
         ${mapContent}
         <div class="panel"><div class="status-line">${ic('compass',22)} <span>Where you are</span></div><p id="distance-copy" style="margin-bottom:12px">${esc(distanceText)}</p>${current && homeCoords ? `<p class="small muted">The dotted line points toward home. It is not a walking route.</p>` : `<p class="small muted">Your location is only used in this view to help show you where you are. It is not sent to family by this version of the app.</p>`}</div>
-        <div class="panel soft-sage"><h3>Ready to go home?</h3><p class="small">Open your phone’s map for walking directions. Your map app can guide you along the streets.</p><a class="primary" href="${esc(mapUrl)}" target="_blank" rel="noopener">${ic('map',21)} Open walking directions</a><button class="secondary" style="margin-top:10px" type="button" data-action="speak" data-text="I will open walking directions to your saved home address. Please follow the directions on your phone's map. If you feel unsure, stop somewhere safe and call your family or emergency contact.">${ic('volume',20)} Hear what to do</button></div>
+        <div class="panel soft-sage"><h3>Ready to go home?</h3><p class="small">Open your phone’s map for walking directions. Your map app can guide you along the streets.</p><a class="primary" href="${esc(mapUrl)}" target="_blank" rel="noopener">${ic('map',21)} Open walking directions</a><div style="margin-top:8px">${speakerButton("I will open walking directions to your saved home address. Please follow the directions on your phone's map. If you feel unsure, stop somewhere safe and call your guardian or emergency contact.",'Hear directions advice')}</div></div>
         <div class="notice"><span class="notice-icon">${ic('phone',22)}</span><div><strong>Feeling unsure?</strong><p class="small" style="margin-bottom:0">Stop somewhere safe and call someone you know. You can find their number in Emergency help.</p><button class="small-link" type="button" data-action="go" data-view="emergency">Open Emergency help ${ic('arrow',16)}</button></div></div>`;
     }
     function renderContacts() {
       const items = state.contacts.slice().sort((a,b)=>a.name.localeCompare(b.name));
-      return `${topTitle('People I know','Familiar names, faces and phone numbers.')}
-        <div class="notice"><span class="notice-icon">${ic('message',22)}</span><div><strong>Who is calling?</strong><p class="small" style="margin-bottom:0">This list can help you remember who someone is. WithYou cannot detect a normal incoming phone call or put a pop-up over your phone’s call screen. To see a name on an ordinary incoming call, save that person in the phone’s own Contacts app too.</p></div></div>
-        ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="contact-form">${ic('plus',21)} Add a person</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: add or update people</button>`}
-        <div class="item-list" style="margin-top:16px">${items.length ? items.map(c=>`<article class="item"><div class="contact-avatar">${ic('user',26)}</div><div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Someone you know')}</div>${c.note?`<p>${esc(c.note)}</p>`:''}<p>${esc(c.phone || 'No phone number added')}</p><button class="small-link" type="button" data-action="speak" data-text="${esc(c.name)} is your ${esc(c.relationship || 'contact')}.${c.note ? ' '+esc(c.note):''}">${ic('volume',17)} Remind me who this is</button><div class="button-row" style="margin-top:8px">${c.phone ? `<a class="primary small-button" href="tel:${esc(c.phone)}">${ic('phone',18)} Call ${esc(c.name.split(' ')[0])}</a>`:''}${caregiverUnlocked?`<button class="secondary small-button" type="button" data-action="delete-contact" data-id="${esc(c.id)}">${ic('trash',17)} Remove</button>`:''}</div></div></article>`).join('') : `<div class="empty"><div class="empty-icon">${ic('users',27)}</div><h3>Your people will be here.</h3><p class="muted small">A family member can add names, relationships and phone numbers here.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}</div>`;
+      return `${topTitle('Contacts','Familiar names, faces and phone numbers.')}
+        <div class="notice"><span class="notice-icon">${ic('message',22)}</span><div><strong>Who is calling?</strong><p class="small" style="margin-bottom:0">This list helps you remember who someone is. Save important people in the phone’s Contacts app too, so their names can appear during calls.</p></div></div>
+        ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="contact-form">${ic('plus',21)} Add a contact</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: add or update contacts</button>`}
+        <div class="item-list" style="margin-top:12px">${items.length ? items.map(c=>`<article class="item"><div class="contact-avatar">${ic('user',26)}</div><div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Someone you know')}</div>${c.note?`<p>${esc(c.note)}</p>`:''}<p>${esc(c.phone || 'No phone number added')}</p><div class="button-row" style="margin-top:6px;align-items:center">${speakerButton(`${c.name} is your ${c.relationship || 'contact'}.${c.note ? ' '+c.note:''}`,'Remember '+c.name)}${c.phone ? `<a class="primary small-button" style="width:auto" href="tel:${esc(c.phone)}">${ic('phone',18)} Call</a>`:''}${caregiverUnlocked?`<button class="secondary small-button" type="button" data-action="delete-contact" data-id="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${ic('trash',17)}</button>`:''}</div></div></article>`).join('') : `<div class="empty"><div class="empty-icon">${ic('users',27)}</div><h3>Your contacts will be here.</h3><p class="muted small">A family member can add names, relationships and phone numbers here.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}</div>`;
     }
     function renderMemories() {
       const items = state.memories.slice().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
-      return `${topTitle('My memories','People, places and stories that matter to you.')}
-        ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="memory-form">${ic('plus',21)} Add a memory</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: add a memory</button>`}
-        <div class="item-list" style="margin-top:16px">${items.length ? items.map(m=>`<article class="item">${m.photo?`<img class="photo" src="${m.photo}" alt="Photo for ${esc(m.title)}">`:`<div class="photo photo-placeholder">${ic('heart',28)}</div>`}<div class="item-main"><h3>${esc(m.title)}</h3>${m.person?`<div class="relationship">${esc(m.person)}${m.relationship ? ` · ${esc(m.relationship)}`:''}</div>`:''}<p style="white-space:pre-wrap">${esc(m.note || 'A familiar memory.')}</p><button class="small-link" type="button" data-action="speak" data-text="${esc(m.title)}. ${esc(m.person || '')}. ${esc(m.note || '')}">${ic('volume',17)} Read this memory aloud</button>${caregiverUnlocked?`<div style="margin-top:8px"><button class="secondary small-button" type="button" data-action="delete-memory" data-id="${esc(m.id)}">${ic('trash',17)} Remove memory</button></div>`:''}</div></article>`).join('') : `<div class="empty"><div class="empty-icon">${ic('heart',28)}</div><h3>Your memories will live here.</h3><p class="muted small">Family can add photos, familiar names and kind notes to help you remember.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}</div>`;
+      return `${topTitle('Moments','Little moments, familiar faces and places you love.')}
+        ${caregiverUnlocked ? `<button type="button" class="primary small-button" data-action="go" data-view="memory-form">${ic('plus',19)} Add a moment</button>` : `<button type="button" class="secondary small-button" data-action="go" data-view="family">${ic('plus',19)} Family: add a moment</button>`}
+        ${items.length ? `<div class="moments-gallery">${items.map(m=>`<article class="moment-tile">${m.photo?`<img class="moment-image" src="${m.photo}" alt="${esc(m.title)}">`:`<div class="moment-image-placeholder">${ic('heart',30)}</div>`}<div class="moment-copy"><h3 class="moment-title">${esc(m.title)}</h3>${m.person?`<div class="relationship" style="font-size:11px;margin-bottom:4px">${esc(m.person)}${m.relationship?` · ${esc(m.relationship)}`:''}</div>`:''}<p class="moment-note">${esc(m.note || 'A familiar moment to enjoy.')}</p><div class="moment-actions">${speakerButton(`${m.title}. ${m.person || ''}. ${m.note || ''}`,'Hear this moment')}${caregiverUnlocked?`<button class="speaker-button" type="button" data-action="delete-memory" data-id="${esc(m.id)}" aria-label="Remove this moment" title="Remove">${ic('trash',16)}</button>`:''}</div></div></article>`).join('')}</div>` : `<div class="empty" style="margin-top:12px"><div class="empty-icon">${ic('image',27)}</div><h3>Your moments will appear here.</h3><p class="muted small">Family can add a photo and a few warm words. They’ll be shown together like a little gallery.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}`;
     }
     function renderMedicines() {
       const items = state.medicines.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
       const taken = m => (m.takenDates||[]).includes(todayStr());
-      return `${topTitle('My medicines','A clear list to check with your care team.')}
-        <div class="panel soft-peach"><div class="status-line">${ic('alert',22)} <span>Please follow the instructions from your doctor or pharmacist.</span></div><p class="small" style="margin-bottom:0">WithYou is a reminder list. It does not decide or change your medicine dose.</p></div>
+      return `${topTitle('Medicines','A clear list to check with your care team.')}
+        <div class="panel soft-peach"><div class="status-line">${ic('alert',22)} <span>Please follow the instructions from your doctor or pharmacist.</span></div><p class="small" style="margin-bottom:0">carey is a reminder list. It does not decide or change your medicine dose.</p></div>
         ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="medicine-form">${ic('plus',21)} Add a medicine</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: update medicines</button>`}
         ${items.length ? `<div class="summary-strip"><div class="summary-cell"><span class="summary-number">${items.filter(taken).length}</span><span class="summary-label">Marked taken today</span></div><div class="summary-cell"><span class="summary-number">${items.length-items.filter(taken).length}</span><span class="summary-label">Not marked taken today</span></div></div><div class="item-list">${items.map(m=>`<article class="item"><div class="contact-avatar" style="background:var(--peach);color:#7a3c2f">${ic('pill',25)}</div><div class="item-main"><h3>${esc(m.name)}</h3><div class="relationship">${esc(m.dose || 'Dose not added')}${m.time ? ` · ${timeLabel(m.time)}`:''}</div>${m.notes?`<p>${esc(m.notes)}</p>`:''}<button type="button" class="${taken(m)?'secondary':'primary'} small-button" style="margin-top:7px;width:auto" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic(taken(m)?'checkcircle':'check',18)} ${taken(m)?'Taken today':'Mark as taken'}</button>${taken(m)?`<p class="small" style="margin-top:6px;color:var(--sage-deep)">Thank you. This is marked as taken today.</p>`:''}${caregiverUnlocked?`<div style="margin-top:8px"><button class="secondary small-button" type="button" data-action="delete-medicine" data-id="${esc(m.id)}">${ic('trash',17)} Remove</button></div>`:''}</div></article>`).join('')}</div>` : `<div class="empty" style="margin-top:16px"><div class="empty-icon">${ic('pill',28)}</div><h3>No medicines added yet.</h3><p class="small muted">Ask a family member to add your medicine names and the times your doctor has advised.</p></div>`}
-        <div class="notice"><span class="notice-icon">${ic('clock',22)}</span><div><strong>About reminders</strong><p class="small" style="margin-bottom:0">This GitHub-only version can show browser alerts while it is open. To receive reliable alerts when it is fully closed, a push-notification service or native app is needed.</p><button class="small-link" type="button" data-action="notifications">Turn on alerts while using WithYou ${ic('arrow',16)}</button></div></div>`;
+        <div class="notice"><span class="notice-icon">${ic('clock',22)}</span><div><strong>One step at a time</strong><p class="small" style="margin-bottom:0">Check the list on your home screen when it is time for your medicines. Follow the instructions from your doctor or pharmacist.</p></div></div>`;
     }
     function renderAppointments() {
       const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
@@ -431,55 +542,69 @@
     function renderAbout() {
       const p=state.profile;
       const line = (label,value,link='') => `<div class="profile-line"><div class="profile-key">${label}</div><div class="profile-value">${value ? (link ? `<a href="${link==='tel'?`tel:${esc(value)}`:`mailto:${esc(value)}`}">${esc(value)}</a>`:esc(value)) : '<span class="muted">Not added yet</span>'}</div></div>`;
-      return `${topTitle('About me','Important information, all in one place.')}
-        <div class="panel soft-navy"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div class="brand-mark" style="width:58px;height:58px;flex-basis:58px;border-radius:18px">${ic('user',31)}</div><div><h2 style="margin-bottom:2px">${esc(p.name)}</h2><p class="muted small" style="margin:0">This is your personal information card.</p></div></div>
-        ${line('Home address',p.homeAddress)}${line('My phone',p.phone,'tel')}${line('Email',p.email,'email')}${line('Main helper',p.emergencyName)}${line('Helper phone',p.emergencyPhone,'tel')}${line('Doctor / clinic',p.doctorName)}${line('Doctor phone',p.doctorPhone,'tel')}</div>
-        <button type="button" class="secondary" data-action="speak" data-text="Your name is ${esc(p.name)}. Your home address is ${esc(p.homeAddress)}. Your main helper is ${esc(p.emergencyName||'not added yet')}. Their phone number is ${esc(p.emergencyPhone||'not added yet')}.">${ic('volume',20)} Read my important information aloud</button>
-        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update my details</button>`:`<button class="secondary" type="button" data-action="go" data-view="family">${ic('edit',20)} Family: update details</button>`}</div>`;
+      return `${topTitle('My details','Important information, all in one place.')}
+        <div class="panel soft-navy"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">${renderAvatar(state.preferences?.companionGender || 'woman')}<div><h2 style="margin-bottom:2px">${esc(p.name)}</h2><p class="muted small" style="margin:0">Your personal information</p></div></div>
+        ${line('Home address',p.homeAddress)}${line('My phone',p.phone,'tel')}${line('Email',p.email,'email')}${line('Guardian',p.emergencyName)}${line('Guardian’s phone',p.emergencyPhone,'tel')}${line('Doctor / clinic',p.doctorName)}${line('Doctor’s phone',p.doctorPhone,'tel')}</div>
+        ${speakerButton(`Your name is ${p.name}. Your home address is ${p.homeAddress}. Your guardian is ${p.emergencyName||'not added yet'}. Their phone number is ${p.emergencyPhone||'not added yet'}.`,'Hear personal details')}
+        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update details</button>`:`<button class="secondary" type="button" data-action="go" data-view="settings">${ic('edit',20)} Family: update details</button>`}</div>`;
     }
     function renderEmergency() {
       const p=state.profile;
       const contacts=state.contacts.filter(c=>c.phone);
+      const services = [
+        {label:'Doctor / clinic', name:p.doctorName || 'Your doctor', phone:p.doctorPhone || '', icon:'heart', tone:'tone-teal'},
+        {label:'Police', name:'Police', phone:p.policeNumber || '112', icon:'siren', tone:'tone-navy'},
+        {label:'Fire department', name:'Fire department', phone:p.fireNumber || '101', icon:'alert', tone:'tone-peach'},
+        {label:'Women’s helpline', name:'Women’s helpline', phone:p.womenHelplineNumber || '181', icon:'phone', tone:'tone-rose'},
+        {label:'Men’s helpline', name:'Men’s helpline', phone:p.menHelplineNumber || '', icon:'phone', tone:'tone-sand'},
+        {label:'National emergency', name:'Emergency services', phone:p.emergencyServiceNumber || '112', icon:'siren', tone:'tone-rose'}
+      ];
+      const serviceCards = services.map(s=>`<article class="item"><div class="contact-avatar ${s.tone}" style="width:44px;height:44px;border-radius:13px">${ic(s.icon,22)}</div><div class="item-main"><h3>${esc(s.label)}</h3><p style="margin-bottom:5px">${esc(s.phone || 'Ask your family to add the local number')}</p>${s.phone?`<a class="primary small-button" style="width:auto" href="tel:${esc(s.phone)}">${ic('phone',17)} Call</a>`:`<button class="secondary small-button" type="button" data-action="go" data-view="settings">Add number</button>`}</div></article>`).join('');
       return `${topTitle('Emergency help','It is okay to ask for help. You are not alone.')}
-        <div class="panel soft-peach"><div style="display:flex;gap:14px;align-items:flex-start"><div class="contact-avatar" style="background:#edc8b9;color:#7b3329;width:60px;height:60px">${ic('phone',29)}</div><div><h2>Need help right now?</h2><p style="margin-bottom:0">Move somewhere safe if you can. Call a family member or local emergency services.</p></div></div></div>
-        ${p.emergencyName && p.emergencyPhone ? `<div class="panel"><p class="eyebrow">Your main helper</p><h2>${esc(p.emergencyName)}</h2><p class="muted">Someone you can call for help</p><a class="primary" href="tel:${esc(p.emergencyPhone)}">${ic('phone',22)} Call ${esc(p.emergencyName.split(' ')[0])}</a></div>`:''}
-        <div class="panel"><p class="eyebrow">Emergency services</p><h2>Call for urgent help</h2><p class="small muted">Check that this number is correct for the country you are in.</p><a class="danger-button" href="tel:${esc(p.emergencyServiceNumber || '112')}">${ic('phone',22)} Call ${esc(p.emergencyServiceNumber || '112')}</a>${caregiverUnlocked?`<button class="small-link" type="button" data-action="go" data-view="profile-form">Change emergency number</button>`:''}</div>
-        ${contacts.length?`<h2 style="margin-top:25px">Other people to call</h2><div class="item-list">${contacts.map(c=>`<article class="item"><div class="contact-avatar">${ic('user',24)}</div><div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Someone you know')}</div><p>${esc(c.phone)}</p><a class="primary small-button" style="width:auto" href="tel:${esc(c.phone)}">${ic('phone',18)} Call ${esc(c.name.split(' ')[0])}</a></div></article>`).join('')}</div>`:''}
-        <div class="notice"><span class="notice-icon">${ic('heart',22)}</span><div><strong>Not sure what to say?</strong><p class="small" style="margin-bottom:0">You can say: “I need a little help. I’m at this location. Can you please stay on the phone with me?”</p><button type="button" class="small-link" data-action="speak" data-text="I need a little help. I'm at this location. Can you please stay on the phone with me?">${ic('volume',17)} Read this sentence aloud</button></div></div>`;
+        <div class="panel soft-peach"><div style="display:flex;gap:11px;align-items:flex-start"><div class="contact-avatar" style="background:#edc8b9;color:#7b3329;width:48px;height:48px">${ic('phone',24)}</div><div><h2>Need help right now?</h2><p style="margin-bottom:0">Move somewhere safe if you can. Call your guardian or local emergency services.</p></div></div></div>
+        ${p.emergencyName && p.emergencyPhone ? `<a class="guardian-strip" href="tel:${esc(p.emergencyPhone)}"><span>${ic('phone',22)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">${esc(p.emergencyName)}</span><span class="guardian-number">${esc(p.emergencyPhone)}</span></span><span>${ic('arrow',18)}</span></a>`:''}
+        <h2 style="margin-top:18px">Important numbers</h2><div class="item-list">${serviceCards}</div>
+        ${contacts.length?`<h2 style="margin-top:20px">Other contacts</h2><div class="item-list">${contacts.map(c=>`<article class="item"><div class="contact-avatar">${ic('user',24)}</div><div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Contact')}</div><p>${esc(c.phone)}</p><a class="primary small-button" style="width:auto" href="tel:${esc(c.phone)}">${ic('phone',18)} Call</a></div></article>`).join('')}</div>`:''}
+        <div class="notice"><span class="notice-icon">${ic('heart',22)}</span><div><strong>Not sure what to say?</strong><p class="small" style="margin-bottom:0">“I need a little help. I’m at this location. Can you please stay on the phone with me?”</p>${speakerButton('I need a little help. I am at this location. Can you please stay on the phone with me?','Hear helpful words')}</div></div>`;
+    }
+    function renderSettings() {
+      const selected=state.preferences?.companionGender==='man'?'man':'woman';
+      return `${topTitle('Settings','Make carey feel right for you.')}
+        <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}" style="${selected==='woman'?'border-color:#286b6c;background:#e9f4f2':''}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}" style="${selected==='man'?'border-color:#286b6c;background:#e9f4f2':''}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
+        <div class="panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
+        <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contacts, moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
     }
     function renderFamily() {
       if (!caregiverUnlocked) {
         const already=Boolean(state.profile.caregiverPin);
         return `${topTitle('Family & setup','A place for a trusted family member to update details.')}
-          <div class="panel soft-sage"><div class="status-line">${ic('shield',22)} <span>Family editing is currently locked.</span></div><p class="small" style="margin-bottom:0">Unlock it to add memories, medicines, visits, reminders and contacts. The family PIN is a simple privacy step, not strong security.</p></div>
+          <div class="panel soft-sage"><div class="status-line">${ic('shield',22)} <span>Family editing is currently locked.</span></div><p class="small" style="margin-bottom:0">Unlock it to add Moments, contacts, medicines, visits and reminders. The family PIN is a simple privacy step, not strong security.</p></div>
           <form class="panel" data-form="family-unlock"><h2>${already?'Enter your family PIN':'Create a family PIN'}</h2><p class="muted small">${already?'Enter the 4-digit PIN created by your family member.':'Choose a 4-digit PIN that the trusted family member can remember. You can add your details after this.'}</p><div class="field"><label for="family-pin">4-digit PIN</label><input id="family-pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" autocomplete="off" required placeholder="••••"></div>${!already?`<div class="field" style="margin-top:12px"><label for="family-pin-confirm">Enter the PIN again</label><input id="family-pin-confirm" name="pinConfirm" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" autocomplete="off" required placeholder="••••"></div>`:''}<div class="form-actions"><button class="primary" type="submit">${already?'Unlock family editing':'Save PIN and unlock'}</button></div></form>
           <div class="panel"><h3>Move your information to another phone</h3><p class="small muted">Use a backup file to transfer information. This starter version does not sync between family phones automatically.</p><button class="secondary" type="button" data-action="export">${ic('download',20)} Export a backup</button><button class="secondary" style="margin-top:9px" type="button" data-action="import">${ic('upload',20)} Import a backup</button></div>
-          <div class="panel"><h3>Install WithYou</h3><p class="small muted">Add it to the phone home screen so it is easy to find.</p><button class="secondary" data-action="install-help" type="button">${ic('plus',20)} Show installation steps</button></div>
           <p class="footer-note">For privacy, only use a phone that the person and their family trust.</p>`;
       }
       return `${topTitle('Family & setup','Thank you for helping make each day easier.')}
         <div class="panel soft-sage"><div class="status-line">${ic('checkcircle',22)} <span>Family editing is unlocked on this device.</span></div><p class="small" style="margin-bottom:0">Your changes are saved on this device when you save a form.</p><button class="secondary small-button" style="margin-top:12px;width:auto" type="button" data-action="lock-family">${ic('shield',18)} Lock family editing</button></div>
         <h2>Update information</h2><div class="item-list">
           <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="profile-form"><div class="contact-avatar">${ic('user',24)}</div><div class="item-main"><h3>Personal details</h3><p>Home address, phone, emergency and doctor details.</p></div>${ic('arrow',19)}</button>
-          <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="contact-form"><div class="contact-avatar">${ic('users',24)}</div><div class="item-main"><h3>Add a person</h3><p>Names, relationships and phone numbers.</p></div>${ic('arrow',19)}</button>
-          <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="memory-form"><div class="contact-avatar">${ic('heart',24)}</div><div class="item-main"><h3>Add a memory</h3><p>A photo, familiar name or helpful story.</p></div>${ic('arrow',19)}</button>
+          <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="contact-form"><div class="contact-avatar">${ic('users',24)}</div><div class="item-main"><h3>Add a contact</h3><p>Names, relationships and phone numbers.</p></div>${ic('arrow',19)}</button>
+          <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="memory-form"><div class="contact-avatar">${ic('heart',24)}</div><div class="item-main"><h3>Add a moment</h3><p>Photos and helpful notes.</p></div>${ic('arrow',19)}</button>
           <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="medicine-form"><div class="contact-avatar">${ic('pill',24)}</div><div class="item-main"><h3>Add a medicine</h3><p>Medicine name, dose as prescribed and time.</p></div>${ic('arrow',19)}</button>
           <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="appointment-form"><div class="contact-avatar">${ic('calendar',24)}</div><div class="item-main"><h3>Add a doctor visit</h3><p>Date, time, place and notes.</p></div>${ic('arrow',19)}</button>
           <button class="item" style="text-align:left;width:100%;color:var(--ink)" data-action="go" data-view="task-form"><div class="contact-avatar">${ic('check',24)}</div><div class="item-main"><h3>Add a daily reminder</h3><p>Simple tasks and times.</p></div>${ic('arrow',19)}</button>
         </div>
         <h2 style="margin-top:28px">Back up or transfer</h2><div class="panel"><p class="small muted">Backups include private details and may include photos. Keep the file somewhere safe.</p><div class="button-row"><button class="secondary" type="button" data-action="export">${ic('download',20)} Export backup</button><button class="secondary" type="button" data-action="import">${ic('upload',20)} Import backup</button></div></div>
-        <div class="panel"><h3>Notifications</h3><p class="small muted">Allow notifications for alerts while WithYou is open. Background reminders when the app is closed need a push service.</p><button class="secondary" type="button" data-action="notifications">${ic('checkcircle',20)} Turn on notifications</button></div>
-        <div class="panel soft-peach"><h3>Important limits of this version</h3><p class="small">Information stays on this device; it does not automatically update a relative’s phone. It also cannot detect incoming phone calls or show a caller pop-up over the phone’s call screen.</p></div>`;
+`;
     }
     function renderContactForm() {
       if (!caregiverUnlocked) return renderFamily();
-      return `${topTitle('Add a person','Add someone familiar and how they know you.')}
-        <form class="panel" data-form="contact"><div class="form-grid two"><div class="field"><label for="contact-name">Person’s name</label><input id="contact-name" name="name" required maxlength="100" placeholder="e.g. Meera Patel"></div><div class="field"><label for="contact-relationship">Who are they?</label><input id="contact-relationship" name="relationship" required maxlength="80" placeholder="e.g. Your daughter"></div><div class="field"><label for="contact-phone">Phone number</label><input id="contact-phone" name="phone" type="tel" maxlength="40" placeholder="Phone number"></div><div class="field"><label for="contact-note">Something helpful to remember</label><textarea id="contact-note" name="note" maxlength="400" placeholder="e.g. She calls every Sunday."></textarea></div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save person</button></div></form>`;
+      return `${topTitle('Add a contact','Add someone familiar and how they know you.')}
+        <form class="panel" data-form="contact"><div class="form-grid two"><div class="field"><label for="contact-name">Contact’s name</label><input id="contact-name" name="name" required maxlength="100" placeholder="e.g. Meera Patel"></div><div class="field"><label for="contact-relationship">Who are they?</label><input id="contact-relationship" name="relationship" required maxlength="80" placeholder="e.g. Your daughter"></div><div class="field"><label for="contact-phone">Phone number</label><input id="contact-phone" name="phone" type="tel" maxlength="40" placeholder="Phone number"></div><div class="field"><label for="contact-note">Something helpful to remember</label><textarea id="contact-note" name="note" maxlength="400" placeholder="e.g. She calls every Sunday."></textarea></div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save contact</button></div></form>`;
     }
     function renderMemoryForm() {
       if (!caregiverUnlocked) return renderFamily();
-      return `${topTitle('Add a memory','A photo or a few kind words can help.')}
-        <form class="panel" data-form="memory"><div class="form-grid"><div class="field"><label for="memory-title">Memory title</label><input id="memory-title" name="title" required maxlength="100" placeholder="e.g. Sunday lunch at home"></div><div class="form-grid two"><div class="field"><label for="memory-person">Person or place</label><input id="memory-person" name="person" maxlength="100" placeholder="e.g. Meera and the family"></div><div class="field"><label for="memory-relationship">Relationship (if relevant)</label><input id="memory-relationship" name="relationship" maxlength="80" placeholder="e.g. Your daughter"></div></div><div class="field"><label for="memory-note">Helpful note or story</label><textarea id="memory-note" name="note" maxlength="1200" placeholder="Use simple, warm words. What might be comforting to remember?"></textarea></div><div class="field"><label for="memory-photo">Add a photo (optional)</label><input id="memory-photo" name="photo" type="file" accept="image/*"><span class="hint">The photo is saved on this device. For best results, choose one clear photo.</span><div id="photo-preview" class="hidden"></div></div></div><div class="form-actions"><button class="primary" type="submit">${ic('heart',20)} Save memory</button></div></form>`;
+      return `${topTitle('Add a moment','A photo or a few kind words can help.')}
+        <form class="panel" data-form="memory"><div class="form-grid"><div class="field"><label for="memory-title">Moment title</label><input id="memory-title" name="title" required maxlength="100" placeholder="e.g. Sunday lunch at home"></div><div class="form-grid two"><div class="field"><label for="memory-person">Person or place</label><input id="memory-person" name="person" maxlength="100" placeholder="e.g. Meera and the family"></div><div class="field"><label for="memory-relationship">Relationship (if relevant)</label><input id="memory-relationship" name="relationship" maxlength="80" placeholder="e.g. Your daughter"></div></div><div class="field"><label for="memory-note">Helpful note or story</label><textarea id="memory-note" name="note" maxlength="1200" placeholder="Use simple, warm words. What might be comforting to remember?"></textarea></div><div class="field"><label for="memory-photo">Add a photo (optional)</label><input id="memory-photo" name="photo" type="file" accept="image/*"><span class="hint">The photo is saved on this device. For best results, choose one clear photo.</span><div id="photo-preview" class="hidden"></div></div></div><div class="form-actions"><button class="primary" type="submit">${ic('heart',20)} Save moment</button></div></form>`;
     }
     function renderMedicineForm() {
       if (!caregiverUnlocked) return renderFamily();
@@ -499,18 +624,10 @@
     function renderProfileForm() {
       if (!caregiverUnlocked) return renderFamily();
       const p=state.profile;
-      return `${topTitle('Update personal details','Please check spellings and phone numbers carefully.')}
-        <form class="panel" data-form="profile"><div class="form-grid"><div class="field"><label for="profile-name">Name they like to be called</label><input id="profile-name" name="name" value="${esc(p.name)}" required maxlength="100"></div><div class="field"><label for="profile-home">Home address</label><textarea id="profile-home" name="homeAddress" required maxlength="300">${esc(p.homeAddress)}</textarea></div><div class="form-grid two"><div class="field"><label for="profile-phone">Personal phone</label><input id="profile-phone" name="phone" type="tel" value="${esc(p.phone)}" maxlength="40"></div><div class="field"><label for="profile-email">Email address</label><input id="profile-email" name="email" type="email" value="${esc(p.email)}" maxlength="150"></div></div><div class="form-section"><h3>Main helper</h3></div><div class="form-grid two"><div class="field"><label for="profile-emergency-name">Helper’s name</label><input id="profile-emergency-name" name="emergencyName" value="${esc(p.emergencyName)}" maxlength="100"></div><div class="field"><label for="profile-emergency-phone">Helper’s phone</label><input id="profile-emergency-phone" name="emergencyPhone" type="tel" value="${esc(p.emergencyPhone)}" maxlength="40"></div></div><div class="form-section"><h3>Doctor and emergency details</h3></div><div class="form-grid two"><div class="field"><label for="profile-doctor-name">Doctor / clinic</label><input id="profile-doctor-name" name="doctorName" value="${esc(p.doctorName)}" maxlength="120"></div><div class="field"><label for="profile-doctor-phone">Doctor’s phone</label><input id="profile-doctor-phone" name="doctorPhone" type="tel" value="${esc(p.doctorPhone)}" maxlength="40"></div><div class="field"><label for="profile-emergency-service">Local emergency number</label><input id="profile-emergency-service" name="emergencyServiceNumber" value="${esc(p.emergencyServiceNumber || '112')}" maxlength="20"><span class="hint">Change this to the correct number for your country or region.</span></div></div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save details</button></div></form>`;
+      return `${topTitle('Personal details','Keep these details up to date.')}
+        <form class="panel" data-form="profile"><div class="form-grid"><div class="field"><label for="profile-name">Name they like to be called</label><input id="profile-name" name="name" value="${esc(p.name)}" required maxlength="100"></div><div class="field"><label for="profile-home">Home address</label><textarea id="profile-home" name="homeAddress" required maxlength="300">${esc(p.homeAddress)}</textarea></div><div class="form-grid two"><div class="field"><label for="profile-phone">Personal phone</label><input id="profile-phone" name="phone" type="tel" value="${esc(p.phone)}" maxlength="40"></div><div class="field"><label for="profile-email">Email address</label><input id="profile-email" name="email" type="email" value="${esc(p.email)}" maxlength="150"></div></div><div class="form-section"><h3>Guardian</h3><p class="small muted">This name and number appear on the home screen for one-tap calling.</p></div><div class="form-grid two"><div class="field"><label for="profile-emergency-name">Guardian’s name</label><input id="profile-emergency-name" name="emergencyName" value="${esc(p.emergencyName)}" maxlength="100"></div><div class="field"><label for="profile-emergency-phone">Guardian’s phone</label><input id="profile-emergency-phone" name="emergencyPhone" type="tel" value="${esc(p.emergencyPhone)}" maxlength="40"></div></div><div class="form-section"><h3>Doctor and emergency numbers</h3><p class="small muted">Please check every number for your local area.</p></div><div class="form-grid two"><div class="field"><label for="profile-doctor-name">Doctor / clinic</label><input id="profile-doctor-name" name="doctorName" value="${esc(p.doctorName)}" maxlength="120"></div><div class="field"><label for="profile-doctor-phone">Doctor’s phone</label><input id="profile-doctor-phone" name="doctorPhone" type="tel" value="${esc(p.doctorPhone)}" maxlength="40"></div><div class="field"><label for="profile-emergency-service">National emergency number</label><input id="profile-emergency-service" name="emergencyServiceNumber" value="${esc(p.emergencyServiceNumber || '112')}" maxlength="20"></div><div class="field"><label for="profile-police-number">Police</label><input id="profile-police-number" name="policeNumber" type="tel" value="${esc(p.policeNumber || '112')}" maxlength="30"></div><div class="field"><label for="profile-fire-number">Fire department</label><input id="profile-fire-number" name="fireNumber" type="tel" value="${esc(p.fireNumber || '101')}" maxlength="30"></div><div class="field"><label for="profile-women-helpline">Women’s helpline</label><input id="profile-women-helpline" name="womenHelplineNumber" type="tel" value="${esc(p.womenHelplineNumber || '181')}" maxlength="30"></div><div class="field"><label for="profile-men-helpline">Men’s helpline</label><input id="profile-men-helpline" name="menHelplineNumber" type="tel" value="${esc(p.menHelplineNumber || '')}" maxlength="30" placeholder="Add local number"></div></div><p class="small muted">Some helplines vary by region. A family member should verify local numbers before use.</p></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save details</button></div></form>`;
     }
-    function renderInstallHelp() {
-      const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const android=/Android/i.test(navigator.userAgent);
-      let steps = ios ? `<ol><li>Open this website in <strong>Safari</strong>.</li><li>Tap the <strong>Share</strong> button.</li><li>Choose <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>. WithYou will appear beside your other apps.</li></ol>` : android ? `<ol><li>Open this website in <strong>Chrome</strong>.</li><li>Tap the three dots in the corner.</li><li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li><li>Tap <strong>Install</strong> or <strong>Add</strong>.</li></ol>` : `<ol><li>Open the website on your phone.</li><li>Use the browser menu to choose <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</li></ol>`;
-      return `${topTitle('Add WithYou to your phone','One quick setup makes it easier to find.')}
-        <div class="panel soft-sage"><div class="brand-mark" style="width:64px;height:64px;border-radius:20px;margin-bottom:14px">${ic('heart',33)}</div><h2>WithYou</h2><p class="lead">A little help, right when you need it.</p>${steps}<p class="small muted">WithYou needs to be hosted over HTTPS (GitHub Pages provides this). Internet is needed for the map tiles and external walking directions.</p></div>
-        <button class="secondary" type="button" data-action="install">${ic('plus',20)} Install WithYou now</button>
-        <div class="notice"><span class="notice-icon">${ic('info',22)}</span><div><strong>Good to know</strong><p class="small" style="margin-bottom:0">This app keeps data on this device. Use Family & setup to create a backup before changing phones.</p></div></div>`;
-    }
+
     function dateOf(y,m,d) { const dt=new Date(y,m,d); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; }
     function distanceKm(lat1,lon1,lat2,lon2) { const R=6371; const rad=x=>x*Math.PI/180; const dLat=rad(lat2-lat1), dLon=rad(lon2-lon1); const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2; return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
     function bearingText(lat1,lon1,lat2,lon2) { const rad=x=>x*Math.PI/180; const deg=x=>x*180/Math.PI; const y=Math.sin(rad(lon2-lon1))*Math.cos(rad(lat2)); const x=Math.cos(rad(lat1))*Math.sin(rad(lat2))-Math.sin(rad(lat1))*Math.cos(rad(lat2))*Math.cos(rad(lon2-lon1)); let b=(deg(Math.atan2(y,x))+360)%360; return ['north','north-east','east','south-east','south','south-west','west','north-west'][Math.round(b/45)%8]; }
@@ -557,16 +674,16 @@
         if(item._kind==='Reminder' && (item.completedDates||[]).includes(today)) continue;
         const k=`${today}-${item._kind}-${item.id}-${hhmm}`;
         if(firedReminders.has(k)) continue; firedReminders.add(k);
-        const msg=`WithYou reminder: ${item._kind.toLowerCase()} time. ${item.name||item.title}.`;
+        const msg=`carey reminder: ${item._kind.toLowerCase()} time. ${item.name||item.title}.`;
         if('Notification' in window && Notification.permission==='granted' && document.visibilityState==='visible') {
-          try { new Notification('WithYou reminder',{body:msg,icon:'./icons/icon-192.png',tag:k}); } catch(e) {}
+          try { new Notification('carey reminder',{body:msg,icon:'./icons/icon-192.png',tag:k}); } catch(e) {}
         }
         showToast(msg);
       }
     }
     async function askNotifications() {
-      if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside WithYou.'); return; }
-      try { const result=await Notification.requestPermission(); showToast(result==='granted'?'Notifications are enabled while WithYou is open. Background alerts need extra push setup.': 'Notifications were not enabled. You can still check reminders inside WithYou.'); } catch(e) { showToast('This browser could not enable notifications.'); }
+      if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside carey.'); return; }
+      try { const result=await Notification.requestPermission(); showToast(result==='granted'?'Notifications are enabled while carey is open. Background alerts need extra push setup.': 'Notifications were not enabled. You can still check reminders inside carey.'); } catch(e) { showToast('This browser could not enable notifications.'); }
     }
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
@@ -584,8 +701,10 @@
       if(type!=='setup' && type!=='family-unlock' && !caregiverUnlocked) { requireCaregiver(); return; }
       try {
         if(type==='setup') {
-          state.profile={...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim(),emergencyServiceNumber:'112',doctorName:'',doctorPhone:'',caregiverPin:''};
-          await save(); currentView='home'; render(); speak(`Welcome to WithYou, ${state.profile.name}. What would you like help with today?`); return;
+          const base=defaultState();
+          state.profile={...base.profile,...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim()};
+          state.preferences={...base.preferences,...state.preferences,companionGender:data.companionGender==='man'?'man':'woman',companionChosen:true};
+          await save(); currentView='home'; render(); speak(`Hello ${state.profile.name}. I’m glad you’re here. What would you like help with today?`); return;
         }
         if(type==='family-unlock') {
           const pin=String(data.pin||'');
@@ -594,15 +713,15 @@
           caregiverUnlocked=true; currentView='family'; render(); showToast('Family editing is unlocked on this device.'); return;
         }
         if(type==='profile') {
-          state.profile={...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim(),doctorName:String(data.doctorName||'').trim(),doctorPhone:String(data.doctorPhone||'').trim(),emergencyServiceNumber:String(data.emergencyServiceNumber||'112').trim()};
-          await save(); currentView='about'; homeCoords=null; render(); showToast('Personal details saved.'); return;
+          state.profile={...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim(),doctorName:String(data.doctorName||'').trim(),doctorPhone:String(data.doctorPhone||'').trim(),emergencyServiceNumber:String(data.emergencyServiceNumber||'112').trim(),policeNumber:String(data.policeNumber||'112').trim(),fireNumber:String(data.fireNumber||'101').trim(),womenHelplineNumber:String(data.womenHelplineNumber||'181').trim(),menHelplineNumber:String(data.menHelplineNumber||'').trim()};
+          await save(); currentView='home'; homeCoords=null; render(); showToast('Personal details saved.'); return;
         }
         if(type==='contact') {
-          state.contacts.push({id:uid(),name:String(data.name||'').trim(),relationship:String(data.relationship||'').trim(),phone:String(data.phone||'').trim(),note:String(data.note||'').trim()}); await save(); currentView='contacts'; render(); showToast('Person saved.'); return;
+          state.contacts.push({id:uid(),name:String(data.name||'').trim(),relationship:String(data.relationship||'').trim(),phone:String(data.phone||'').trim(),note:String(data.note||'').trim()}); await save(); currentView='contacts'; render(); showToast('Contact saved.'); return;
         }
         if(type==='memory') {
           const photo=await resizeImage(form.querySelector('[name="photo"]').files[0]);
-          state.memories.push({id:uid(),title:String(data.title||'').trim(),person:String(data.person||'').trim(),relationship:String(data.relationship||'').trim(),note:String(data.note||'').trim(),photo,createdAt:new Date().toISOString()}); await save(); currentView='memories'; render(); showToast('Memory saved.'); return;
+          state.memories.push({id:uid(),title:String(data.title||'').trim(),person:String(data.person||'').trim(),relationship:String(data.relationship||'').trim(),note:String(data.note||'').trim(),photo,createdAt:new Date().toISOString()}); await save(); currentView='memories'; render(); showToast('Moment saved.'); return;
         }
         if(type==='medicine') {
           state.medicines.push({id:uid(),name:String(data.name||'').trim(),dose:String(data.dose||'').trim(),time:String(data.time||''),notes:String(data.notes||'').trim(),takenDates:[]}); await save(); currentView='medicines'; render(); showToast('Medicine saved.'); return;
@@ -619,35 +738,29 @@
     async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else m.takenDates.push(todayStr()); await save(); render(); }
     async function deleteEntry(listName,id,view,message) { if(!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
     async function exportBackup() {
-      const payload={app:'WithYou',schemaVersion:1,exportedAt:new Date().toISOString(),state};
-      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`withyou-backup-${todayStr()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Backup created. Keep the file somewhere private.');
+      const payload={app:'carey',schemaVersion:1,exportedAt:new Date().toISOString(),state};
+      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`carey-backup-${todayStr()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Backup created. Keep the file somewhere private.');
     }
     function importBackup() { importInput.click(); }
     importInput.addEventListener('change', async () => {
       if(!importInput.files || !importInput.files[0]) return;
       if(!caregiverUnlocked) { importInput.value=''; requireCaregiver(); return; }
-      try { const txt=await importInput.files[0].text(); const payload=JSON.parse(txt); const data=payload.state||payload; if(!data.profile || !Array.isArray(data.contacts) || !Array.isArray(data.memories)) throw new Error('That does not look like a WithYou backup.'); if(!confirm('Replace the information on this phone with the backup? Export a backup first if you want to keep the current information.')) return; state={...defaultState(),...data,profile:{...defaultState().profile,...data.profile}}; await save(); currentView='home'; render(); showToast('Backup imported.'); } catch(err) { showToast(err.message||'I could not import that backup.'); } finally { importInput.value=''; }
+      try { const txt=await importInput.files[0].text(); const payload=JSON.parse(txt); const data=payload.state||payload; if(!data.profile || !Array.isArray(data.contacts) || !Array.isArray(data.memories)) throw new Error('That does not look like a carey backup.'); if(!confirm('Replace the information on this phone with the backup? Export a backup first if you want to keep the current information.')) return; state={...defaultState(),...data,profile:{...defaultState().profile,...data.profile}}; await save(); currentView='home'; render(); showToast('Backup imported.'); } catch(err) { showToast(err.message||'I could not import that backup.'); } finally { importInput.value=''; }
     });
-    function installApp() {
-      if(deferredInstallPrompt) { deferredInstallPrompt.prompt(); deferredInstallPrompt.userChoice.then(choice=>{ showToast(choice.outcome==='accepted'?'WithYou was added to your home screen.':'You can install WithYou later from your browser menu.'); deferredInstallPrompt=null; }); }
-      else { currentView='install-help'; render(); }
-    }
-    window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredInstallPrompt=e; });
     document.addEventListener('click', async event => {
       const el=event.target.closest('[data-action]'); if(!el)return;
       const action=el.dataset.action;
       if(action==='go') { currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
-      if(action==='speak-home') { const pageText=main.innerText.replace(/\s+/g,' ').slice(0,1200); speak(pageText || `Hello ${sayName()}. What would you like help with?`); return; }
+      if(action==='choose-companion') { state.preferences=state.preferences||{}; state.preferences.companionGender=el.dataset.gender==='man'?'man':'woman'; state.preferences.companionChosen=true; await save(); currentView='settings'; render(); speak(state.preferences.companionGender==='man'?'Hello, I’m here with you.':'Hello, I’m here with you.'); showToast('Your companion has been changed.'); return; }
+      if(action==='speak-home') { speak(`Hello ${sayName()}. Today, you have ${state.medicines.filter(m=>!(m.takenDates||[]).includes(todayStr())).length} medicines not marked as taken and ${state.tasks.filter(t=>(t.repeat==='daily'||!t.date||t.date>=todayStr())&&!(t.completedDates||[]).includes(todayStr())).length} reminders to check. Your guardian is ${state.profile.emergencyName||'not added yet'}.`); return; }
       if(action==='speak') { speak(el.dataset.text||''); return; }
       if(action==='locate') { locate(); return; }
       if(action==='notifications') { askNotifications(); return; }
-      if(action==='install-help') { currentView='install-help'; render(); return; }
-      if(action==='install') { installApp(); return; }
       if(action==='lock-family') { caregiverUnlocked=false; currentView='family'; render(); showToast('Family editing is locked.'); return; }
       if(action==='toggle-task') { toggleTask(el.dataset.id); return; }
       if(action==='toggle-medicine') { toggleMedicine(el.dataset.id); return; }
       if(action==='delete-contact') { deleteEntry('contacts',el.dataset.id,'contacts','Person removed.'); return; }
-      if(action==='delete-memory') { deleteEntry('memories',el.dataset.id,'memories','Memory removed.'); return; }
+      if(action==='delete-memory') { deleteEntry('memories',el.dataset.id,'memories','Moment removed.'); return; }
       if(action==='delete-medicine') { deleteEntry('medicines',el.dataset.id,'medicines','Medicine removed.'); return; }
       if(action==='delete-task') { deleteEntry('tasks',el.dataset.id,'tasks','Reminder removed.'); return; }
       if(action==='delete-appointment') { deleteEntry('appointments',el.dataset.id,'appointments','Appointment removed.'); return; }
