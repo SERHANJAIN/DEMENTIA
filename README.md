@@ -1,17 +1,33 @@
-# carey — phone-first web app
+# Optional natural voice for carey
 
-A calm, compact daily companion. The app files are in this folder's root so the folder contents can be published directly with GitHub Pages.
+carey can use a higher-quality generated voice rather than the phone's built-in speech voice. This integration keeps the provider API key on a server, not inside the public GitHub app.
 
-## Publish
-1. Create a GitHub repository and upload the contents of this folder into the repository root.
-2. Open **Settings → Pages** and publish the `main` branch from the root directory.
-3. Open the HTTPS page on the phone.
+## 1. Create the voice service
 
-The browser app can be added to the phone home screen from the browser menu. This is a hosting/install instruction, not an app screen.
+1. Create an ElevenLabs account and select two voices you are allowed to use: one for the woman companion and one for the man companion. Copy each voice ID from the provider's voice library.
+2. Create a Cloudflare account, open Workers & Pages, and create a Worker named `carey-natural-voice`.
+3. Paste `worker.js` into the Worker editor and deploy it once.
+4. In the Worker settings, add these **Variables**:
+   - `CAREY_ALLOWED_ORIGINS`: comma-separated exact origins, e.g. `https://YOUR-USERNAME.github.io,capacitor://localhost,http://localhost,https://localhost`. Replace the GitHub example with your site's origin. Origins do not include a repository path.
+   - `CAREY_VOICE_ID_WOMAN`: the chosen woman voice ID.
+   - `CAREY_VOICE_ID_MAN`: the chosen man voice ID.
+   - `CAREY_TTS_MODEL`: `eleven_multilingual_v2` (or a model enabled for your account).
+5. Add `ELEVENLABS_API_KEY` as a **Secret**, not a plain variable. Never put this key in the app code or in GitHub.
+6. Deploy the Worker again. Copy its public HTTPS URL.
+
+## 2. Connect carey to the service
+
+Edit `www/voice-config.js` and set:
+
+```js
+window.CAREY_VOICE_ENDPOINT = 'https://YOUR-WORKER-URL.workers.dev';
+```
+
+Use the Worker URL only; do not put your API key in this file. Commit the change to GitHub Pages. For an Android APK, rebuild the APK in GitHub Actions after changing the file.
 
 ## Notes
-- Data is saved on the current device. There is no secure cross-device family sync in this starter build.
-- Speech uses the voice installed on the phone; voice availability and quality vary.
-- Scheduled reminders while the app is fully closed need additional notification infrastructure.
-- Home-finding shows an approximate direction and hands off to the phone's maps app for walking directions. Test it before relying on it.
-- Check and confirm all emergency numbers for the user's location.
+
+- Generated speech is sent to the configured voice provider. Do not send private medical details or other sensitive text unless you are comfortable with the provider's data handling and terms.
+- Text-to-speech usage may be billable under the provider's plan. Check current pricing and terms before enabling it.
+- The local built-in voice is used as a fallback if the remote service is not configured or temporarily unavailable.
+- Configure `CAREY_ALLOWED_ORIGINS` narrowly. CORS is an origin control, not a substitute for provider usage limits or abuse monitoring.

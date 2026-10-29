@@ -1,0 +1,8 @@
+name = "carey-natural-voice"
+main = "worker.js"
+compatibility_date = "2026-10-30"
+
+# Configure these in the Cloudflare Workers dashboard:
+# Variables: CAREY_ALLOWED_ORIGINS, CAREY_VOICE_ID_WOMAN, CAREY_VOICE_ID_MAN, CAREY_TTS_MODEL
+# Secret:    ELEVENLABS_API_KEY
+# Never add the provider API key to this file, GitHub, or www/voice-config.js.

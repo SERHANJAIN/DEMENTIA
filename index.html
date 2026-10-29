@@ -226,29 +226,207 @@
       .moments-gallery { grid-template-columns: repeat(3,minmax(0,1fr)); }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+
+    /* Carey refinement: warm, ambient sections; 3D portrait companions; and readable night mode. */
+    .brand-side { display:flex; align-items:center; gap:7px; min-width:0; }
+    .settings-top { display:inline-grid; place-items:center; width:39px; height:42px; padding:0; color:var(--navy); border:0; border-radius:12px; background:transparent; flex:0 0 39px; }
+    .settings-top:active { background:rgba(36,59,83,.08); transform:scale(.96); }
+    .brand-mark { border-radius:14px; }
+    .home-hero { overflow:hidden; position:relative; border-radius:22px; padding:13px 13px 10px; margin:0 0 10px; background:linear-gradient(90deg,rgba(246,248,239,.90),rgba(246,248,239,.58)),url('./assets/ambient-home.svg') center/cover no-repeat; box-shadow:0 4px 18px rgba(36,59,83,.06); }
+    .home-hero .home-intro { padding:0; }
+    .identity-home { align-items:center; }
+    .identity-copy h1 { font-size:clamp(25px,5.5vw,33px); }
+    .identity-details { font-size:13px; }
+    .avatar-launch { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:0; flex:0 0 auto; color:var(--navy); border:0; background:transparent; text-decoration:none; }
+    .avatar-launch:active { transform:scale(.97); }
+    .avatar-launch-label { font-size:11px; font-weight:800; line-height:1.15; }
+    .avatar-launch-small { margin-top:2px; }
+    .companion-avatar { position:relative; display:inline-block; width:74px; height:74px; flex:0 0 74px; overflow:visible; border-radius:50%; background:#dcebe4; border:2px solid rgba(255,255,255,.8); box-shadow:0 5px 18px rgba(36,59,83,.16); }
+    .companion-avatar img { display:block; width:100%; height:100%; border-radius:50%; object-fit:cover; object-position:center 45%; animation:portraitBreath 7s ease-in-out infinite; transform-origin:50% 80%; }
+    @keyframes portraitBreath { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-1.4px) scale(1.006)} }
+    .companion-avatar.is-happy img { animation:portraitHappy .65s ease-in-out 2; }
+    @keyframes portraitHappy { 0%,100%{transform:translateY(0) rotate(0)} 35%{transform:translateY(-4px) rotate(-2deg)} 70%{transform:translateY(-2px) rotate(2deg)} }
+    .companion-avatar.large { width:102px; height:102px; flex-basis:102px; }
+    .companion-avatar.small-avatar { width:45px; height:45px; flex-basis:45px; }
+    .companion-avatar.is-happy { animation:celebrateBob .62s ease-in-out 2; box-shadow:0 0 0 4px rgba(96,155,117,.22),0 5px 18px rgba(36,59,83,.15); }
+    .avatar-reaction { position:absolute; right:-7px; bottom:-4px; display:grid; place-items:center; width:34px; height:34px; border-radius:50%; color:white; background:#4b8967; border:2px solid rgba(255,255,255,.96); font-size:19px; animation:reactionPop .5s cubic-bezier(.2,1.4,.4,1) both; }
+    @keyframes celebrateBob { 0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-7px) rotate(-3deg)}70%{transform:translateY(-3px) rotate(3deg)} }
+    @keyframes reactionPop { 0%{transform:scale(.1) rotate(-25deg);opacity:0}80%{transform:scale(1.12) rotate(7deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1} }
+    .encouragement-bubble { display:inline-flex; gap:7px; align-items:center; margin:8px 0 0 112px; padding:7px 11px; border-radius:14px 14px 14px 4px; background:#e3f0e3; color:#315b42; font-size:13px; font-weight:800; box-shadow:0 3px 10px rgba(45,90,63,.08); }
+    .guardian-strip { margin:9px 0 11px; min-height:62px; padding:9px 12px; background:linear-gradient(105deg,#e8f0e7,#f0f6ec); }
+    .guardian-phone-icon { width:37px;height:37px;display:grid;place-items:center;border-radius:13px;background:#d4e4d3;flex:0 0 37px; }
+    .guardian-call-icon { width:39px;height:39px;display:grid;place-items:center;border-radius:50%;background:#426b54;color:white;flex:0 0 39px; }
+    .today-priority { padding:12px; margin:10px 0 12px; border-radius:20px; background:rgba(255,255,255,.73); }
+    .today-heading h2 { font-size:20px; }
+    .today-columns { gap:10px; }
+    .today-list { padding:9px; }
+    .today-list-title { font-size:13px; margin-bottom:7px; }
+    .today-item { gap:7px; padding:7px 0; }
+    .today-item-name { font-size:13px; line-height:1.28; }
+    .today-item-meta { font-size:11px; line-height:1.25; }
+    .today-check { width:33px; height:33px; flex-basis:33px; border-radius:12px; }
+    .home-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0 22px; }
+    .home-card { min-height:91px; padding:11px 9px; border-radius:18px; gap:6px; }
+    .home-card .card-icon { width:39px;height:39px;border-radius:13px; }
+    .home-card .card-label { font-size:15px; }
+    .home-card .card-icon svg { width:25px;height:25px; }
+    .moments-section { position:relative; overflow:hidden; padding:18px 13px 14px; margin:18px 0 15px; border-radius:23px; background:linear-gradient(180deg,rgba(250,248,239,.89),rgba(241,246,239,.94)),url('./assets/ambient-moments.svg') center/cover; border:1px solid rgba(36,59,83,.08); box-shadow:0 4px 18px rgba(36,59,83,.05); }
+    .moments-heading { position:relative; z-index:1; display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px; }
+    .moments-heading .eyebrow { font-size:11px; margin-bottom:3px; }
+    .moments-heading h2 { font-size:25px;margin:0; }
+    .gallery-add { display:inline-flex;align-items:center;justify-content:center;gap:5px; min-height:39px; padding:7px 11px;border-radius:13px;background:rgba(255,255,255,.82);border:1px solid rgba(36,59,83,.15);color:var(--navy);font-weight:800; }
+    .moments-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin-top:12px; }
+    .moment-tile { border-radius:17px; background:rgba(255,255,255,.94); box-shadow:0 3px 11px rgba(38,58,72,.09); }
+    .moment-image,.moment-image-placeholder { aspect-ratio:1 / .92; }
+    .moment-copy { padding:10px; }
+    .moment-title { font-size:14px; margin-bottom:4px; }
+    .moment-person { font-size:11px; margin-bottom:4px; }
+    .moment-note { font-size:12px; line-height:1.35; -webkit-line-clamp:3; }
+    .moment-actions { margin-top:5px; }
+    .moment-featured { grid-row:span 1; }
+    .gallery-empty { display:flex;align-items:center;gap:12px;padding:16px 12px;border-radius:18px;background:rgba(255,255,255,.72);margin-top:12px; }
+    .gallery-empty-mark { display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:#dcefed;color:#286b6c;flex:0 0 48px; }
+    .gallery-empty h3 { margin-bottom:4px; }
+    .gallery-empty p { margin-bottom:0;font-size:13px;color:var(--muted); }
+    .home-bottom-help { display:flex;align-items:center;gap:11px;padding:14px 15px;margin-top:16px;border-radius:19px;background:linear-gradient(110deg,#e8f0e7,#f7e8da);color:#27445a; }
+    .home-bottom-help p { font-size:13px;margin:2px 0 0;color:#526b75; }
+    .home-bottom-icon { display:grid;place-items:center;width:39px;height:39px;border-radius:14px;background:rgba(255,255,255,.75);flex:0 0 39px; }
+    .home-bottom-help .speaker-button { margin-left:auto; }
+    .contact-avatar-photo { display:block;width:64px;height:64px;flex:0 0 64px;object-fit:cover;object-position:center;border-radius:18px;background:#e4efeb;box-shadow:0 2px 7px rgba(36,59,83,.08); }
+    .contact-photo-editor { display:flex;align-items:center;gap:15px;margin:4px 0 18px;padding:12px;border-radius:17px;background:rgba(224,239,234,.55); }
+    .contact-photo-preview { width:86px;height:86px;flex:0 0 86px;border-radius:22px; }
+    .contact-photo-editor .field { flex:1;min-width:0; }
+    .contact-actions { flex-wrap:wrap; }
+    .contact-actions > * { flex:0 1 auto; }
+    .settings-appearance { background:linear-gradient(130deg,rgba(255,255,255,.95),rgba(231,241,237,.94)),url('./assets/ambient-chat.svg') center/cover; }
+    .theme-options { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px; }
+    .theme-option { display:flex;align-items:center;gap:9px;min-height:74px;padding:10px;border:2px solid var(--line);border-radius:16px;background:rgba(255,255,255,.76);color:var(--ink);text-align:left; }
+    .theme-option > span { flex:1;min-width:0; }
+    .theme-option strong { display:block;font-size:14px; }
+    .theme-option small { display:block;font-size:11px;color:var(--muted);margin-top:2px; }
+    .theme-option.is-active { border-color:var(--teal-deep);background:#e0efeb; }
+    .companion-choice.is-selected { border-color:var(--teal-deep);background:#e9f4f2;box-shadow:0 0 0 2px rgba(40,107,108,.1); }
+    .chat-shell { min-height:60vh;padding:14px;border-radius:23px;background:linear-gradient(180deg,rgba(251,248,239,.84),rgba(242,246,240,.95)),url('./assets/ambient-chat.svg') center/cover;border:1px solid rgba(36,59,83,.08); }
+    .chat-welcome { display:flex;align-items:center;gap:14px;padding:11px 8px 16px; }
+    .chat-welcome h2 { margin-bottom:4px; }
+    .chat-welcome p { margin:0;color:var(--muted);font-size:14px; }
+    .chat-mode-switch { display:flex;gap:8px;padding:4px;border-radius:15px;background:rgba(36,59,83,.08);margin-bottom:14px; }
+    .chat-mode-button { display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-height:43px;border:0;border-radius:12px;background:transparent;color:var(--ink);font-weight:800; }
+    .chat-mode-button.active { background:var(--navy);color:white;box-shadow:0 2px 8px rgba(36,59,83,.18); }
+    .chat-messages { display:flex;flex-direction:column;gap:13px;min-height:135px;max-height:47vh;overflow-y:auto;padding:4px 0 12px;scroll-behavior:smooth; }
+    .chat-row { display:flex;align-items:flex-end;gap:8px;max-width:96%; }
+    .chat-row-user { margin-left:auto;justify-content:flex-end; }
+    .chat-avatar-mini { flex:0 0 37px; }
+    .chat-avatar-mini .companion-avatar { width:37px;height:37px;flex-basis:37px; }
+    .chat-bubble { padding:12px 13px;border-radius:18px;max-width:100%;box-shadow:0 2px 8px rgba(36,59,83,.06); }
+    .chat-bubble p { margin:0;white-space:pre-wrap;font-size:15px;line-height:1.45; }
+    .carey-bubble { background:rgba(255,255,255,.95);border:1px solid rgba(36,59,83,.07);border-bottom-left-radius:5px; }
+    .user-bubble { background:#dcefed;color:#203244;border-bottom-right-radius:5px; }
+    .chat-message-actions { display:flex;align-items:center;gap:8px;margin-top:7px; }
+    .chat-message-actions .speaker-button { width:35px;height:35px;flex:0 0 35px; }
+    .chat-open-link { display:inline-flex;align-items:center;gap:3px;min-height:35px;padding:5px 9px;border:1px solid var(--line);border-radius:11px;background:#f2f6f4;color:var(--navy);font-size:12px;font-weight:800; }
+    .chat-compose { display:flex;align-items:center;gap:8px;margin:6px 0 12px;padding:6px 6px 6px 12px;background:rgba(255,255,255,.98);border:2px solid #d3e0df;border-radius:17px; }
+    .chat-compose input { flex:1;min-width:0;min-height:42px;border:0;outline:0;background:transparent;color:var(--ink);font-size:16px; }
+    .send-chat { display:grid;place-items:center;width:43px;height:43px;flex:0 0 43px;border:0;border-radius:14px;background:var(--navy);color:white; }
+    .chat-suggestions { display:flex;flex-wrap:wrap;gap:7px; }
+    .chat-suggestions button { min-height:38px;padding:7px 11px;border:1px solid rgba(36,59,83,.13);border-radius:999px;background:rgba(255,255,255,.82);color:var(--navy);font-size:12px;font-weight:800; }
+    .voice-input-card { text-align:center;padding:21px 14px 18px;margin:6px 0 13px;border-radius:19px;background:rgba(255,255,255,.76); }
+    .voice-orb { width:62px;height:62px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;background:#d7eae5;color:#286b6c;box-shadow:0 0 0 7px rgba(40,107,108,.09); }
+    .voice-input-card h3 { font-size:19px; }
+    .voice-input-card p { margin-bottom:12px; }
+    .voice-listen-button { max-width:250px;margin:0 auto 9px; }
+    .sr-only { position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+    .ambient-note { background:linear-gradient(110deg,rgba(232,242,237,.95),rgba(249,232,218,.83)),url('./assets/ambient-moments.svg') center/cover; }
+    .ambient-panel { background:linear-gradient(130deg,rgba(255,255,255,.94),rgba(233,242,235,.9)),url('./assets/ambient-home.svg') center/cover; }
+    :root[data-theme="dark"] { --navy:#243b53;--navy-soft:#2a4157;--sage:#263d3a;--sage-deep:#a9d0b1;--teal:#253e46;--teal-deep:#8bd0cb;--peach:#463731;--terracotta:#efa98f;--sand:#453b30;--paper:#142b45;--white:#1d374f;--ink:#f3f6fb;--muted:#c4d0dd;--line:#3a566d;--focus:#93d8e7;--danger:#c8655b;--shadow:0 5px 20px rgba(0,0,0,.18);--daily-background:#142b45; }
+    :root[data-theme="dark"] html,:root[data-theme="dark"] body { background:#142b45; }
+    :root[data-theme="dark"] body { color:var(--ink);background:#142b45; }
+    :root[data-theme="dark"] .shell { background:transparent; }
+    :root[data-theme="dark"] .topbar { background:rgba(20,43,69,.94);border-bottom-color:rgba(220,234,245,.12); }
+    :root[data-theme="dark"] .brand-tagline,:root[data-theme="dark"] .lead,:root[data-theme="dark"] .identity-details,:root[data-theme="dark"] .profile-key { color:var(--muted); }
+    :root[data-theme="dark"] .settings-top { color:#f3f6fb; }
+    :root[data-theme="dark"] .settings-top:active { background:rgba(255,255,255,.09); }
+    :root[data-theme="dark"] .icon-button,:root[data-theme="dark"] .speaker-button { background:#203b55;color:#f3f6fb;border-color:#49657a; }
+    :root[data-theme="dark"] .home-hero { background:linear-gradient(100deg,rgba(20,43,69,.90),rgba(20,43,69,.55)),url('./assets/ambient-home.svg') center/cover; }
+    :root[data-theme="dark"] .today-priority,:root[data-theme="dark"] .today-list,:root[data-theme="dark"] .panel,:root[data-theme="dark"] .item,:root[data-theme="dark"] .summary-cell,:root[data-theme="dark"] .summary-strip .summary-cell,:root[data-theme="dark"] .moment-tile,:root[data-theme="dark"] .companion-choice,:root[data-theme="dark"] .empty,:root[data-theme="dark"] .notice,:root[data-theme="dark"] .chat-shell,:root[data-theme="dark"] .chat-bubble,:root[data-theme="dark"] .voice-input-card,:root[data-theme="dark"] .gallery-empty { background-color:#1d374f;color:var(--ink);border-color:#3c5a70; }
+    :root[data-theme="dark"] .today-priority { background:rgba(29,55,79,.94); }
+    :root[data-theme="dark"] .today-list { background:rgba(14,36,59,.8); }
+    :root[data-theme="dark"] .today-list-title,:root[data-theme="dark"] .today-footer button,:root[data-theme="dark"] .identity-link,:root[data-theme="dark"] .small-link { color:#b8d8eb; }
+    :root[data-theme="dark"] .today-check { background:#234c48;color:#d9fbef;border-color:#527c74; }
+    :root[data-theme="dark"] .today-check.done { background:#4b8967;color:white; }
+    :root[data-theme="dark"] .guardian-strip { background:linear-gradient(110deg,#234538,#203d45);color:#effaf1;border-color:#456e5a; }
+    :root[data-theme="dark"] .guardian-label,:root[data-theme="dark"] .guardian-number { color:#bdd9c6; }
+    :root[data-theme="dark"] .guardian-phone-icon { background:#2c5a49; }
+    :root[data-theme="dark"] .guardian-call-icon { background:#578d6b;color:white; }
+    :root[data-theme="dark"] .tone-navy,:root[data-theme="dark"] .tone-sage,:root[data-theme="dark"] .tone-teal,:root[data-theme="dark"] .tone-peach,:root[data-theme="dark"] .tone-sand,:root[data-theme="dark"] .tone-rose { background:#203b55;color:#f3f6fb;border-color:#3b566b; }
+    :root[data-theme="dark"] .tone-navy .card-icon,:root[data-theme="dark"] .tone-sage .card-icon,:root[data-theme="dark"] .tone-teal .card-icon,:root[data-theme="dark"] .tone-peach .card-icon,:root[data-theme="dark"] .tone-sand .card-icon,:root[data-theme="dark"] .tone-rose .card-icon { background:#34536a;color:#f6f8fb; }
+    :root[data-theme="dark"] .moments-section { background:linear-gradient(180deg,rgba(20,43,69,.91),rgba(20,43,69,.96)),url('./assets/ambient-moments.svg') center/cover;border-color:#38556c; }
+    :root[data-theme="dark"] .moment-copy,:root[data-theme="dark"] .moment-note { color:var(--muted); }
+    :root[data-theme="dark"] .gallery-add,:root[data-theme="dark"] .chat-suggestions button,:root[data-theme="dark"] .chat-open-link { color:#e7f0f8;background:#27445e;border-color:#4b687f; }
+    :root[data-theme="dark"] .theme-option { background:#203b55;color:var(--ink);border-color:#3b586f; }
+    :root[data-theme="dark"] .theme-option.is-active,:root[data-theme="dark"] .companion-choice.is-selected { background:#244d4d;border-color:#75b8b2; }
+    :root[data-theme="dark"] .settings-appearance,:root[data-theme="dark"] .ambient-note,:root[data-theme="dark"] .ambient-panel { background:linear-gradient(130deg,rgba(29,55,79,.94),rgba(29,55,79,.90)),url('./assets/ambient-chat.svg') center/cover; }
+    :root[data-theme="dark"] .chat-shell { background:linear-gradient(180deg,rgba(20,43,69,.90),rgba(20,43,69,.96)),url('./assets/ambient-chat.svg') center/cover; }
+    :root[data-theme="dark"] .carey-bubble,:root[data-theme="dark"] .chat-compose,:root[data-theme="dark"] .chat-mode-switch,:root[data-theme="dark"] .voice-input-card { background:#1d374f;border-color:#3d5a70;color:var(--ink); }
+    :root[data-theme="dark"] .user-bubble { background:#284d60;color:#f4f8fb; }
+    :root[data-theme="dark"] .chat-mode-switch { background:#0f263e; }
+    :root[data-theme="dark"] .chat-mode-button { color:#dce7f2; }
+    :root[data-theme="dark"] .chat-mode-button.active { background:#e4f0f5;color:#1b3851; }
+    :root[data-theme="dark"] .chat-compose input { color:var(--ink); }
+    :root[data-theme="dark"] .home-bottom-help { background:linear-gradient(110deg,#203e4c,#26394e);color:#eef5f8; }
+    :root[data-theme="dark"] .encouragement-bubble { background:#254b40;color:#e0f6e7; }
+    :root[data-theme="dark"] .home-bottom-help p { color:#c6d6e0; }
+    :root[data-theme="dark"] .home-bottom-icon { background:#345268;color:#fff; }
+    :root[data-theme="dark"] .panel.soft-sage,:root[data-theme="dark"] .panel.soft-peach,:root[data-theme="dark"] .panel.soft-teal,:root[data-theme="dark"] .panel.soft-navy { background:#1d374f;border-color:#3c5a70; }
+    :root[data-theme="dark"] .primary { background:#34556e;color:#fff; }
+    :root[data-theme="dark"] .secondary { background:#263f57;color:#ecf5fb;border-color:#48657b; }
+    :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field select { color:var(--ink);background:#102a43;border-color:#3b586f; }
+    :root[data-theme="dark"] .profile-line { border-bottom-color:#3b566c; }
+    :root[data-theme="dark"] .contact-photo-editor { background:#213d55; }
+    :root[data-theme="dark"] .chat-suggestions button { background:#233f58;color:#eef7fc; }
+    @media (max-width:360px) { .home-grid { gap:8px; } .home-card { min-height:84px;padding:8px; } .home-card .card-label { font-size:14px; } .identity-home { gap:8px; } .companion-avatar.large { width:88px;height:88px;flex-basis:88px; } .identity-copy h1 { font-size:24px; } .today-columns { grid-template-columns:1fr; } .home-hero { padding:10px; } }
+    @media (min-width:640px) { .home-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .home-card { min-height:102px; } .moments-gallery { grid-template-columns:repeat(3,minmax(0,1fr)); } .moment-featured { grid-column:span 1; } }
+
+
+    :root[data-theme="dark"] .back-button,:root[data-theme="dark"] a { color:#cfe3f1; }
+    :root[data-theme="dark"] .primary,:root[data-theme="dark"] a.primary { color:#fff; }
+    :root[data-theme="dark"] .month-nav { background:#203b55;color:#edf6fb;border-color:#3c5a70; }
+    :root[data-theme="dark"] .day { background:#1d374f;color:#f2f6fb;border-color:#3b586e; }
+    :root[data-theme="dark"] .day.muted-day { background:#172f48;color:#8fa8bc; }
+    :root[data-theme="dark"] .day.selected { background:#d9eaf2;color:#18334c;border-color:#d9eaf2; }
+    :root[data-theme="dark"] .day.selected .dot { background:#18334c; }
+    :root[data-theme="dark"] .map { background:#10263d;border-color:#3a586e; }
+    :root[data-theme="dark"] .map-placeholder { background:#1d374f;color:#cfdeeb; }
+    :root[data-theme="dark"] .summary-number { color:#d4eaf8; }
+    :root[data-theme="dark"] .weekday { color:#c3d2df; }
+    :root[data-theme="dark"] .status-line { color:#eaf3f9; }
+    :root[data-theme="dark"] .lead { color:#d0dce7; }
+    :root[data-theme="dark"] .footer-note { color:#afc0d0; }
+    :root[data-theme="dark"] .profile-value { color:#edf5fa; }
+    :root[data-theme="dark"] .companion-avatar { border-color:#49667e; }
+    :root[data-theme="dark"] .home-card { box-shadow:0 4px 14px rgba(0,0,0,.16); }
+    :root[data-theme="dark"] .gallery-empty-mark { background:#284a5b;color:#c0eee2; }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
   <div class="shell">
     <header class="topbar">
-      <div class="brand" role="img" aria-label="carey — A little help, right when you need it">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" width="31" height="31" fill="none"><path d="M7 22.5 24 8l17 14.5v17H7v-17Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="M18.2 28.5c0-2.7 2-4.4 4.2-4.4 1 0 1.9.5 2.6 1.4.7-.9 1.6-1.4 2.7-1.4 2.2 0 4.1 1.7 4.1 4.4 0 3.4-6.8 7.7-6.8 7.7s-6.8-4.3-6.8-7.7Z" fill="#F9E7D9" stroke="#F9E7D9" stroke-width="1.3" stroke-linejoin="round"/></svg>
-        </span>
-        <span>
-          <span class="brand-name">carey</span>
-          <span class="brand-tagline">A little help, right when you need it.</span>
-        </span>
+      <div class="brand-side">
+        <button class="settings-top" type="button" data-action="go" data-view="settings" aria-label="Settings" title="Settings"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4 1.4-1.1A8 8 0 0 1 7 13l-1.8-.3V9.9L7 9.6a8 8 0 0 1 .9-1.7L6.5 6.5l1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.4a8 8 0 0 1 .9 1.7l1.8.3v2.8l-1.8.3a8 8 0 0 1-.8 2.2Z"/></svg></button>
+        <div class="brand" aria-label="carey — A little help, right when you need it">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" width="31" height="31"><path d="M5 22 24 6l19 16v20H5Z" fill="#fff"/><path d="M15 26c0-5 4-8 8-8 1 0 3 1 4 3 1-2 3-3 5-3 4 0 7 3 7 8 0 6-12 13-12 13S15 32 15 26Z" fill="#243b53" transform="translate(-1 -2) scale(.9)"/></svg></span>
+          <span><span class="brand-name">carey</span><span class="brand-tagline">A little help, right when you need it.</span></span>
+        </div>
       </div>
-      <div class="top-actions">
-        <button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear carey" title="Hear carey"><span id="voice-icon"></span></button>
-      </div>
+      <div class="top-actions"><button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear carey" title="Hear carey"><span id="voice-icon"></span></button></div>
     </header>
     <main id="main" aria-live="polite"></main>
   </div>
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <input class="file-input" id="import-file" type="file" accept="application/json,.json">
+  <script src="./voice-config.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
   <script>
   (() => {
@@ -297,12 +475,15 @@
       alert:'<path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/>',
       checkcircle:'<circle cx="12" cy="12" r="10"/><path d="m8 12 2.5 2.5L16 9"/>',
       image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
-      message:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>'
+      message:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>',
+      sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>',
+      moon:'<path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z"/>',
+      mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>'
     };
     const ic = (name, size=24) => `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.info}</svg>`;
     const defaultState = () => ({
       profile: { name:'', homeAddress:'', phone:'', email:'', emergencyName:'', emergencyPhone:'', emergencyServiceNumber:'112', doctorName:'', doctorPhone:'', policeNumber:'112', fireNumber:'101', womenHelplineNumber:'181', menHelplineNumber:'', caregiverPin:'' },
-      preferences: { companionGender:'', companionChosen:false },
+      preferences: { companionGender:'', companionChosen:false, theme:'light' },
       contacts: [], memories: [], medicines: [], appointments: [], tasks: []
     });
     let state = defaultState();
@@ -316,6 +497,14 @@
     let leafletMap = null;
     let firedReminders = new Set();
     let toastTimer = null;
+    let editingContactId = null;
+    let chatMode = 'text';
+    let chatMessages = [];
+    let companionMood = 'neutral';
+    let moodTimer = null;
+    let activeRecognition = null;
+    let activeVoiceAudio = null;
+    let activeVoiceObjectUrl = null;
 
     function openDb() {
       return new Promise((resolve, reject) => {
@@ -344,17 +533,34 @@
     function showToast(message) {
       toastEl.textContent = message; toastEl.classList.remove('hidden'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>toastEl.classList.add('hidden'), 4600);
     }
-    function speak(message) {
+    async function speak(message) {
+      const text=String(message||'').trim(); if(!text) return;
+      if (activeVoiceAudio) { try { activeVoiceAudio.pause(); } catch(e) {} activeVoiceAudio=null; }
+      if (activeVoiceObjectUrl) { URL.revokeObjectURL(activeVoiceObjectUrl); activeVoiceObjectUrl=null; }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      const endpoint=String(window.CAREY_VOICE_ENDPOINT||'').trim();
+      if(endpoint) {
+        try {
+          const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,gender:state.preferences?.companionGender==='man'?'man':'woman'})});
+          if(!response.ok) throw new Error('Natural voice service returned '+response.status);
+          const blob=await response.blob();
+          if(!blob.type.startsWith('audio/')) throw new Error('Voice service did not return audio');
+          activeVoiceObjectUrl=URL.createObjectURL(blob); activeVoiceAudio=new Audio(activeVoiceObjectUrl);
+          activeVoiceAudio.onended=()=>{if(activeVoiceObjectUrl){URL.revokeObjectURL(activeVoiceObjectUrl);activeVoiceObjectUrl=null;}activeVoiceAudio=null;};
+          await activeVoiceAudio.play(); return;
+        } catch(err) { console.warn('Natural voice service is unavailable; using this phone’s voice.',err); }
+      }
       if (!('speechSynthesis' in window)) { showToast('Spoken help is not available on this phone.'); return; }
-      window.speechSynthesis.cancel();
       const gender = state.preferences?.companionGender === 'man' ? 'man' : 'woman';
-      const utterance = new SpeechSynthesisUtterance(message);
-      utterance.rate = 0.78; utterance.pitch = gender === 'man' ? 0.94 : 1.02; utterance.volume = 1;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.88; utterance.pitch = gender === 'man' ? 0.98 : 1.035; utterance.volume = 1;
       const voices = window.speechSynthesis.getVoices();
       const english = voices.filter(v => /^en(-|_)/i.test(v.lang));
-      const genderPattern = gender === 'man' ? /male|man|daniel|alex|david|george|guy|fred|aaron|mark|oliver|james/i : /female|woman|samantha|ava|karen|moira|zira|serena| victoria|tessa|susan|aria|jenny/i;
-      const localeVoice = english.find(v => /en[-_]in/i.test(v.lang) && genderPattern.test(v.name)) || english.find(v => genderPattern.test(v.name)) || english.find(v => /en[-_]in/i.test(v.lang)) || english[0];
-      if (localeVoice) utterance.voice = localeVoice;
+      const genderPattern = gender === 'man' ? /male|man|daniel|alex|david|george|guy|fred|aaron|mark|oliver|james|liam/i : /female|woman|samantha|ava|karen|moira|zira|serena|victoria|tessa|susan|aria|jenny|siri/i;
+      const qualityPattern = /natural|neural|premium|enhanced|google|samantha|ava|aria|jenny|daniel|siri|microsoft/i;
+      const score = v => (genderPattern.test(v.name)?5:0) + (qualityPattern.test(v.name)?4:0) + (/en[-_]in/i.test(v.lang)?3:0) + (/en[-_]gb/i.test(v.lang)?1:0) + (v.default?1:0);
+      const preferred = english.slice().sort((a,b)=>score(b)-score(a))[0] || voices[0];
+      if (preferred) { utterance.voice = preferred; utterance.lang = preferred.lang; }
       window.speechSynthesis.speak(utterance);
     }
     function dateLabel(iso) { if (!iso) return ''; const d = new Date(`${iso}T12:00:00`); return d.toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long', year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined}); }
@@ -366,7 +572,7 @@
       currentView='family'; render(); return false;
     }
     function topTitle(title, subtitle='') {
-      return `<button class="back-button" data-action="go" data-view="home">${ic('arrow',19)} Back to home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">carey</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div>${renderAvatar(state.preferences?.companionGender || 'woman',false,true)}</div>`;
+      return `<button class="back-button" data-action="go" data-view="home">${ic('arrow',19)} Back to home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">carey</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div><button class="avatar-launch avatar-launch-small" type="button" data-action="chat-open" aria-label="Talk with carey">${renderAvatar(state.preferences?.companionGender || 'woman',false,true,companionMood)}</button></div>`;
     }
     function button(label, action, opts={}) {
       const cls = opts.class || 'secondary'; const iconName = opts.icon ? ic(opts.icon,21) : '';
@@ -376,28 +582,36 @@
     function card(label, sub, view, iconName, tone) {
       return `<button type="button" class="home-card tone-${tone}" data-action="go" data-view="${view}"><span class="card-icon">${ic(iconName,27)}</span><span><span class="card-label">${esc(label)}</span><span class="card-sub">${esc(sub)}</span></span></button>`;
     }
-    function renderAvatar(gender='woman', large=false, small=false) {
+    function renderAvatar(gender='woman', large=false, small=false, mood='neutral') {
       const man = gender === 'man';
-      const hair = man
-        ? '<path d="M22 45C20 23 34 11 51 11c18 0 30 12 29 34l-7-7-3-10c-9 8-24 10-39 8l-4 9Z" fill="#6C4E3D"/>'
-        : '<path d="M21 47C15 20 31 8 50 8c21 0 36 15 30 43l-3 20-10 5 2-24-5-24c-8 9-24 12-38 8l-1 19 2 21-10-6Z" fill="#674B45"/>';
-      const mouth = man ? 'M39 66Q50 73 61 66' : 'M39 65Q50 75 61 65';
-      return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${man?'companion-man':'companion-woman'}" aria-hidden="true"><svg viewBox="0 0 100 100" width="100%" height="100%" role="presentation"><circle cx="50" cy="50" r="50" fill="#E1EFEB"/><g class="avatar-bob">${hair}<ellipse cx="50" cy="48" rx="25" ry="31" fill="#DDAA89"/><path d="M24 45Q18 40 24 34M76 45Q82 40 76 34" fill="none" stroke="#C78E72" stroke-width="4" stroke-linecap="round"/><path d="M35 43Q41 40 45 43M55 43Q60 40 65 43" fill="none" stroke="#6B5147" stroke-width="2.2" stroke-linecap="round"/><g class="avatar-eye" fill="#263746"><ellipse cx="40" cy="49" rx="2.5" ry="3.2"/><ellipse cx="60" cy="49" rx="2.5" ry="3.2"/></g><circle cx="34" cy="58" r="4" fill="#D98D7D" opacity=".42"/><circle cx="66" cy="58" r="4" fill="#D98D7D" opacity=".42"/><path d="${mouth}" fill="none" stroke="#8C4E49" stroke-width="2.4" stroke-linecap="round"/><path d="M32 31Q50 18 68 31" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".35"/></g></svg></span>`;
+      const source = man ? './assets/avatar-man.jpg' : './assets/avatar-woman.jpg';
+      return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${mood==='happy'?'is-happy':''}" aria-hidden="true"><img src="${source}" alt="" loading="eager">${mood==='happy'?'<span class="avatar-reaction">👍</span>':''}</span>`;
     }
     function speakerButton(message, label, extraClass='') {
       return `<button type="button" class="speaker-button ${extraClass}" data-action="speak" data-text="${esc(message)}" aria-label="${esc(label)}" title="${esc(label)}">${ic('volume',19)}</button>`;
     }
+    function applyTheme() {
+      const theme = state.preferences?.theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = theme;
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) themeColor.content = theme === 'dark' ? '#142b45' : '#243b53';
+      applyDailyBackground();
+    }
     function applyDailyBackground() {
+      if (state.preferences?.theme === 'dark') {
+        document.documentElement.style.setProperty('--daily-background', '#142b45');
+        return;
+      }
       const d = new Date();
       const day = Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()) - Date.UTC(d.getFullYear(),0,0)) / 86400000) % 7;
       const moods = [
-        'linear-gradient(145deg,#f6f6ed 0%,#e5efeb 55%,#f9eee4 100%)',
-        'linear-gradient(145deg,#f4f5eb 0%,#e5eede 52%,#edf4f1 100%)',
-        'linear-gradient(145deg,#f5f4ed 0%,#e3edf0 54%,#f7ede5 100%)',
-        'linear-gradient(145deg,#faf0e7 0%,#f4e5dc 45%,#e5f0eb 100%)',
-        'linear-gradient(145deg,#f6f5ed 0%,#e8ebf3 50%,#edf4ed 100%)',
-        'linear-gradient(145deg,#f7f3e9 0%,#f7e7d9 46%,#e7f1eb 100%)',
-        'linear-gradient(145deg,#f5f4ea 0%,#e1efec 50%,#f5e8ec 100%)'
+        'linear-gradient(145deg,#eef4ef 0%,#e0ece8 48%,#f7e8db 100%)',
+        'linear-gradient(145deg,#edf3e9 0%,#dcebe2 52%,#eaf1ef 100%)',
+        'linear-gradient(145deg,#ecf2f4 0%,#e1e9f0 48%,#f6e9df 100%)',
+        'linear-gradient(145deg,#f9eee5 0%,#f2e1d7 46%,#dfece5 100%)',
+        'linear-gradient(145deg,#eff0e7 0%,#e2e6f0 50%,#e6f0e7 100%)',
+        'linear-gradient(145deg,#f6f0e4 0%,#f3dfcf 46%,#e2eee8 100%)',
+        'linear-gradient(145deg,#edf3ed 0%,#dcece9 50%,#efe3e9 100%)'
       ];
       document.documentElement.style.setProperty('--daily-background', moods[day]);
     }
@@ -405,10 +619,10 @@
     function render() {
       document.title = 'carey — A little help, right when you need it';
       voiceIconEl.innerHTML = ic('volume',20);
-      applyDailyBackground();
+      applyTheme();
       if (!state.profile.name || !state.profile.homeAddress || !state.preferences?.companionChosen) { currentView='setup'; main.innerHTML=renderSetup(); return; }
       const renderers = {
-        home: renderHome, setup: renderSetup, route: renderRoute, contacts: renderContacts, memories: renderMemories,
+        home: renderHome, setup: renderSetup, route: renderRoute, contacts: renderContacts, memories: renderHome, chat: renderChat,
         medicines: renderMedicines, appointments: renderAppointments, tasks: renderTasks, about: renderAbout,
         emergency: renderEmergency, family: renderFamily, settings: renderSettings, 'memory-form': renderMemoryForm, 'contact-form': renderContactForm,
         'medicine-form': renderMedicineForm, 'appointment-form': renderAppointmentForm, 'task-form': renderTaskForm,
@@ -445,33 +659,38 @@
       const guardianName = p.emergencyName || 'Your guardian';
       const renderMedRow = m => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(m.name)}</p><div class="today-item-meta">${esc(m.time?timeLabel(m.time):'No time set')}${m.dose?` · ${esc(m.dose)}`:''}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(m.name)} taken today" title="Mark taken" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic('check',17)}</button></div>`;
       const renderTaskRow = t => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(t.title)}</p><div class="today-item-meta">${esc(t.time?timeLabel(t.time):(t.repeat==='daily'?'Any time today':'Today'))}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(t.title)} done" title="Mark done" data-action="toggle-task" data-id="${esc(t.id)}">${ic('check',17)}</button></div>`;
-      const medRows = todoMeds.slice(0,2).map(renderMedRow).join('');
-      const taskRows = tasks.slice(0,2).map(renderTaskRow).join('');
+      const medRows = todoMeds.slice(0,3).map(renderMedRow).join('');
+      const taskRows = tasks.slice(0,3).map(renderTaskRow).join('');
       const medEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${meds.length?'All checked for today':'No medicines added'}</p><div class="today-item-meta">${meds.length?'You’re doing well.':'A family member can add them.'}</div></div></div>`;
       const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All done for today':'No reminders yet'}</p><div class="today-item-meta">${state.tasks.length?'One step at a time.':'A family member can add them.'}</div></div></div>`;
-      return `<div class="home-intro">
-          <div class="identity-home">
-            ${renderAvatar(state.preferences?.companionGender || 'woman')}
-            <div class="identity-copy"><p class="eyebrow">${esc(now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><div class="identity-details">${esc(p.homeAddress)}${p.phone?` · ${esc(p.phone)}`:''}</div><button class="identity-link" type="button" data-action="go" data-view="about">My details ${ic('arrow',12)}</button></div>
+      return `<section class="home-hero">
+          <div class="home-intro"><div class="identity-home">
+            <button class="avatar-launch" type="button" data-action="chat-open" aria-label="Talk with carey">${renderAvatar(state.preferences?.companionGender || 'woman',true,false,companionMood)}<span class="avatar-launch-label">Tap to talk</span></button>
+            <div class="identity-copy"><p class="eyebrow">${esc(now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><div class="identity-details">${esc(p.homeAddress)}${p.phone?` · ${esc(p.phone)}`:''}</div><button class="identity-link" type="button" data-action="go" data-view="about">Personal details ${ic('arrow',12)}</button></div>
             ${speakerButton(`Hello ${sayName()}. ${hello}. I'm glad you're here. What would you like help with today?`,'Hear greeting')}
-          </div>
-        </div>
-        ${guardianPhone ? `<a class="guardian-strip" href="tel:${esc(guardianPhone)}" aria-label="Call guardian ${esc(guardianName)}"><span>${ic('phone',22)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><span>${ic('arrow',18)}</span></a>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span>${ic('phone',22)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span>${ic('arrow',18)}</span></button>`}
-        <section class="today-priority" aria-label="Today's medicines and reminders">
-          <div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
-          <div class="today-columns">
-            <div class="today-list"><div class="today-list-title">${ic('pill',16)} Medicines</div>${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">${todoMeds.length>2?`See ${todoMeds.length-2} more`: 'All medicines'} ${ic('arrow',12)}</button></div></div>
-            <div class="today-list"><div class="today-list-title">${ic('check',16)} Daily reminders</div>${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">${tasks.length>2?`See ${tasks.length-2} more`: 'All reminders'} ${ic('arrow',12)}</button></div></div>
-          </div>
+          </div>${companionMood==='happy'?'<div class="encouragement-bubble">Wonderful! You did it. <span aria-hidden="true">✨</span></div>':''}</div>
+        </section>
+        ${guardianPhone ? `<a class="guardian-strip" href="tel:${esc(guardianPhone)}" aria-label="Call guardian ${esc(guardianName)}"><span class="guardian-phone-icon">${ic('phone',24)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><span class="guardian-call-icon">${ic('phone',22)}</span></a>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-phone-icon">${ic('phone',24)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
+        <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
+          <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',17)} Medicines</div>${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
+          <div class="today-list"><div class="today-list-title">${ic('check',17)} Daily reminders</div>${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
         </section>
         <div class="home-grid" aria-label="Main features">
           ${card('Find home','Map and walking directions','route','map','navy')}
           ${card('Contacts','Names and familiar faces','contacts','users','sage')}
-          ${card('Moments','Photos and kind notes','memories','image','peach')}
           ${card('Doctor visits','Calendar and appointments','appointments','calendar','sand')}
           ${card('Emergency help','People and services to call','emergency','siren','rose')}
-          ${card('Settings','Choose your companion','settings','settings','teal')}
-        </div>`;
+        </div>
+        ${renderHomeMoments()}
+        <div class="home-bottom-help"><span class="home-bottom-icon">${ic('heart',22)}</span><div><strong>One step at a time.</strong><p>Carey is here whenever you need a little help.</p></div><button class="speaker-button" type="button" data-action="chat-open" aria-label="Talk with carey">${ic('message',19)}</button></div>`;
+    }
+    function renderHomeMoments() {
+      const items = state.memories.slice().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,8);
+      const addControl = caregiverUnlocked
+        ? `<button class="gallery-add" type="button" data-action="go" data-view="memory-form" aria-label="Add a moment">${ic('plus',18)} Add</button>`
+        : `<button class="gallery-add" type="button" data-action="go" data-view="family" aria-label="Family can add a moment">${ic('plus',18)} Add</button>`;
+      return `<section class="moments-section" aria-label="Moments gallery"><div class="moments-heading"><div><p class="eyebrow">Familiar faces and happy places</p><h2>Moments</h2></div>${addControl}</div>
+        ${items.length ? `<div class="moments-gallery home-moments-gallery">${items.map((m,i)=>`<article class="moment-tile ${i===0?'moment-featured':''}">${m.photo?`<img class="moment-image" src="${m.photo}" alt="${esc(m.title)}" loading="lazy">`:`<div class="moment-image-placeholder">${ic('heart',30)}</div>`}<div class="moment-copy"><h3 class="moment-title">${esc(m.title)}</h3>${m.person?`<div class="relationship moment-person">${esc(m.person)}${m.relationship?` · ${esc(m.relationship)}`:''}</div>`:''}${m.note?`<p class="moment-note">${esc(m.note)}</p>`:''}<div class="moment-actions">${speakerButton(`${m.title}. ${m.person || ''}. ${m.note || ''}`,'Hear this moment')}${caregiverUnlocked?`<button class="speaker-button" type="button" data-action="delete-memory" data-id="${esc(m.id)}" aria-label="Remove this moment" title="Remove">${ic('trash',16)}</button>`:''}</div></div></article>`).join('')}</div>` : `<div class="gallery-empty"><div class="gallery-empty-mark">${ic('image',28)}</div><div><h3>Beautiful moments belong here.</h3><p>Family can add favorite photos and little notes. They’ll appear here together in a gallery.</p></div></div>`}</section>`;
     }
     function renderRoute() {
       const address = state.profile.homeAddress;
@@ -494,9 +713,9 @@
     function renderContacts() {
       const items = state.contacts.slice().sort((a,b)=>a.name.localeCompare(b.name));
       return `${topTitle('Contacts','Familiar names, faces and phone numbers.')}
-        <div class="notice"><span class="notice-icon">${ic('message',22)}</span><div><strong>Who is calling?</strong><p class="small" style="margin-bottom:0">This list helps you remember who someone is. Save important people in the phone’s Contacts app too, so their names can appear during calls.</p></div></div>
+        <div class="notice ambient-note"><span class="notice-icon">${ic('message',22)}</span><div><strong>Who is calling?</strong><p class="small" style="margin-bottom:0">Family can add a clear photo to each profile. Save important people in the phone’s Contacts app too, so their names can appear during calls.</p></div></div>
         ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="contact-form">${ic('plus',21)} Add a contact</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: add or update contacts</button>`}
-        <div class="item-list" style="margin-top:12px">${items.length ? items.map(c=>`<article class="item"><div class="contact-avatar">${ic('user',26)}</div><div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Someone you know')}</div>${c.note?`<p>${esc(c.note)}</p>`:''}<p>${esc(c.phone || 'No phone number added')}</p><div class="button-row" style="margin-top:6px;align-items:center">${speakerButton(`${c.name} is your ${c.relationship || 'contact'}.${c.note ? ' '+c.note:''}`,'Remember '+c.name)}${c.phone ? `<a class="primary small-button" style="width:auto" href="tel:${esc(c.phone)}">${ic('phone',18)} Call</a>`:''}${caregiverUnlocked?`<button class="secondary small-button" type="button" data-action="delete-contact" data-id="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${ic('trash',17)}</button>`:''}</div></div></article>`).join('') : `<div class="empty"><div class="empty-icon">${ic('users',27)}</div><h3>Your contacts will be here.</h3><p class="muted small">A family member can add names, relationships and phone numbers here.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}</div>`;
+        <div class="item-list" style="margin-top:12px">${items.length ? items.map(c=>`<article class="item contact-item">${c.photo?`<img class="contact-avatar-photo" src="${c.photo}" alt="Photo of ${esc(c.name)}" loading="lazy">`:`<div class="contact-avatar">${ic('user',26)}</div>`}<div class="item-main"><h3>${esc(c.name)}</h3><div class="relationship">${esc(c.relationship || 'Someone you know')}</div>${c.note?`<p>${esc(c.note)}</p>`:''}<p>${esc(c.phone || 'No phone number added')}</p><div class="button-row contact-actions" style="margin-top:6px;align-items:center">${speakerButton(`${c.name} is your ${c.relationship || 'contact'}.${c.note ? ' '+c.note:''}`,'Remember '+c.name)}${c.phone ? `<a class="primary small-button" style="width:auto" href="tel:${esc(c.phone)}">${ic('phone',18)} Call</a>`:''}${caregiverUnlocked?`<button class="secondary small-button" type="button" data-action="edit-contact" data-id="${esc(c.id)}" aria-label="Edit ${esc(c.name)}">${ic('edit',17)} Edit</button><button class="secondary small-button" type="button" data-action="delete-contact" data-id="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${ic('trash',17)}</button>`:''}</div></div></article>`).join('') : `<div class="empty"><div class="empty-icon">${ic('users',27)}</div><h3>Your contacts will be here.</h3><p class="muted small">A family member can add names, relationships, photos and phone numbers here.</p><button class="secondary" data-action="go" data-view="family" type="button">Open Family & setup</button></div>`}</div>`;
     }
     function renderMemories() {
       const items = state.memories.slice().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
@@ -569,10 +788,74 @@
     }
     function renderSettings() {
       const selected=state.preferences?.companionGender==='man'?'man':'woman';
+      const theme=state.preferences?.theme==='dark'?'dark':'light';
       return `${topTitle('Settings','Make carey feel right for you.')}
-        <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}" style="${selected==='woman'?'border-color:#286b6c;background:#e9f4f2':''}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}" style="${selected==='man'?'border-color:#286b6c;background:#e9f4f2':''}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
-        <div class="panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
-        <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contacts, moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
+        <section class="panel settings-appearance"><h2>Appearance</h2><p class="small muted">Choose the colors that feel comfortable.</p><div class="theme-options"><button type="button" class="theme-option ${theme==='light'?'is-active':''}" data-action="set-theme" data-theme="light" aria-pressed="${theme==='light'}">${ic('sun',21)}<span><strong>Light mode</strong><small>Soft and bright</small></span>${theme==='light'?ic('checkcircle',19):''}</button><button type="button" class="theme-option ${theme==='dark'?'is-active':''}" data-action="set-theme" data-theme="dark" aria-pressed="${theme==='dark'}">${ic('moon',21)}<span><strong>Dark mode</strong><small>Navy blue background</small></span>${theme==='dark'?ic('checkcircle',19):''}</button></div></section>
+        <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true,false,companionMood)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice ${selected==='woman'?'is-selected':''}" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice ${selected==='man'?'is-selected':''}" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
+        <div class="panel ambient-panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
+        <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contact photos, Moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
+    }
+
+    function renderChat() {
+      const gender=state.preferences?.companionGender==='man'?'man':'woman';
+      const history=chatMessages.length ? chatMessages : [{role:'carey',text:`Hello ${sayName()}. I'm glad you're here. You can ask me about medicines, daily reminders, contacts, Moments, appointments, finding home, or using carey. We can take it one step at a time.`}];
+      const messageHtml=history.map((m,i)=>`<div class="chat-row ${m.role==='user'?'chat-row-user':'chat-row-carey'}">${m.role==='carey'?`<div class="chat-avatar-mini">${renderAvatar(gender,false,true)}</div>`:''}<div class="chat-bubble ${m.role==='user'?'user-bubble':'carey-bubble'}"><p>${esc(m.text)}</p>${m.role==='carey'?`<div class="chat-message-actions">${speakerButton(m.text,'Hear carey’s reply')}${m.view?`<button class="chat-open-link" type="button" data-action="chat-go" data-view="${esc(m.view)}">${esc(m.viewLabel||'Open this section')} ${ic('arrow',14)}</button>`:''}</div>`:''}</div></div>`).join('');
+      return `${topTitle('Talk with carey','You can type or speak. Take your time.')}
+        <section class="chat-shell"><div class="chat-welcome">${renderAvatar(gender,true,false,companionMood)}<div><h2>I'm here with you.</h2><p>What would you like help with today?</p></div></div>
+          <div class="chat-mode-switch"><button type="button" class="chat-mode-button ${chatMode==='text'?'active':''}" data-action="chat-mode" data-mode="text">${ic('message',18)} Text</button><button type="button" class="chat-mode-button ${chatMode==='voice'?'active':''}" data-action="chat-mode" data-mode="voice">${ic('volume',18)} Voice</button></div>
+          <div class="chat-messages" id="chat-messages">${messageHtml}</div>
+          ${chatMode==='voice'?`<div class="voice-input-card"><div class="voice-orb">${ic('volume',27)}</div><h3>Ready when you are.</h3><p>Tap below, then say what is on your mind.</p><button type="button" class="primary voice-listen-button" data-action="start-voice-input">${ic('volume',20)} Tap to speak</button><p class="small muted">You can switch to Text at any time.</p></div>`:`<form class="chat-compose" data-form="chat"><label class="sr-only" for="chat-message">Your message</label><input id="chat-message" name="message" autocomplete="off" maxlength="600" placeholder="Type a message…" required><button class="send-chat" type="submit" aria-label="Send message">${ic('arrow',20)}</button></form>`}
+          <div class="chat-suggestions"><button type="button" data-action="chat-suggest" data-message="What medicines are left today?">My medicines</button><button type="button" data-action="chat-suggest" data-message="What reminders do I have today?">Today's reminders</button><button type="button" data-action="chat-suggest" data-message="How do I find home?">Find home</button><button type="button" data-action="chat-suggest" data-message="How do I use Moments?">Moments</button></div>
+        </section>`;
+    }
+    function answerForCarey(raw) {
+      const q=String(raw||'').toLowerCase();
+      if (/\b(hello|hi|hey|good morning|good afternoon|good evening)\b/.test(q)) return {text:`Hello ${sayName()}. It’s nice to hear from you. What can I help you with?`};
+      if (/medicine|medication|pill|tablet|dose/.test(q)) {
+        const remaining=state.medicines.filter(m=>!(m.takenDates||[]).includes(todayStr()));
+        if (!state.medicines.length) return {text:'There are no medicines listed yet. A family member can add the exact medicine details from your doctor or pharmacist.',view:'family',viewLabel:'Open Family & setup'};
+        return {text:remaining.length?`You have ${remaining.length} medicine${remaining.length===1?'':'s'} not marked as taken today: ${remaining.map(m=>m.name+(m.time?' at '+timeLabel(m.time):'')).join(', ')}. Please follow the directions from your doctor or pharmacist.`:'All your listed medicines are marked as taken today. Well done. Please keep following your doctor’s instructions.',view:'medicines',viewLabel:'Open medicines'};
+      }
+      if (/remind|task|to do|todo|drink water|daily/.test(q)) {
+        const items=state.tasks.filter(t=>(t.repeat==='daily'||!t.date||t.date>=todayStr())&&!(t.completedDates||[]).includes(todayStr())).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+        return {text:items.length?`Here are your reminders that are not checked off yet: ${items.slice(0,6).map(t=>t.title+(t.time?' at '+timeLabel(t.time):'')).join('; ')}. You can tick each one on the home page when it’s done.`:'Everything on your reminder list is checked off for today, or no reminders have been added yet.',view:'tasks',viewLabel:'Open reminders'};
+      }
+      if (/appointment|doctor|clinic|calendar|visit/.test(q)) {
+        const items=state.appointments.filter(a=>a.date>=todayStr()).sort((a,b)=>(a.date+' '+(a.time||'')).localeCompare(b.date+' '+(b.time||'')));
+        return {text:items.length?`Your next visit is ${items[0].title} on ${dateLabel(items[0].date)}${items[0].time?' at '+timeLabel(items[0].time):''}${items[0].place?' at '+items[0].place:''}.`:'There are no upcoming doctor visits in the calendar yet. Your family can add one in Family & setup.',view:'appointments',viewLabel:'Open calendar'};
+      }
+      if (/contact|who is|who's calling|call someone|guardian|family/.test(q)) {
+        const g=state.profile.emergencyName&&state.profile.emergencyPhone?`Your guardian is ${state.profile.emergencyName}. The number saved here is ${state.profile.emergencyPhone}. `:'Your guardian’s number has not been added yet. ';
+        return {text:g+`There ${state.contacts.length===1?'is 1 contact':'are '+state.contacts.length+' contacts'} in your Contacts section. Photos and relationships can help you recognise familiar people.`,view:'contacts',viewLabel:'Open contacts'};
+      }
+      if (/moment|photo|picture|memory|memories|gallery/.test(q)) return {text:'Moments is a little gallery on your home page. Scroll below the main buttons to see photos and notes. A family member can add more in Family & setup.',view:'home',viewLabel:'Back to home'};
+      if (/home|map|lost|direction|where am i|navigate/.test(q)) return {text:`Your saved home address is ${state.profile.homeAddress}. Tap Find home on the home page, then choose Find me on the map. If you feel unsure, stop somewhere safe and call your guardian.`,view:'route',viewLabel:'Open Find home'};
+      if (/emergency|police|fire|helpline|urgent|unsafe/.test(q)) return {text:'If you are in immediate danger or need urgent help, please call your guardian or local emergency services now. The Emergency help page has the numbers saved on this phone.',view:'emergency',viewLabel:'Open Emergency help'};
+      if (/setting|dark mode|light mode|appearance|voice/.test(q)) return {text:'You can choose light or dark mode and change your companion in Settings. The gear symbol is at the top left of the screen.',view:'settings',viewLabel:'Open Settings'};
+      if (/thank/.test(q)) return {text:'You’re very welcome. You’re doing well, and we can take things one step at a time.'};
+      return {text:'I’m here to help with carey. We can look at your medicines, reminders, contacts, Moments, doctor visits, home directions, emergency help, or settings. Which one would you like to talk about?'};
+    }
+    function sendChatMessage(raw, voiceReply=false) {
+      const text=String(raw||'').trim(); if(!text)return;
+      chatMessages.push({role:'user',text});
+      const response=answerForCarey(text);
+      chatMessages.push({role:'carey',text:response.text,view:response.view,viewLabel:response.viewLabel});
+      if(chatMessages.length>32) chatMessages=chatMessages.slice(-32);
+      currentView='chat'; render();
+      const list=document.getElementById('chat-messages'); if(list) list.scrollTop=list.scrollHeight;
+      if(voiceReply || chatMode==='voice') speak(response.text);
+    }
+    function startVoiceInput() {
+      const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+      if(!SpeechRecognition){showToast('Voice input is not available in this browser. Please choose Text to continue.');return;}
+      try {
+        if(activeRecognition){activeRecognition.stop();activeRecognition=null;}
+        const rec=new SpeechRecognition(); activeRecognition=rec; rec.lang='en-IN'; rec.interimResults=false; rec.maxAlternatives=1;
+        rec.onstart=()=>showToast('I’m listening. Speak whenever you’re ready.');
+        rec.onresult=e=>{const heard=e.results?.[0]?.[0]?.transcript||'';if(heard)sendChatMessage(heard,true);};
+        rec.onerror=()=>showToast('I could not hear that clearly. Please try again or type your message.');
+        rec.onend=()=>{activeRecognition=null;}; rec.start();
+      } catch(err){activeRecognition=null;showToast('Voice input could not start on this phone. Please use Text instead.');}
     }
     function renderFamily() {
       if (!caregiverUnlocked) {
@@ -598,8 +881,9 @@
     }
     function renderContactForm() {
       if (!caregiverUnlocked) return renderFamily();
-      return `${topTitle('Add a contact','Add someone familiar and how they know you.')}
-        <form class="panel" data-form="contact"><div class="form-grid two"><div class="field"><label for="contact-name">Contact’s name</label><input id="contact-name" name="name" required maxlength="100" placeholder="e.g. Meera Patel"></div><div class="field"><label for="contact-relationship">Who are they?</label><input id="contact-relationship" name="relationship" required maxlength="80" placeholder="e.g. Your daughter"></div><div class="field"><label for="contact-phone">Phone number</label><input id="contact-phone" name="phone" type="tel" maxlength="40" placeholder="Phone number"></div><div class="field"><label for="contact-note">Something helpful to remember</label><textarea id="contact-note" name="note" maxlength="400" placeholder="e.g. She calls every Sunday."></textarea></div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save contact</button></div></form>`;
+      const c=editingContactId?state.contacts.find(x=>x.id===editingContactId):null;
+      return `${topTitle(c?'Edit contact':'Add a contact',c?'Update the details or add a photo so this familiar person is easier to recognise.':'Add someone familiar and how they know you.')}
+        <form class="panel" data-form="contact"><div class="contact-photo-editor">${c&&c.photo?`<img class="contact-avatar-photo contact-photo-preview" src="${c.photo}" alt="Current photo of ${esc(c.name)}">`:`<div class="contact-photo-preview contact-avatar">${ic('user',32)}</div>`}<div class="field"><label for="contact-photo">Photo</label><input id="contact-photo" name="photo" type="file" accept="image/*"><span class="hint">Choose a clear photo of their face.</span><div id="contact-photo-preview" class="hidden"></div></div></div><div class="form-grid two"><div class="field"><label for="contact-name">Contact’s name</label><input id="contact-name" name="name" value="${esc(c?.name||'')}" required maxlength="100" placeholder="e.g. Meera Patel"></div><div class="field"><label for="contact-relationship">Who are they?</label><input id="contact-relationship" name="relationship" value="${esc(c?.relationship||'')}" required maxlength="80" placeholder="e.g. Your daughter"></div><div class="field"><label for="contact-phone">Phone number</label><input id="contact-phone" name="phone" value="${esc(c?.phone||'')}" type="tel" maxlength="40" placeholder="Phone number"></div><div class="field"><label for="contact-note">Something helpful to remember</label><textarea id="contact-note" name="note" maxlength="400" placeholder="e.g. She calls every Sunday.">${esc(c?.note||'')}</textarea></div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} ${c?'Save changes':'Save contact'}</button></div></form>`;
     }
     function renderMemoryForm() {
       if (!caregiverUnlocked) return renderFamily();
@@ -698,7 +982,7 @@
     async function handleSubmit(event) {
       const form=event.target.closest('form[data-form]'); if(!form) return;
       event.preventDefault(); const fd=new FormData(form); const data=Object.fromEntries(fd.entries()); const type=form.dataset.form;
-      if(type!=='setup' && type!=='family-unlock' && !caregiverUnlocked) { requireCaregiver(); return; }
+      if(type!=='setup' && type!=='family-unlock' && type!=='chat' && !caregiverUnlocked) { requireCaregiver(); return; }
       try {
         if(type==='setup') {
           const base=defaultState();
@@ -706,6 +990,7 @@
           state.preferences={...base.preferences,...state.preferences,companionGender:data.companionGender==='man'?'man':'woman',companionChosen:true};
           await save(); currentView='home'; render(); speak(`Hello ${state.profile.name}. I’m glad you’re here. What would you like help with today?`); return;
         }
+        if(type==='chat') { sendChatMessage(data.message,false); return; }
         if(type==='family-unlock') {
           const pin=String(data.pin||'');
           if(state.profile.caregiverPin) { if(pin!==state.profile.caregiverPin) { showToast('That PIN did not match. Please try again.'); return; } }
@@ -717,11 +1002,17 @@
           await save(); currentView='home'; homeCoords=null; render(); showToast('Personal details saved.'); return;
         }
         if(type==='contact') {
-          state.contacts.push({id:uid(),name:String(data.name||'').trim(),relationship:String(data.relationship||'').trim(),phone:String(data.phone||'').trim(),note:String(data.note||'').trim()}); await save(); currentView='contacts'; render(); showToast('Contact saved.'); return;
+          const existing=editingContactId?state.contacts.find(x=>x.id===editingContactId):null;
+          const photoInput=form.querySelector('[name="photo"]');
+          let photo=existing?.photo||'';
+          if(photoInput?.files?.[0]) photo=await resizeImage(photoInput.files[0]);
+          const entry={...(existing||{}),id:existing?.id||uid(),name:String(data.name||'').trim(),relationship:String(data.relationship||'').trim(),phone:String(data.phone||'').trim(),note:String(data.note||'').trim(),photo};
+          if(existing) Object.assign(existing,entry); else state.contacts.push(entry);
+          editingContactId=null; await save(); currentView='contacts'; render(); showToast(existing?'Contact updated.':'Contact saved.'); return;
         }
         if(type==='memory') {
           const photo=await resizeImage(form.querySelector('[name="photo"]').files[0]);
-          state.memories.push({id:uid(),title:String(data.title||'').trim(),person:String(data.person||'').trim(),relationship:String(data.relationship||'').trim(),note:String(data.note||'').trim(),photo,createdAt:new Date().toISOString()}); await save(); currentView='memories'; render(); showToast('Moment saved.'); return;
+          state.memories.push({id:uid(),title:String(data.title||'').trim(),person:String(data.person||'').trim(),relationship:String(data.relationship||'').trim(),note:String(data.note||'').trim(),photo,createdAt:new Date().toISOString()}); await save(); currentView='home'; render(); showToast('Moment added to your gallery.'); return;
         }
         if(type==='medicine') {
           state.medicines.push({id:uid(),name:String(data.name||'').trim(),dose:String(data.dose||'').trim(),time:String(data.time||''),notes:String(data.notes||'').trim(),takenDates:[]}); await save(); currentView='medicines'; render(); showToast('Medicine saved.'); return;
@@ -734,8 +1025,12 @@
         }
       } catch(err) { console.error(err); showToast(err.message || 'I could not save that. Please try again.'); }
     }
-    async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else t.completedDates.push(todayStr()); await save(); render(); }
-    async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else m.takenDates.push(todayStr()); await save(); render(); }
+    function celebrateCarey() {
+      companionMood='happy'; clearTimeout(moodTimer);
+      moodTimer=setTimeout(()=>{companionMood='neutral'; if(currentView==='home'||currentView==='tasks'||currentView==='medicines') render();},5200);
+    }
+    async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else {t.completedDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! One more thing taken care of.'); }
+    async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else {m.takenDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! Your medicine is marked as taken.'); }
     async function deleteEntry(listName,id,view,message) { if(!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
     async function exportBackup() {
       const payload={app:'carey',schemaVersion:1,exportedAt:new Date().toISOString(),state};
@@ -750,7 +1045,14 @@
     document.addEventListener('click', async event => {
       const el=event.target.closest('[data-action]'); if(!el)return;
       const action=el.dataset.action;
-      if(action==='go') { currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='go') { if(el.dataset.view==='contact-form') editingContactId=null; currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='chat-open') { chatMode='text'; currentView='chat'; render(); window.scrollTo({top:0,behavior:'smooth'}); const input=document.getElementById('chat-message'); if(input) setTimeout(()=>input.focus(),120); return; }
+      if(action==='chat-mode') { chatMode=el.dataset.mode==='voice'?'voice':'text'; render(); return; }
+      if(action==='start-voice-input') { startVoiceInput(); return; }
+      if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
+      if(action==='chat-go') { currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='set-theme') { state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
+      if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='choose-companion') { state.preferences=state.preferences||{}; state.preferences.companionGender=el.dataset.gender==='man'?'man':'woman'; state.preferences.companionChosen=true; await save(); currentView='settings'; render(); speak(state.preferences.companionGender==='man'?'Hello, I’m here with you.':'Hello, I’m here with you.'); showToast('Your companion has been changed.'); return; }
       if(action==='speak-home') { speak(`Hello ${sayName()}. Today, you have ${state.medicines.filter(m=>!(m.takenDates||[]).includes(todayStr())).length} medicines not marked as taken and ${state.tasks.filter(t=>(t.repeat==='daily'||!t.date||t.date>=todayStr())&&!(t.completedDates||[]).includes(todayStr())).length} reminders to check. Your guardian is ${state.profile.emergencyName||'not added yet'}.`); return; }
       if(action==='speak') { speak(el.dataset.text||''); return; }
@@ -773,6 +1075,9 @@
     });
     document.addEventListener('submit', handleSubmit);
     document.addEventListener('change', async e=>{
+      if(e.target && e.target.id==='contact-photo' && e.target.files && e.target.files[0]) {
+        try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById('contact-photo-preview'); if(preview){preview.innerHTML=`<img class="contact-avatar-photo" src="${data}" alt="Contact photo preview">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
+      }
       if(e.target && e.target.id==='memory-photo' && e.target.files && e.target.files[0]) {
         try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById('photo-preview'); if(preview){preview.innerHTML=`<img class="photo" src="${data}" alt="Photo preview" style="width:120px;height:120px">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
       }

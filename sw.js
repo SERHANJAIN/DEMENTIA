@@ -1,13 +1,19 @@
-/* carey offline shell. Map tiles and external walking directions need an internet connection. */
-const CACHE_NAME = 'withyou-shell-v1';
+/* carey offline shell. Map tiles and generated cloud speech still need an internet connection. */
+const CACHE_NAME = 'carey-shell-v3';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [
   BASE_URL.href,
   new URL('index.html', BASE_URL).href,
+  new URL('voice-config.js', BASE_URL).href,
   new URL('manifest.webmanifest', BASE_URL).href,
   new URL('icons/icon.svg', BASE_URL).href,
   new URL('icons/icon-192.png', BASE_URL).href,
-  new URL('icons/icon-512.png', BASE_URL).href
+  new URL('icons/icon-512.png', BASE_URL).href,
+  new URL('assets/avatar-woman.jpg', BASE_URL).href,
+  new URL('assets/avatar-man.jpg', BASE_URL).href,
+  new URL('assets/ambient-home.svg', BASE_URL).href,
+  new URL('assets/ambient-moments.svg', BASE_URL).href,
+  new URL('assets/ambient-chat.svg', BASE_URL).href
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting()));
@@ -20,6 +26,14 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  // Keep this public endpoint setting fresh after deployments; never cache an old blank endpoint indefinitely.
+  if (url.pathname.endsWith('/voice-config.js')) {
+    event.respondWith(fetch(request).then(response => {
+      if (response.ok) { const copy=response.clone(); caches.open(CACHE_NAME).then(cache=>cache.put(request,copy)); }
+      return response;
+    }).catch(() => caches.match(request)));
+    return;
+  }
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).then(response => {
       const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(request, copy)); return response;
