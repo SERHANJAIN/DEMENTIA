@@ -521,6 +521,23 @@
     :root[data-theme="dark"] .weather-location-field input { background:#10283d; color:#f3f6fb; border-color:#49657a; }
     @media (max-width:390px) { .ambient-panel .button-row { gap:7px; } .ambient-panel .button-row > * { flex:1 1 135px; } }
 
+
+    .profile-photo-editor { display:flex;align-items:center;gap:14px;margin:8px 0 16px;padding:12px;border-radius:16px;background:rgba(224,239,234,.58);min-width:0; }
+    .profile-photo-thumb { display:block;width:82px;height:82px;flex:0 0 82px;object-fit:cover;object-position:center;border-radius:50%;background:#e3eeea;border:2px solid rgba(255,255,255,.95);box-shadow:0 2px 8px rgba(36,59,83,.10); }
+    .profile-photo-placeholder { display:grid;place-items:center;color:#426b54;background:#dce9de; }
+    .profile-photo-editor .field { flex:1;min-width:0; }
+    .photo-upload-preview { margin-top:7px; }
+    .photo-remove-option { display:flex!important;flex-direction:row!important;align-items:center;gap:7px;font-size:13px!important;font-weight:600!important;margin-top:6px; }
+    .photo-remove-option input { width:18px;height:18px;accent-color:#426b54; }
+    .personal-photo-display { display:flex;align-items:center;gap:14px;padding-bottom:12px;margin-bottom:4px;border-bottom:1px solid rgba(36,59,83,.10); }
+    .personal-photo-display > img,.personal-photo-placeholder { width:78px;height:78px;flex:0 0 78px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 10px rgba(36,59,83,.12); }
+    .personal-photo-placeholder { display:grid;place-items:center;color:#426b54;background:#dce9de; }
+    .guardian-detail-value { display:flex;align-items:center;gap:10px; }
+    .guardian-detail-photo { width:42px;height:42px;flex:0 0 42px;object-fit:cover;border-radius:50%;border:2px solid #fff; }
+    :root[data-theme="dark"] .profile-photo-editor { background:rgba(34,65,82,.75); }
+    :root[data-theme="dark"] .profile-photo-placeholder,:root[data-theme="dark"] .personal-photo-placeholder { background:#28483f;color:#d0efda; }
+    @media(max-width:390px) { .profile-photo-editor { gap:9px;padding:9px; } .profile-photo-thumb { width:68px;height:68px;flex-basis:68px; } }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
@@ -726,23 +743,26 @@
       const label = man ? 'Man companion' : 'Woman companion';
       const art = man ? `
         <svg class="companion-art companion-man-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <ellipse cx="50" cy="103" rx="48" ry="29" fill="#9fc9c8"/>
-          <path d="M7 104c3-21 18-32 43-32s40 11 43 32" fill="#a9d1cd"/>
-          <path d="M41 65h18v17H41z" fill="#dba993"/>
-          <path d="M39 72l11 12 11-12 10 5-9 25H38l-9-25z" fill="#6f9f9f"/>
-          <path d="M29 35c0-18 9-28 22-28 14 0 23 10 23 28v14c0 16-10 27-24 27S27 65 27 49z" fill="#eec1aa"/>
-          <path d="M25 43c-3-10-2-22 5-30C36 4 44 2 53 3c14 1 24 11 25 26l-2 16-5-3-2-15c-7 5-20 8-37 7l-1 13z" fill="#557889"/>
-          <path d="M28 37c-1 10 0 18 3 23l-4 1c-5-8-6-17-5-26zM72 36c1 10 0 18-3 24l4 1c5-8 6-17 5-26z" fill="#557889"/>
-          <path d="M35 38q6-4 12 0M54 38q6-4 12 0" fill="none" stroke="#425766" stroke-width="3.1" stroke-linecap="round"/>
-          <ellipse cx="41" cy="47" rx="2.2" ry="2.8" fill="#334b5b"/><ellipse cx="59" cy="47" rx="2.2" ry="2.8" fill="#334b5b"/>
-          <ellipse cx="36" cy="55" rx="4.2" ry="2.3" fill="#e5a19a" opacity=".5"/><ellipse cx="64" cy="55" rx="4.2" ry="2.3" fill="#e5a19a" opacity=".5"/>
-          <path d="M43 60q7 5 14 0" fill="none" stroke="#965d59" stroke-width="2.6" stroke-linecap="round"/>
-          <path d="M36 65q14 9 28 0" fill="none" stroke="#b98777" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
+          <ellipse cx="50" cy="104" rx="49" ry="28" fill="#9fc9c8"/>
+          <path d="M6 104c4-21 19-32 44-32s40 11 44 32" fill="#a9d1cd"/>
+          <path d="M41 64h18v17H41z" fill="#dba993"/>
+          <path d="M28 80l13-7 9 10 10-10 13 7 8 24H20z" fill="#6f9f9f"/>
+          <path d="M27 37c0-19 10-30 23-30 15 0 24 11 24 30v13c0 17-10 27-24 27S26 66 26 50z" fill="#edc0a9"/>
+          <path d="M24 43c-4-13-2-25 6-33C37 3 45 1 54 3c15 2 23 13 24 29l-3 13-5-4-2-17c-8 6-21 8-40 7l-2 13z" fill="#557889"/>
+          <path d="M34 39q7-3 13 0M54 39q7-3 13 0" fill="none" stroke="#425766" stroke-width="2.4" stroke-linecap="round"/>
+          <ellipse cx="41" cy="48" rx="2.2" ry="2.8" fill="#334b5b"/><ellipse cx="59" cy="48" rx="2.2" ry="2.8" fill="#334b5b"/>
+          <path d="M43 62q7 5 14 0" fill="none" stroke="#965d59" stroke-width="2.5" stroke-linecap="round"/>
         </svg>` : `
         <svg class="companion-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <ellipse cx="50" cy="100" rx="47" ry="27" fill="#d4bfe1"/><path d="M8 102c3-19 18-29 42-29s39 10 42 29" fill="#c8b7dc"/><path d="M42 62h16v18H42z" fill="#eabda9"/>
-          <path d="M22 49c-5-23 1-39 16-45 17-7 37-1 43 16 5 14 2 33-3 44L27 77z" fill="#c6b5dc"/><ellipse cx="50" cy="44" rx="22" ry="27" fill="#f3c9b5"/><path d="M27 37c0-19 11-30 25-30 15 0 26 11 26 29-10-1-18-6-23-14-7 9-16 14-28 15z" fill="#c6b5dc"/><path d="M27 40c-4 16-2 26 3 34M73 40c4 16 2 26-3 34" fill="none" stroke="#a995c7" stroke-width="7" stroke-linecap="round"/>
-          <ellipse cx="41" cy="45" rx="2.1" ry="2.7" fill="#4e5365"/><ellipse cx="59" cy="45" rx="2.1" ry="2.7" fill="#4e5365"/><ellipse cx="37" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><ellipse cx="63" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><path d="M41 56q9 11 18 0" fill="none" stroke="#985c5a" stroke-width="2.8" stroke-linecap="round"/><path d="M37 34q4-3 8 0M55 34q4-3 8 0" fill="none" stroke="#9c87b4" stroke-width="1.7" stroke-linecap="round"/>
+          <ellipse cx="50" cy="103" rx="48" ry="28" fill="#d4bfe1"/>
+          <path d="M7 104c4-21 19-31 43-31s40 10 43 31" fill="#c8b7dc"/>
+          <path d="M42 63h16v18H42z" fill="#eabda9"/>
+          <path d="M22 49c-5-22 1-39 17-45 18-7 38 0 43 18 4 15 1 31-5 47l-7 8H29l-6-9z" fill="#b9a8d1"/>
+          <ellipse cx="50" cy="45" rx="22" ry="27" fill="#f3c9b5"/>
+          <path d="M27 39c0-20 10-31 24-31 16 0 26 12 26 31-9-1-17-7-23-15-7 9-15 14-27 15z" fill="#c6b5dc"/>
+          <ellipse cx="41" cy="46" rx="2.1" ry="2.7" fill="#4e5365"/><ellipse cx="59" cy="46" rx="2.1" ry="2.7" fill="#4e5365"/>
+          <ellipse cx="37" cy="53" rx="4.1" ry="2.3" fill="#e9a9a3" opacity=".5"/><ellipse cx="63" cy="53" rx="4.1" ry="2.3" fill="#e9a9a3" opacity=".5"/>
+          <path d="M41 58q9 10 18 0" fill="none" stroke="#985c5a" stroke-width="2.7" stroke-linecap="round"/>
         </svg>`;
       return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${mood==='happy'?'is-happy':''}" role="img" aria-label="${label}">${art}${mood==='happy'?'<span class="avatar-reaction" aria-hidden="true">♥</span>':''}</span>`;
     }
@@ -916,7 +936,7 @@
             ${speakerButton(`Hello ${sayName()}. ${hello}. I'm glad you're here. What would you like help with today?`,'Hear greeting')}
           </div>${companionMood==='happy'?'<div class="encouragement-bubble">Wonderful! You did it. <span aria-hidden="true">✨</span></div>':''}</div>
         </section>
-        ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
+        ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${p.guardianPhoto?`<img src="${p.guardianPhoto}" alt="Photo of ${esc(guardianName)}">`:guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
         ${eventBanner}
         <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
           <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',17)} Medicines</div>${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
@@ -1035,10 +1055,16 @@
       const p=state.profile;
       const line = (label,value,link='') => `<div class="profile-line"><div class="profile-key">${label}</div><div class="profile-value">${value ? (link ? `<a href="${link==='tel'?`tel:${esc(value)}`:`mailto:${esc(value)}`}">${esc(value)}</a>`:esc(value)) : '<span class="muted">Not added yet</span>'}</div></div>`;
       return `${topTitle('My details','Important information, all in one place.')}
-        <div class="panel soft-navy"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">${renderAvatar(state.preferences?.companionGender || 'woman')}<div><h2 style="margin-bottom:2px">${esc(p.name)}</h2><p class="muted small" style="margin:0">Your personal information</p></div></div>
-        ${line('Home address',p.homeAddress)}${line('My phone',p.phone,'tel')}${line('Email',p.email,'email')}${line('Guardian',p.emergencyName)}${line('Guardian’s phone',p.emergencyPhone,'tel')}${line('Doctor / clinic',p.doctorName)}${line('Doctor’s phone',p.doctorPhone,'tel')}</div>
+        <div class="panel soft-navy">
+          <div class="personal-photo-display">${p.photo? `<img src="${p.photo}" alt="Photo of ${esc(p.name)}">` : `<div class="personal-photo-placeholder">${ic('user',34)}</div>`}
+            <div><h2 style="margin-bottom:2px">${esc(p.name)}</h2><p class="muted small" style="margin:0">Your personal information</p></div>
+          </div>
+          ${line('Home address',p.homeAddress)}${line('My phone',p.phone,'tel')}${line('Email',p.email,'email')}
+          <div class="profile-line"><div class="profile-key">Guardian</div><div class="profile-value guardian-detail-value">${p.guardianPhoto?`<img class="guardian-detail-photo" src="${p.guardianPhoto}" alt="Photo of ${esc(p.emergencyName||'your guardian')}">`:''}<span>${p.emergencyName?esc(p.emergencyName):'<span class="muted">Not added yet</span>'}</span></div></div>
+          ${line('Guardian’s phone',p.emergencyPhone,'tel')}${line('Doctor / clinic',p.doctorName)}${line('Doctor’s phone',p.doctorPhone,'tel')}
+        </div>
         ${speakerButton(`Your name is ${p.name}. Your home address is ${p.homeAddress}. Your guardian is ${p.emergencyName||'not added yet'}. Their phone number is ${p.emergencyPhone||'not added yet'}.`,'Hear personal details')}
-        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update details</button>`:`<button class="secondary" type="button" data-action="go" data-view="settings">${ic('edit',20)} Family: update details</button>`}</div>`;
+        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update details and photos</button>`:`<button class="secondary" type="button" data-action="go" data-view="settings">${ic('edit',20)} Family: update details</button>`}</div>`;
     }
     function renderEmergency() {
       const p=state.profile;
@@ -1186,8 +1212,23 @@
     function renderProfileForm() {
       if (!caregiverUnlocked) return renderFamily();
       const p=state.profile;
+      const photoEditor=(kind,label,existing,alt,id,name)=>`<div class="profile-photo-editor">
+        ${existing?`<img class="profile-photo-thumb" src="${existing}" alt="${alt}">`:`<div class="profile-photo-thumb profile-photo-placeholder">${ic('user',30)}</div>`}
+        <div class="field"><label for="${id}">${label}</label><input id="${id}" name="${name}" type="file" accept="image/*"><span class="hint">Choose a clear photo. It will stay saved on this device.</span>
+          <div id="${id}-preview" class="photo-upload-preview hidden"></div>
+          ${existing?`<label class="photo-remove-option"><input type="checkbox" name="remove${kind}" value="yes"> Remove saved photo</label>`:''}
+        </div></div>`;
       return `${topTitle('Personal details','Keep these details up to date.')}
-        <form class="panel" data-form="profile"><div class="form-grid"><div class="field"><label for="profile-name">Name they like to be called</label><input id="profile-name" name="name" value="${esc(p.name)}" required maxlength="100"></div><div class="field"><label for="profile-home">Home address</label><textarea id="profile-home" name="homeAddress" required maxlength="300">${esc(p.homeAddress)}</textarea></div><div class="form-grid two"><div class="field"><label for="profile-phone">Personal phone</label><input id="profile-phone" name="phone" type="tel" value="${esc(p.phone)}" maxlength="40"></div><div class="field"><label for="profile-email">Email address</label><input id="profile-email" name="email" type="email" value="${esc(p.email)}" maxlength="150"></div></div><div class="form-section"><h3>Guardian</h3><p class="small muted">This name and number appear on the home screen for one-tap calling.</p></div><div class="form-grid two"><div class="field"><label for="profile-emergency-name">Guardian’s name</label><input id="profile-emergency-name" name="emergencyName" value="${esc(p.emergencyName)}" maxlength="100"></div><div class="field"><label for="profile-emergency-phone">Guardian’s phone</label><input id="profile-emergency-phone" name="emergencyPhone" type="tel" value="${esc(p.emergencyPhone)}" maxlength="40"></div></div><div class="form-section"><h3>Doctor and emergency numbers</h3><p class="small muted">Please check every number for your local area.</p></div><div class="form-grid two"><div class="field"><label for="profile-doctor-name">Doctor / clinic</label><input id="profile-doctor-name" name="doctorName" value="${esc(p.doctorName)}" maxlength="120"></div><div class="field"><label for="profile-doctor-phone">Doctor’s phone</label><input id="profile-doctor-phone" name="doctorPhone" type="tel" value="${esc(p.doctorPhone)}" maxlength="40"></div><div class="field"><label for="profile-emergency-service">National emergency number</label><input id="profile-emergency-service" name="emergencyServiceNumber" value="${esc(p.emergencyServiceNumber || '112')}" maxlength="20"></div><div class="field"><label for="profile-police-number">Police</label><input id="profile-police-number" name="policeNumber" type="tel" value="${esc(p.policeNumber || '112')}" maxlength="30"></div><div class="field"><label for="profile-fire-number">Fire department</label><input id="profile-fire-number" name="fireNumber" type="tel" value="${esc(p.fireNumber || '101')}" maxlength="30"></div><div class="field"><label for="profile-women-helpline">Women’s helpline</label><input id="profile-women-helpline" name="womenHelplineNumber" type="tel" value="${esc(p.womenHelplineNumber || '181')}" maxlength="30"></div><div class="field"><label for="profile-men-helpline">Men’s helpline</label><input id="profile-men-helpline" name="menHelplineNumber" type="tel" value="${esc(p.menHelplineNumber || '')}" maxlength="30" placeholder="Add local number"></div></div><p class="small muted">Some helplines vary by region. A family member should verify local numbers before use.</p></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save details</button></div></form>`;
+        <form class="panel" data-form="profile">
+          <h3>Your photo</h3><p class="small muted">This is your own photo. It stays with your personal details.</p>
+          ${photoEditor('ProfilePhoto','Your photo',p.photo,'Your saved profile photo','profile-photo','profilePhoto')}
+          <div class="form-grid"><div class="field"><label for="profile-name">Name they like to be called</label><input id="profile-name" name="name" value="${esc(p.name)}" required maxlength="100"></div><div class="field"><label for="profile-home">Home address</label><textarea id="profile-home" name="homeAddress" required maxlength="300">${esc(p.homeAddress)}</textarea></div><div class="form-grid two"><div class="field"><label for="profile-phone">Personal phone</label><input id="profile-phone" name="phone" type="tel" value="${esc(p.phone)}" maxlength="40"></div><div class="field"><label for="profile-email">Email address</label><input id="profile-email" name="email" type="email" value="${esc(p.email)}" maxlength="150"></div></div>
+          <div class="form-section"><h3>Guardian</h3><p class="small muted">The guardian’s photo will appear in the guardian section on the home screen, beside their call option.</p></div>
+          ${photoEditor('GuardianPhoto','Guardian’s photo',p.guardianPhoto,'Photo of your guardian','guardian-photo','guardianPhoto')}
+          <div class="form-grid two"><div class="field"><label for="profile-emergency-name">Guardian’s name</label><input id="profile-emergency-name" name="emergencyName" value="${esc(p.emergencyName)}" maxlength="100"></div><div class="field"><label for="profile-emergency-phone">Guardian’s phone</label><input id="profile-emergency-phone" name="emergencyPhone" type="tel" value="${esc(p.emergencyPhone)}" maxlength="40"></div></div>
+          <div class="form-section"><h3>Doctor and emergency numbers</h3><p class="small muted">Please check every number for your local area.</p></div><div class="form-grid two"><div class="field"><label for="profile-doctor-name">Doctor / clinic</label><input id="profile-doctor-name" name="doctorName" value="${esc(p.doctorName)}" maxlength="120"></div><div class="field"><label for="profile-doctor-phone">Doctor’s phone</label><input id="profile-doctor-phone" name="doctorPhone" type="tel" value="${esc(p.doctorPhone)}" maxlength="40"></div><div class="field"><label for="profile-emergency-service">National emergency number</label><input id="profile-emergency-service" name="emergencyServiceNumber" value="${esc(p.emergencyServiceNumber || '112')}" maxlength="20"></div><div class="field"><label for="profile-police-number">Police</label><input id="profile-police-number" name="policeNumber" type="tel" value="${esc(p.policeNumber || '112')}" maxlength="30"></div><div class="field"><label for="profile-fire-number">Fire department</label><input id="profile-fire-number" name="fireNumber" type="tel" value="${esc(p.fireNumber || '101')}" maxlength="30"></div><div class="field"><label for="profile-women-helpline">Women’s helpline</label><input id="profile-women-helpline" name="womenHelplineNumber" type="tel" value="${esc(p.womenHelplineNumber || '181')}" maxlength="30"></div><div class="field"><label for="profile-men-helpline">Men’s helpline</label><input id="profile-men-helpline" name="menHelplineNumber" type="tel" value="${esc(p.menHelplineNumber || '')}" maxlength="30" placeholder="Add local number"></div></div><p class="small muted">Some helplines vary by region. A family member should verify local numbers before use.</p></div>
+          <div class="form-actions"><button class="primary" type="submit">${ic('check',20)} Save details and photos</button></div>
+        </form>`;
     }
 
     function dateOf(y,m,d) { const dt=new Date(y,m,d); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; }
@@ -1310,8 +1351,15 @@
           caregiverUnlocked=true; currentView='family'; render(); showToast('Family editing is unlocked on this device.'); return;
         }
         if(type==='profile') {
-          state.profile={...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim(),doctorName:String(data.doctorName||'').trim(),doctorPhone:String(data.doctorPhone||'').trim(),emergencyServiceNumber:String(data.emergencyServiceNumber||'112').trim(),policeNumber:String(data.policeNumber||'112').trim(),fireNumber:String(data.fireNumber||'101').trim(),womenHelplineNumber:String(data.womenHelplineNumber||'181').trim(),menHelplineNumber:String(data.menHelplineNumber||'').trim()};
-          await save(); currentView='home'; homeCoords=null; render(); showToast('Personal details saved.'); return;
+          const profilePhotoInput=form.querySelector('[name="profilePhoto"]');
+          const guardianPhotoInput=form.querySelector('[name="guardianPhoto"]');
+          let photo=state.profile.photo||'', guardianPhoto=state.profile.guardianPhoto||'';
+          if(profilePhotoInput?.files?.[0]) photo=await resizeImage(profilePhotoInput.files[0]);
+          else if(data.removeProfilePhoto==='yes') photo='';
+          if(guardianPhotoInput?.files?.[0]) guardianPhoto=await resizeImage(guardianPhotoInput.files[0]);
+          else if(data.removeGuardianPhoto==='yes') guardianPhoto='';
+          state.profile={...state.profile,photo,guardianPhoto,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim(),doctorName:String(data.doctorName||'').trim(),doctorPhone:String(data.doctorPhone||'').trim(),emergencyServiceNumber:String(data.emergencyServiceNumber||'112').trim(),policeNumber:String(data.policeNumber||'112').trim(),fireNumber:String(data.fireNumber||'101').trim(),womenHelplineNumber:String(data.womenHelplineNumber||'181').trim(),menHelplineNumber:String(data.menHelplineNumber||'').trim()};
+          await save(); currentView='home'; homeCoords=null; render(); showToast('Personal details and photos saved.'); return;
         }
         if(type==='contact') {
           const existing=editingContactId?state.contacts.find(x=>x.id===editingContactId):null;
@@ -1429,6 +1477,9 @@
     document.addEventListener('change', async e=>{
       if(e.target && e.target.id==='contact-photo' && e.target.files && e.target.files[0]) {
         try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById('contact-photo-preview'); if(preview){preview.innerHTML=`<img class="contact-avatar-photo" src="${data}" alt="Contact photo preview">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
+      }
+      if(e.target && (e.target.id==='profile-photo'||e.target.id==='guardian-photo') && e.target.files && e.target.files[0]) {
+        try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById(e.target.id+'-preview'); if(preview){preview.innerHTML=`<img class="profile-photo-thumb" src="${data}" alt="Selected photo preview">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
       }
       if(e.target && e.target.id==='memory-photo' && e.target.files && e.target.files[0]) {
         try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById('photo-preview'); if(preview){preview.innerHTML=`<img class="photo" src="${data}" alt="Photo preview" style="width:120px;height:120px">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
