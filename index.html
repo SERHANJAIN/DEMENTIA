@@ -1063,8 +1063,19 @@
           <div class="profile-line"><div class="profile-key">Guardian</div><div class="profile-value guardian-detail-value">${p.guardianPhoto?`<img class="guardian-detail-photo" src="${p.guardianPhoto}" alt="Photo of ${esc(p.emergencyName||'your guardian')}">`:''}<span>${p.emergencyName?esc(p.emergencyName):'<span class="muted">Not added yet</span>'}</span></div></div>
           ${line('Guardian’s phone',p.emergencyPhone,'tel')}${line('Doctor / clinic',p.doctorName)}${line('Doctor’s phone',p.doctorPhone,'tel')}
         </div>
+        <form class="panel" data-form="profile-photos">
+          <h3>Your photo</h3><p class="small muted">This photo stays saved with your details on this phone.</p>
+          <div class="profile-photo-editor">${p.photo?`<img class="profile-photo-thumb" src="${p.photo}" alt="Your saved photo">`:`<div class="profile-photo-thumb profile-photo-placeholder">${ic('user',30)}</div>`}
+            <div class="field"><label for="about-profile-photo">Add or change your photo</label><input id="about-profile-photo" name="profilePhoto" type="file" accept="image/*"><div id="about-profile-photo-preview" class="photo-upload-preview hidden"></div></div>
+          </div>
+          <div class="form-section"><h3>Guardian’s photo</h3><p class="small muted">This photo will appear beside the guardian’s name and call option on the home screen.</p></div>
+          <div class="profile-photo-editor">${p.guardianPhoto?`<img class="profile-photo-thumb" src="${p.guardianPhoto}" alt="Your guardian’s saved photo">`:`<div class="profile-photo-thumb profile-photo-placeholder">${ic('user',30)}</div>`}
+            <div class="field"><label for="about-guardian-photo">Add or change guardian’s photo</label><input id="about-guardian-photo" name="guardianPhoto" type="file" accept="image/*"><div id="about-guardian-photo-preview" class="photo-upload-preview hidden"></div></div>
+          </div>
+          <button class="primary" type="submit">${ic('check',20)} Save photos</button>
+        </form>
         ${speakerButton(`Your name is ${p.name}. Your home address is ${p.homeAddress}. Your guardian is ${p.emergencyName||'not added yet'}. Their phone number is ${p.emergencyPhone||'not added yet'}.`,'Hear personal details')}
-        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update details and photos</button>`:`<button class="secondary" type="button" data-action="go" data-view="settings">${ic('edit',20)} Family: update details</button>`}</div>`;
+        <div style="margin-top:12px">${caregiverUnlocked?`<button class="primary" type="button" data-action="go" data-view="profile-form">${ic('edit',20)} Update personal information</button>`:`<button class="secondary" type="button" data-action="go" data-view="settings">${ic('edit',20)} Family: update personal information</button>`}</div>`;
     }
     function renderEmergency() {
       const p=state.profile;
@@ -1335,7 +1346,7 @@
     async function handleSubmit(event) {
       const form=event.target.closest('form[data-form]'); if(!form) return;
       event.preventDefault(); const fd=new FormData(form); const data=Object.fromEntries(fd.entries()); const type=form.dataset.form;
-      if(type!=='setup' && type!=='family-unlock' && type!=='chat' && type!=='route-destination' && type!=='memory' && !caregiverUnlocked) { requireCaregiver(); return; }
+      if(type!=='setup' && type!=='family-unlock' && type!=='chat' && type!=='route-destination' && type!=='memory' && type!=='profile-photos' && !caregiverUnlocked) { requireCaregiver(); return; }
       try {
         if(type==='setup') {
           const base=defaultState();
@@ -1349,6 +1360,13 @@
           if(state.profile.caregiverPin) { if(pin!==state.profile.caregiverPin) { showToast('That PIN did not match. Please try again.'); return; } }
           else { if(!/^\d{4}$/.test(pin) || pin!==String(data.pinConfirm||'')) { showToast('Please enter the same 4-digit PIN twice.'); return; } state.profile.caregiverPin=pin; await save(); }
           caregiverUnlocked=true; currentView='family'; render(); showToast('Family editing is unlocked on this device.'); return;
+        }
+        if(type==='profile-photos') {
+          const profilePhotoInput=form.querySelector('[name="profilePhoto"]');
+          const guardianPhotoInput=form.querySelector('[name="guardianPhoto"]');
+          if(profilePhotoInput?.files?.[0]) state.profile.photo=await resizeImage(profilePhotoInput.files[0]);
+          if(guardianPhotoInput?.files?.[0]) state.profile.guardianPhoto=await resizeImage(guardianPhotoInput.files[0]);
+          await save(); currentView='about'; render(); showToast('Your photos have been saved.'); return;
         }
         if(type==='profile') {
           const profilePhotoInput=form.querySelector('[name="profilePhoto"]');
@@ -1478,7 +1496,7 @@
       if(e.target && e.target.id==='contact-photo' && e.target.files && e.target.files[0]) {
         try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById('contact-photo-preview'); if(preview){preview.innerHTML=`<img class="contact-avatar-photo" src="${data}" alt="Contact photo preview">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
       }
-      if(e.target && (e.target.id==='profile-photo'||e.target.id==='guardian-photo') && e.target.files && e.target.files[0]) {
+      if(e.target && ['profile-photo','guardian-photo','about-profile-photo','about-guardian-photo'].includes(e.target.id) && e.target.files && e.target.files[0]) {
         try { const data=await resizeImage(e.target.files[0]); const preview=document.getElementById(e.target.id+'-preview'); if(preview){preview.innerHTML=`<img class="profile-photo-thumb" src="${data}" alt="Selected photo preview">`;preview.classList.remove('hidden');} } catch(err){showToast(err.message);}
       }
       if(e.target && e.target.id==='memory-photo' && e.target.files && e.target.files[0]) {
