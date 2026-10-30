@@ -500,6 +500,27 @@
     :root[data-theme="dark"] .route-steps li { background:#294736;color:#f2faf1; }
     @media (min-width:640px) { .moment-photo-wide,.moment-text-wide { grid-column:span 1; } }
 
+
+    /* Weather backgrounds are deliberately visible at page level, not only as a faint overlay. */
+    :root:not([data-theme="dark"]) body[data-weather="sunny"] { background:linear-gradient(145deg,#fff0b9 0%,#f8e8c9 38%,#e5f0df 100%) fixed !important; }
+    :root:not([data-theme="dark"]) body[data-weather="cloudy"] { background:linear-gradient(145deg,#dce9eb 0%,#e5eceb 45%,#e9e5df 100%) fixed !important; }
+    :root:not([data-theme="dark"]) body[data-weather="drizzle"] { background:linear-gradient(145deg,#cfe0e4 0%,#dce9e8 48%,#e7ece8 100%) fixed !important; }
+    :root:not([data-theme="dark"]) body[data-weather="rain"] { background:linear-gradient(145deg,#b9cedd 0%,#cbdbe2 48%,#dce6e5 100%) fixed !important; }
+    :root:not([data-theme="dark"]) body[data-weather="storm"] { background:linear-gradient(145deg,#b9c1d4 0%,#d0d7e1 46%,#e4dfe3 100%) fixed !important; }
+    :root:not([data-theme="dark"]) body[data-weather="snow"] { background:linear-gradient(145deg,#e4f2f7 0%,#edf4f5 48%,#dfeaf0 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="sunny"] { background:linear-gradient(145deg,#27374c 0%,#26394a 45%,#35423e 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="cloudy"] { background:linear-gradient(145deg,#172d40 0%,#20384b 50%,#263744 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="drizzle"] { background:linear-gradient(145deg,#142e40 0%,#1b3749 50%,#253d48 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="rain"] { background:linear-gradient(145deg,#10283d 0%,#19354d 50%,#214052 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="storm"] { background:linear-gradient(145deg,#17243a 0%,#26324a 50%,#35374a 100%) fixed !important; }
+    :root[data-theme="dark"] body[data-weather="snow"] { background:linear-gradient(145deg,#243a4c 0%,#304958 50%,#263e50 100%) fixed !important; }
+    .weather-status { margin:9px 0 0; padding:8px 10px; border-radius:11px; background:rgba(220,235,225,.72); color:#365c48; font-size:14px; font-weight:800; }
+    .weather-location-field { margin:13px 0; }
+    .weather-location-field input { width:100%; min-height:50px; border:2px solid #ced8de; background:#fff; color:#203244; border-radius:13px; padding:11px 13px; font-size:17px; }
+    :root[data-theme="dark"] .weather-status { background:#25483f; color:#d0efda; }
+    :root[data-theme="dark"] .weather-location-field input { background:#10283d; color:#f3f6fb; border-color:#49657a; }
+    @media (max-width:390px) { .ambient-panel .button-row { gap:7px; } .ambient-panel .button-row > * { flex:1 1 135px; } }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
@@ -704,10 +725,19 @@
       const man = gender === 'man';
       const label = man ? 'Man companion' : 'Woman companion';
       const art = man ? `
-        <svg class="companion-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <ellipse cx="50" cy="100" rx="47" ry="27" fill="#a9d1ce"/><path d="M8 102c3-19 18-29 42-29s39 10 42 29" fill="#b9dcd5"/><path d="M42 62h16v18H42z" fill="#eabda9"/>
-          <path d="M24 46c-5-20 3-37 19-41 17-5 34 2 39 19 3 9 1 21-4 30l-4 14H27z" fill="#9ebdce"/><ellipse cx="50" cy="44" rx="22" ry="27" fill="#f2c9b4"/><path d="M27 36c1-18 12-28 25-28 14 0 25 9 27 25-8 0-15-4-20-11-8 8-18 12-32 12z" fill="#8eafc1"/>
-          <ellipse cx="41" cy="45" rx="2.1" ry="2.7" fill="#425766"/><ellipse cx="59" cy="45" rx="2.1" ry="2.7" fill="#425766"/><ellipse cx="37" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><ellipse cx="63" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><path d="M41 56q9 11 18 0" fill="none" stroke="#985c5a" stroke-width="2.8" stroke-linecap="round"/><path d="M37 34q4-3 8 0M55 34q4-3 8 0" fill="none" stroke="#688598" stroke-width="1.7" stroke-linecap="round"/>
+        <svg class="companion-art companion-man-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <ellipse cx="50" cy="103" rx="48" ry="29" fill="#9fc9c8"/>
+          <path d="M7 104c3-21 18-32 43-32s40 11 43 32" fill="#a9d1cd"/>
+          <path d="M41 65h18v17H41z" fill="#dba993"/>
+          <path d="M39 72l11 12 11-12 10 5-9 25H38l-9-25z" fill="#6f9f9f"/>
+          <path d="M29 35c0-18 9-28 22-28 14 0 23 10 23 28v14c0 16-10 27-24 27S27 65 27 49z" fill="#eec1aa"/>
+          <path d="M25 43c-3-10-2-22 5-30C36 4 44 2 53 3c14 1 24 11 25 26l-2 16-5-3-2-15c-7 5-20 8-37 7l-1 13z" fill="#557889"/>
+          <path d="M28 37c-1 10 0 18 3 23l-4 1c-5-8-6-17-5-26zM72 36c1 10 0 18-3 24l4 1c5-8 6-17 5-26z" fill="#557889"/>
+          <path d="M35 38q6-4 12 0M54 38q6-4 12 0" fill="none" stroke="#425766" stroke-width="3.1" stroke-linecap="round"/>
+          <ellipse cx="41" cy="47" rx="2.2" ry="2.8" fill="#334b5b"/><ellipse cx="59" cy="47" rx="2.2" ry="2.8" fill="#334b5b"/>
+          <ellipse cx="36" cy="55" rx="4.2" ry="2.3" fill="#e5a19a" opacity=".5"/><ellipse cx="64" cy="55" rx="4.2" ry="2.3" fill="#e5a19a" opacity=".5"/>
+          <path d="M43 60q7 5 14 0" fill="none" stroke="#965d59" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M36 65q14 9 28 0" fill="none" stroke="#b98777" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
         </svg>` : `
         <svg class="companion-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <ellipse cx="50" cy="100" rx="47" ry="27" fill="#d4bfe1"/><path d="M8 102c3-19 18-29 42-29s39 10 42 29" fill="#c8b7dc"/><path d="M42 62h16v18H42z" fill="#eabda9"/>
@@ -750,27 +780,41 @@
       try { const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{'Accept':'application/json'}}); if(!response.ok) throw new Error(`Weather service returned ${response.status}`); return await response.json(); }
       finally { clearTimeout(timer); }
     }
+    async function geocodeWeatherCity(city, source) {
+      const name=String(city||'').trim();
+      if(!name) return null;
+      const data=await requestJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=10&language=en&format=json`,9000);
+      const places=(data.results||[]).filter(p=>Number.isFinite(Number(p.latitude))&&Number.isFinite(Number(p.longitude)));
+      const place=places.find(p=>/^PPL/.test(String(p.feature_code||'')))||places.find(p=>/^ADM2?$/.test(String(p.feature_code||'')))||places[0];
+      return place?{latitude:Number(place.latitude),longitude:Number(place.longitude),source,placeName:place.name||name}:null;
+    }
     async function getWeatherCoordinates(force=false) {
-      if(navigator.geolocation) {
-        try {
-          const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,maximumAge:force?0:15*60*1000,timeout:12000}));
-          return {latitude:position.coords.latitude,longitude:position.coords.longitude,source:'device'};
-        } catch(error) { console.info('Device location unavailable; trying the saved area for weather.',error); }
+      // A manually entered city is reliable when the user has denied device location.
+      const chosenCity=String(state.preferences?.weatherLocation||'').trim();
+      if(chosenCity) {
+        const chosen=await geocodeWeatherCity(chosenCity,'chosen city');
+        if(chosen) return chosen;
+        throw new Error(`I could not find “${chosenCity}”. Check the city name and try again.`);
       }
-      // Use only the city/locality part of the saved address; never send house or street details.
-      const parts=String(state.profile?.homeAddress||'').split(',').map(x=>x.trim()).filter(Boolean);
-      const candidates=[...new Set([parts.slice(-3).join(', '),parts.slice(-2).join(', '),parts.slice(-1).join(', ')].filter(Boolean))];
+      if(navigator.geolocation && window.isSecureContext) {
+        try {
+          const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,maximumAge:force?0:15*60*1000,timeout:6500}));
+          return {latitude:position.coords.latitude,longitude:position.coords.longitude,source:'device',placeName:'your area'};
+        } catch(error) { console.info('Device location unavailable; trying the saved city.',error); }
+      }
+      // Only try the final locality/city components. Street and house-number details are never sent.
+      const parts=String(state.profile?.homeAddress||'').split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
+      const candidates=parts.slice(-4).reverse().filter(x=>!/[0-9]/.test(x)&&/[A-Za-z]{3,}/.test(x));
       for(const locality of candidates) {
         try {
-          const data=await requestJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locality)}&count=1&language=en&format=json`,10000);
-          const place=data.results?.[0];
-          if(place&&Number.isFinite(Number(place.latitude))&&Number.isFinite(Number(place.longitude))) return {latitude:Number(place.latitude),longitude:Number(place.longitude),source:'saved area'};
-        } catch(error) { console.info('Saved locality lookup failed.',error); }
+          const place=await geocodeWeatherCity(locality,'saved area');
+          if(place) return place;
+        } catch(error) { console.info('Saved city lookup failed.',error); }
       }
-      throw new Error('Location unavailable. Allow location access or check the city in your saved home address.');
+      throw new Error('Weather needs a city. Open Settings and enter your city or town.');
     }
     async function syncWeatherMood(force=false) {
-      if(state.preferences?.weatherEnabled===false) return false;
+      if(state.preferences?.weatherEnabled===false) { delete document.body.dataset.weather; return false; }
       if(!force) {
         const at=Number(localStorage.getItem('carey-weather-updated')||0), mood=localStorage.getItem('carey-weather-mood')||'';
         if(mood&&Date.now()-at<90*60*1000) { document.body.dataset.weather=mood; return true; }
@@ -784,18 +828,28 @@
           if(!Number.isFinite(Number(current.weather_code))) throw new Error('Weather service returned no current conditions.');
           const code=Number(current.weather_code), day=Number(current.is_day)===1;
           let mood='cloudy';
-          if(code===0&&day) mood='sunny';
+          if(code===0) mood=day?'sunny':'cloudy';
+          else if([45,48,3].includes(code)) mood='cloudy';
           else if([51,53,55,56,57].includes(code)) mood='drizzle';
           else if([95,96,99].includes(code)) mood='storm';
           else if([71,73,75,77,85,86].includes(code)) mood='snow';
           else if([61,63,65,66,67,80,81,82].includes(code)||Number(current.precipitation)>0||Number(current.rain)>0||Number(current.showers)>0) mood='rain';
           else if([1,2].includes(code)&&day) mood='sunny';
           document.body.dataset.weather=mood;
-          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source);
+          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source); localStorage.setItem('carey-weather-place',coords.placeName||'');
           return true;
-        } catch(error) { console.warn('Weather ambience update failed.',error); if(!document.body.dataset.weather) document.body.dataset.weather='cloudy'; return false; }
+        } catch(error) {
+          console.warn('Weather ambience update failed.',error);
+          document.body.dataset.weather='cloudy';
+          return false;
+        }
       })();
       try { return await weatherInFlight; } finally { weatherInFlight=null; }
+    }
+    function weatherStatusText() {
+      const mood=document.body.dataset.weather||localStorage.getItem('carey-weather-mood')||'';
+      const names={sunny:'Sunny weather ambience is active',cloudy:'Cloudy weather ambience is active',drizzle:'Light drizzle ambience is active',rain:'Rainy weather ambience is active',storm:'Stormy weather ambience is active',snow:'Snowy weather ambience is active'};
+      return names[mood]||'Weather is not connected yet. Add your city below, then tap “Use this city”.';
     }
 
     function render() {
@@ -1003,7 +1057,7 @@
       const theme=state.preferences?.theme==='dark'?'dark':'light';
       return `${topTitle('Settings','Make carey feel right for you.')}
         <section class="panel settings-appearance"><h2>Appearance</h2><p class="small muted">Choose the colors that feel comfortable.</p><div class="theme-options"><button type="button" class="theme-option ${theme==='light'?'is-active':''}" data-action="set-theme" data-theme="light" aria-pressed="${theme==='light'}">${ic('sun',21)}<span><strong>Light mode</strong><small>Soft and bright</small></span>${theme==='light'?ic('checkcircle',19):''}</button><button type="button" class="theme-option ${theme==='dark'?'is-active':''}" data-action="set-theme" data-theme="dark" aria-pressed="${theme==='dark'}">${ic('moon',21)}<span><strong>Dark mode</strong><small>Navy blue background</small></span>${theme==='dark'?ic('checkcircle',19):''}</button></div></section>
-        <section class="panel ambient-panel"><div class="panel-title-row"><div><h3>Weather ambience</h3><p class="small muted" style="margin:0">The background can gently reflect the weather near you. If you allow location, carey uses it only to check local weather; it does not save your coordinates. If you say no, the daily calming background remains.</p></div></div><div class="button-row"><button class="secondary small-button" type="button" data-action="weather-toggle">${state.preferences?.weatherEnabled===false?'Turn weather effects on':'Turn weather effects off'}</button><button class="secondary small-button" type="button" data-action="weather-refresh">${ic('refresh',17)} Refresh weather</button></div></section>
+        <section class="panel ambient-panel"><div class="panel-title-row"><div><h3>Weather ambience</h3><p class="small muted" style="margin:0">carey uses your phone’s location when allowed. Otherwise, enter your city below. Only the city name is sent to the weather service; your full home address is not.</p><p class="weather-status" role="status">${weatherStatusText()}</p></div></div><div class="field weather-location-field"><label for="weather-location">City or town</label><input id="weather-location" type="text" maxlength="80" value="${esc(state.preferences?.weatherLocation||'')}" placeholder="Enter your city (for example, Bengaluru)" autocomplete="off"><span class="hint">Useful when location access is turned off.</span></div><div class="button-row"><button class="primary small-button" type="button" data-action="save-weather-location">Use this city</button><button class="secondary small-button" type="button" data-action="weather-refresh">${ic('refresh',17)} Refresh weather</button><button class="secondary small-button" type="button" data-action="weather-toggle">${state.preferences?.weatherEnabled===false?'Turn weather effects on':'Turn weather effects off'}</button></div></section>
         <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true,false,companionMood)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice ${selected==='woman'?'is-selected':''}" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice ${selected==='man'?'is-selected':''}" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
         <div class="panel ambient-panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
         <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so carey can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button></div>
@@ -1325,7 +1379,17 @@
       if(action==='chat-go') { stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='set-theme') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
       if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(!state.preferences.weatherEnabled) {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');localStorage.removeItem('carey-weather-source'); await save(); render(); showToast('Weather ambience is off.'); return;} await save(); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is on.':'Weather is on, but current conditions could not be reached. Check location access or your connection.'); return; }
-      if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); showToast('Checking the weather near you…'); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is up to date.':'I could not update the weather. Check your connection or allow location access, then try again.'); return; }
+      if(action==='save-weather-location') {
+        const field=document.getElementById('weather-location');
+        const city=String(field?.value||'').trim();
+        if(!city) { showToast('Enter your city or town first.'); return; }
+        state.preferences=state.preferences||{}; state.preferences.weatherLocation=city; state.preferences.weatherEnabled=true;
+        await save(); showToast('Checking the weather for '+city+'…');
+        const ok=await syncWeatherMood(true); render();
+        showToast(ok?'Weather ambience is now set for '+city+'.':'I could not find that city or reach the weather service. Check the spelling and your internet connection.');
+        return;
+      }
+      if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); showToast('Checking the weather…'); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is up to date.':'I could not update the weather. Enter your city in Settings or check your connection, then try again.'); return; }
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-medicine') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
