@@ -47,8 +47,9 @@
     .topbar { padding: max(8px, env(safe-area-inset-top)) 12px 8px; background: rgba(248,247,242,.9); backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid rgba(36,59,83,.08); position: sticky; top: 0; z-index: 20; }
     .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
     .brand-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 13px; background: var(--navy); color: white; }
-    .brand-name { font-size: 22px; line-height: 1.12; font-weight: 800; letter-spacing: -.35px; }
-    .brand-tagline { font-size: 12px; color: var(--muted); line-height: 1.25; margin-top: 2px; }
+    .brand-copy { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; }
+    .brand-name { display:block; font-size: 22px; line-height: 1.12; font-weight: 800; letter-spacing: -.35px; }
+    .brand-tagline { display:block; font-size: 12px; color: var(--muted); line-height: 1.25; margin:0; }
     .top-actions { display: flex; align-items: center; gap: 8px; }
     .icon-button { min-width: 42px; min-height: 42px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); color: var(--navy); display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 7px 10px; font-weight: 700; }
     .speaker-button { width: 40px; height: 40px; flex: 0 0 40px; padding: 0; border: 1px solid rgba(36,59,83,.14); border-radius: 50%; background: #fff; color: var(--navy); display: inline-grid; place-items: center; box-shadow: 0 2px 8px rgba(36,59,83,.06); }
@@ -202,13 +203,14 @@
     .guardian-strip .guardian-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #4b6b56; }
     .guardian-strip .guardian-name { display: block; font-size: 14px; line-height: 1.2; overflow-wrap: anywhere; }
     .guardian-strip .guardian-number { display: block; font-size: 11px; font-weight: 500; }
-    .moments-gallery { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 12px; }
-    .moment-tile { overflow: hidden; padding: 0; border: 1px solid rgba(36,59,83,.12); border-radius: 15px; background: rgba(255,255,255,.96); box-shadow: 0 2px 8px rgba(36,59,83,.05); min-width: 0; }
-    .moment-image { display: block; width: 100%; aspect-ratio: 1 / .82; object-fit: cover; background: #e4efeb; }
-    .moment-image-placeholder { display: grid; place-items: center; width: 100%; aspect-ratio: 1/.82; background: linear-gradient(140deg,#e2efea,#f9e6d8); color: #426b54; }
-    .moment-copy { padding: 9px; }
-    .moment-title { font-size: 14px; line-height: 1.2; font-weight: 800; margin: 0 0 4px; overflow-wrap: anywhere; }
-    .moment-note { font-size: 12px; color: var(--muted); line-height: 1.3; margin: 0 0 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; }
+    .moments-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; align-items:start; }
+    .moment-tile { overflow:hidden; padding:0; border:1px solid rgba(36,59,83,.12); border-radius:13px; background:rgba(255,255,255,.96); box-shadow:0 2px 7px rgba(36,59,83,.045); min-width:0; }
+    .moment-image { display:block; width:100%; aspect-ratio:1 / .94; object-fit:cover; background:#e4efeb; }
+    .moment-image-placeholder { display:grid; place-items:center; width:100%; aspect-ratio:1/.94; background:linear-gradient(140deg,#e2efea,#f9e6d8); color:#426b54; }
+    .moment-copy { padding:7px; }
+    .moment-title { font-size:13px; line-height:1.2; font-weight:800; margin:0 0 3px; overflow-wrap:anywhere; }
+    .moment-note { font-size:11px; color:var(--muted); line-height:1.28; margin:0 0 5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; white-space:pre-wrap; }
+    @media (max-width:380px) { .moments-gallery { gap:7px; } .moment-tile { border-radius:11px; } .moment-copy { padding:6px; } .moment-title { font-size:12px; } .moment-note { font-size:10.5px; } }
     .moment-actions { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     .moment-actions .speaker-button { width: 34px; height: 34px; flex-basis: 34px; }
     .home-section-label { font-size: 12px; color: var(--muted); margin: 4px 0 2px; }
@@ -282,6 +284,11 @@
     .companion-avatar.small-avatar { width:45px; height:45px; flex-basis:45px; }
     .companion-avatar.is-happy { animation:celebrateBob .62s ease-in-out 2; box-shadow:0 0 0 4px rgba(96,155,117,.22),0 5px 18px rgba(36,59,83,.15); }
     .avatar-reaction { position:absolute; right:-7px; bottom:-4px; display:grid; place-items:center; width:34px; height:34px; border-radius:50%; color:white; background:#4b8967; border:2px solid rgba(255,255,255,.96); font-size:19px; animation:reactionPop .5s cubic-bezier(.2,1.4,.4,1) both; }
+    .companion-avatar { position:relative; overflow:hidden; }
+    .companion-art { display:block; width:100%; height:100%; padding:1px; transform-origin:50% 78%; animation:portraitBreath 7s ease-in-out infinite; }
+    .companion-avatar.is-happy .companion-art { animation:portraitHappy .65s ease-in-out 2; }
+    .companion-avatar.small-avatar .companion-art { padding:0; }
+    .avatar-reaction { right:2px; bottom:2px; width:23px; height:23px; font-size:13px; color:#fff; background:#679b7a; border:2px solid rgba(255,255,255,.96); }
     @keyframes celebrateBob { 0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-7px) rotate(-3deg)}70%{transform:translateY(-3px) rotate(3deg)} }
     @keyframes reactionPop { 0%{transform:scale(.1) rotate(-25deg);opacity:0}80%{transform:scale(1.12) rotate(7deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1} }
     .encouragement-bubble { display:inline-flex; gap:7px; align-items:center; margin:8px 0 0 112px; padding:7px 11px; border-radius:14px 14px 14px 4px; background:#e3f0e3; color:#315b42; font-size:13px; font-weight:800; box-shadow:0 3px 10px rgba(45,90,63,.08); }
@@ -503,7 +510,7 @@
         <button class="settings-top" type="button" data-action="go" data-view="settings" aria-label="Settings" title="Settings"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75 13.5 4a8.4 8.4 0 0 1 1.85.78l1.9-.5 1.72 1.72-.5 1.9a8.4 8.4 0 0 1 .78 1.85L20.5 11.25v2.5L19.25 15a8.4 8.4 0 0 1-.78 1.85l.5 1.9-1.72 1.72-1.9-.5a8.4 8.4 0 0 1-1.85.78L12 22.25 10.75 21a8.4 8.4 0 0 1-1.85-.78l-1.9.5-1.72-1.72.5-1.9A8.4 8.4 0 0 1 5 15l-1.25-1.25v-2.5L5 10a8.4 8.4 0 0 1 .78-1.85l-.5-1.9L7 4.53l1.9.5A8.4 8.4 0 0 1 10.75 4L12 2.75Z"/><circle cx="12" cy="12.5" r="3"/></svg></button>
         <div class="brand" aria-label="carey — A little help, right when you need it">
           <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" width="31" height="31"><path d="M24 4 4 21v22h40V21L24 4Z" fill="#fff"/><path d="M24 35.7s-10.4-6.2-10.4-12.3c0-4.3 5-6.2 8.5-2.7l1.9 2 1.9-2c3.5-3.5 8.5-1.6 8.5 2.7 0 6.1-10.4 12.3-10.4 12.3Z" fill="#243b53"/></svg></span>
-          <span><span class="brand-name">carey</span><span class="brand-tagline">A little help, right when you need it.</span></span>
+          <span class="brand-copy"><span class="brand-name">carey</span><span class="brand-tagline">A little help, right when you need it.</span></span>
         </div>
       </div>
       <div class="top-actions"><button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear carey" title="Hear carey"><span id="voice-icon"></span></button></div>
@@ -695,9 +702,19 @@
     }
     function renderAvatar(gender='woman', large=false, small=false, mood='neutral') {
       const man = gender === 'man';
-      const emoji = man ? '🙎‍♂️' : '🙍‍♀️';
       const label = man ? 'Man companion' : 'Woman companion';
-      return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${mood==='happy'?'is-happy':''}" aria-label="${label}"><span class="companion-emoji" aria-hidden="true">${emoji}</span>${mood==='happy'?'<span class="avatar-reaction">👍</span>':''}</span>`;
+      const art = man ? `
+        <svg class="companion-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <ellipse cx="50" cy="100" rx="47" ry="27" fill="#a9d1ce"/><path d="M8 102c3-19 18-29 42-29s39 10 42 29" fill="#b9dcd5"/><path d="M42 62h16v18H42z" fill="#eabda9"/>
+          <path d="M24 46c-5-20 3-37 19-41 17-5 34 2 39 19 3 9 1 21-4 30l-4 14H27z" fill="#9ebdce"/><ellipse cx="50" cy="44" rx="22" ry="27" fill="#f2c9b4"/><path d="M27 36c1-18 12-28 25-28 14 0 25 9 27 25-8 0-15-4-20-11-8 8-18 12-32 12z" fill="#8eafc1"/>
+          <ellipse cx="41" cy="45" rx="2.1" ry="2.7" fill="#425766"/><ellipse cx="59" cy="45" rx="2.1" ry="2.7" fill="#425766"/><ellipse cx="37" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><ellipse cx="63" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><path d="M41 56q9 11 18 0" fill="none" stroke="#985c5a" stroke-width="2.8" stroke-linecap="round"/><path d="M37 34q4-3 8 0M55 34q4-3 8 0" fill="none" stroke="#688598" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>` : `
+        <svg class="companion-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <ellipse cx="50" cy="100" rx="47" ry="27" fill="#d4bfe1"/><path d="M8 102c3-19 18-29 42-29s39 10 42 29" fill="#c8b7dc"/><path d="M42 62h16v18H42z" fill="#eabda9"/>
+          <path d="M22 49c-5-23 1-39 16-45 17-7 37-1 43 16 5 14 2 33-3 44L27 77z" fill="#c6b5dc"/><ellipse cx="50" cy="44" rx="22" ry="27" fill="#f3c9b5"/><path d="M27 37c0-19 11-30 25-30 15 0 26 11 26 29-10-1-18-6-23-14-7 9-16 14-28 15z" fill="#c6b5dc"/><path d="M27 40c-4 16-2 26 3 34M73 40c4 16 2 26-3 34" fill="none" stroke="#a995c7" stroke-width="7" stroke-linecap="round"/>
+          <ellipse cx="41" cy="45" rx="2.1" ry="2.7" fill="#4e5365"/><ellipse cx="59" cy="45" rx="2.1" ry="2.7" fill="#4e5365"/><ellipse cx="37" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><ellipse cx="63" cy="52" rx="4.3" ry="2.4" fill="#e9a9a3" opacity=".55"/><path d="M41 56q9 11 18 0" fill="none" stroke="#985c5a" stroke-width="2.8" stroke-linecap="round"/><path d="M37 34q4-3 8 0M55 34q4-3 8 0" fill="none" stroke="#9c87b4" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>`;
+      return `<span class="companion-avatar ${large?'large':''} ${small?'small-avatar':''} ${mood==='happy'?'is-happy':''}" role="img" aria-label="${label}">${art}${mood==='happy'?'<span class="avatar-reaction" aria-hidden="true">♥</span>':''}</span>`;
     }
     function speakerButton(message, label, extraClass='') {
       return `<button type="button" class="speaker-button ${extraClass}" data-action="speak" data-text="${esc(message)}" aria-label="${esc(label)}" title="${esc(label)}">${ic('volume',19)}</button>`;
@@ -727,31 +744,58 @@
       ];
       document.documentElement.style.setProperty('--daily-background', moods[day]);
     }
-    let weatherRequestAt = 0;
-    async function syncWeatherMood(force=false) {
-      if (!state.profile?.homeAddress || state.preferences?.weatherEnabled === false || !navigator.geolocation) return;
-      const previousAt = Number(localStorage.getItem('carey-weather-updated') || 0);
-      const previousMood = localStorage.getItem('carey-weather-mood') || '';
-      if (!force && previousMood && Date.now()-previousAt < 90*60*1000) { document.body.dataset.weather=previousMood; return; }
-      if (weatherRequestAt && Date.now()-weatherRequestAt < 15000) return;
-      weatherRequestAt=Date.now();
-      navigator.geolocation.getCurrentPosition(async position => {
+    let weatherInFlight = null;
+    async function requestJson(url, timeoutMs=12000) {
+      const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),timeoutMs);
+      try { const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{'Accept':'application/json'}}); if(!response.ok) throw new Error(`Weather service returned ${response.status}`); return await response.json(); }
+      finally { clearTimeout(timer); }
+    }
+    async function getWeatherCoordinates(force=false) {
+      if(navigator.geolocation) {
         try {
-          const lat=position.coords.latitude, lon=position.coords.longitude;
-          const url=`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,precipitation,rain,showers,weather_code,is_day&timezone=auto`;
-          const response=await fetch(url,{cache:'no-store'}); if(!response.ok) throw new Error('Weather lookup failed');
-          const payload=await response.json(); const current=payload.current||{}; const code=Number(current.weather_code);
+          const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,maximumAge:force?0:15*60*1000,timeout:12000}));
+          return {latitude:position.coords.latitude,longitude:position.coords.longitude,source:'device'};
+        } catch(error) { console.info('Device location unavailable; trying the saved area for weather.',error); }
+      }
+      // Use only the city/locality part of the saved address; never send house or street details.
+      const parts=String(state.profile?.homeAddress||'').split(',').map(x=>x.trim()).filter(Boolean);
+      const candidates=[...new Set([parts.slice(-3).join(', '),parts.slice(-2).join(', '),parts.slice(-1).join(', ')].filter(Boolean))];
+      for(const locality of candidates) {
+        try {
+          const data=await requestJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locality)}&count=1&language=en&format=json`,10000);
+          const place=data.results?.[0];
+          if(place&&Number.isFinite(Number(place.latitude))&&Number.isFinite(Number(place.longitude))) return {latitude:Number(place.latitude),longitude:Number(place.longitude),source:'saved area'};
+        } catch(error) { console.info('Saved locality lookup failed.',error); }
+      }
+      throw new Error('Location unavailable. Allow location access or check the city in your saved home address.');
+    }
+    async function syncWeatherMood(force=false) {
+      if(state.preferences?.weatherEnabled===false) return false;
+      if(!force) {
+        const at=Number(localStorage.getItem('carey-weather-updated')||0), mood=localStorage.getItem('carey-weather-mood')||'';
+        if(mood&&Date.now()-at<90*60*1000) { document.body.dataset.weather=mood; return true; }
+      }
+      if(weatherInFlight) return weatherInFlight;
+      weatherInFlight=(async()=>{
+        try {
+          const coords=await getWeatherCoordinates(force);
+          const url=`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(coords.latitude)}&longitude=${encodeURIComponent(coords.longitude)}&current=temperature_2m,precipitation,rain,showers,weather_code,is_day&timezone=auto`;
+          const data=await requestJson(url,12000), current=data.current||{};
+          if(!Number.isFinite(Number(current.weather_code))) throw new Error('Weather service returned no current conditions.');
+          const code=Number(current.weather_code), day=Number(current.is_day)===1;
           let mood='cloudy';
-          if ([0,1].includes(code) && Number(current.is_day)===1) mood='sunny';
-          else if ([0,1,2,3,45,48].includes(code)) mood='cloudy';
-          else if ([51,53,55,56,57].includes(code)) mood='drizzle';
-          else if ([71,73,75,77,85,86].includes(code)) mood='snow';
-          else if ([95,96,99].includes(code)) mood='storm';
-          else if ([61,63,65,66,67,80,81,82].includes(code) || Number(current.precipitation)>0 || Number(current.rain)>0 || Number(current.showers)>0) mood='rain';
+          if(code===0&&day) mood='sunny';
+          else if([51,53,55,56,57].includes(code)) mood='drizzle';
+          else if([95,96,99].includes(code)) mood='storm';
+          else if([71,73,75,77,85,86].includes(code)) mood='snow';
+          else if([61,63,65,66,67,80,81,82].includes(code)||Number(current.precipitation)>0||Number(current.rain)>0||Number(current.showers)>0) mood='rain';
+          else if([1,2].includes(code)&&day) mood='sunny';
           document.body.dataset.weather=mood;
-          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now()));
-        } catch(error) { console.info('Using the calm daily background because local weather is unavailable.',error); }
-      }, () => { if(!document.body.dataset.weather) document.body.dataset.weather='cloudy'; }, {enableHighAccuracy:false,maximumAge:30*60*1000,timeout:10000});
+          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source);
+          return true;
+        } catch(error) { console.warn('Weather ambience update failed.',error); if(!document.body.dataset.weather) document.body.dataset.weather='cloudy'; return false; }
+      })();
+      try { return await weatherInFlight; } finally { weatherInFlight=null; }
     }
 
     function render() {
@@ -1280,8 +1324,8 @@
       if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
       if(action==='chat-go') { stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='set-theme') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
-      if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(state.preferences.weatherEnabled) syncWeatherMood(true); else {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');} await save(); render(); showToast(state.preferences.weatherEnabled?'Weather ambience is on.':'Weather ambience is off.'); return; }
-      if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); syncWeatherMood(true); showToast('Checking the local weather. Allow location access when asked.'); render(); return; }
+      if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(!state.preferences.weatherEnabled) {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');localStorage.removeItem('carey-weather-source'); await save(); render(); showToast('Weather ambience is off.'); return;} await save(); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is on.':'Weather is on, but current conditions could not be reached. Check location access or your connection.'); return; }
+      if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); showToast('Checking the weather near you…'); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is up to date.':'I could not update the weather. Check your connection or allow location access, then try again.'); return; }
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-medicine') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
