@@ -804,7 +804,9 @@
       }
       // Only try the final locality/city components. Street and house-number details are never sent.
       const parts=String(state.profile?.homeAddress||'').split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
-      const candidates=parts.slice(-4).reverse().filter(x=>!/[0-9]/.test(x)&&/[A-Za-z]{3,}/.test(x));
+      // Setup asks for house, street, area, city. Only use the final area/city components.
+      const safeParts=parts.length>=5?parts.slice(-3):parts.slice(-2);
+      const candidates=safeParts.reverse().filter(x=>!/[0-9]/.test(x)&&/[A-Za-z]{3,}/.test(x));
       for(const locality of candidates) {
         try {
           const place=await geocodeWeatherCity(locality,'saved area');
@@ -836,20 +838,25 @@
           else if([61,63,65,66,67,80,81,82].includes(code)||Number(current.precipitation)>0||Number(current.rain)>0||Number(current.showers)>0) mood='rain';
           else if([1,2].includes(code)&&day) mood='sunny';
           document.body.dataset.weather=mood;
-          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source); localStorage.setItem('carey-weather-place',coords.placeName||'');
+          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source); localStorage.setItem('carey-weather-place',coords.placeName||''); localStorage.removeItem('carey-weather-error');
           return true;
         } catch(error) {
           console.warn('Weather ambience update failed.',error);
           document.body.dataset.weather='cloudy';
+          localStorage.setItem('carey-weather-error',String(error?.message||'Weather could not be reached.'));
           return false;
         }
       })();
       try { return await weatherInFlight; } finally { weatherInFlight=null; }
     }
     function weatherStatusText() {
+      if(state.preferences?.weatherEnabled===false) return 'Weather ambience is turned off.';
+      const error=localStorage.getItem('carey-weather-error');
+      if(error) return 'Live weather could not be reached. Enter your city below and try again.';
       const mood=document.body.dataset.weather||localStorage.getItem('carey-weather-mood')||'';
       const names={sunny:'Sunny weather ambience is active',cloudy:'Cloudy weather ambience is active',drizzle:'Light drizzle ambience is active',rain:'Rainy weather ambience is active',storm:'Stormy weather ambience is active',snow:'Snowy weather ambience is active'};
-      return names[mood]||'Weather is not connected yet. Add your city below, then tap “Use this city”.';
+      const place=localStorage.getItem('carey-weather-place')||'';
+      return mood?(names[mood]||'Weather ambience is active')+(place?' · '+place:''):'Weather is not connected yet. Add your city below, then tap “Use this city”.';
     }
 
     function render() {
@@ -1378,7 +1385,7 @@
       if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
       if(action==='chat-go') { stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='set-theme') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
-      if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(!state.preferences.weatherEnabled) {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');localStorage.removeItem('carey-weather-source'); await save(); render(); showToast('Weather ambience is off.'); return;} await save(); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is on.':'Weather is on, but current conditions could not be reached. Check location access or your connection.'); return; }
+      if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(!state.preferences.weatherEnabled) {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');localStorage.removeItem('carey-weather-source'); localStorage.removeItem('carey-weather-place'); localStorage.removeItem('carey-weather-error'); await save(); render(); showToast('Weather ambience is off.'); return;} await save(); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is on.':'Weather is on, but current conditions could not be reached. Check location access or your connection.'); return; }
       if(action==='save-weather-location') {
         const field=document.getElementById('weather-location');
         const city=String(field?.value||'').trim();
