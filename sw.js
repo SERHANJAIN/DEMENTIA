@@ -1,5 +1,5 @@
-/* carey service worker — v7 clears older cached shells and always keeps current portraits available. */
-const CACHE_NAME = 'carey-shell-v7';
+/* carey service worker — v8 clears older cached shells and always keeps current portraits available. */
+const CACHE_NAME = 'carey-shell-v8';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [
   BASE_URL.href,
