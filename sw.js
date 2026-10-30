@@ -1,5 +1,5 @@
-/* carey service worker — v5 clears older cached shells and always keeps current portraits available. */
-const CACHE_NAME = 'carey-shell-v5';
+/* carey service worker — v7 clears older cached shells and always keeps current portraits available. */
+const CACHE_NAME = 'carey-shell-v7';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [
   BASE_URL.href,
@@ -9,8 +9,6 @@ const CORE_ASSETS = [
   new URL('icons/icon.svg', BASE_URL).href,
   new URL('icons/icon-192.png', BASE_URL).href,
   new URL('icons/icon-512.png', BASE_URL).href,
-  new URL('assets/avatar-woman.jpg', BASE_URL).href,
-  new URL('assets/avatar-man.jpg', BASE_URL).href,
   new URL('assets/ambient-home.svg', BASE_URL).href,
   new URL('assets/ambient-moments.svg', BASE_URL).href,
   new URL('assets/ambient-chat.svg', BASE_URL).href
