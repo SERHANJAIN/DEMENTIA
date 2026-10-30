@@ -205,7 +205,7 @@
     .guardian-strip .guardian-number { display: block; font-size: 11px; font-weight: 500; }
     .moments-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; align-items:start; }
     .moment-tile { overflow:hidden; padding:0; border:1px solid rgba(36,59,83,.12); border-radius:13px; background:rgba(255,255,255,.96); box-shadow:0 2px 7px rgba(36,59,83,.045); min-width:0; }
-    .moment-image { display:block; width:100%; aspect-ratio:1 / .94; object-fit:cover; background:#e4efeb; }
+    .moment-image { display:block; width:100%; height:auto; max-height:280px; object-fit:contain; background:#e9efec; }
     .moment-image-placeholder { display:grid; place-items:center; width:100%; aspect-ratio:1/.94; background:linear-gradient(140deg,#e2efea,#f9e6d8); color:#426b54; }
     .moment-copy { padding:7px; }
     .moment-title { font-size:13px; line-height:1.2; font-weight:800; margin:0 0 3px; overflow-wrap:anywhere; }
@@ -316,7 +316,7 @@
     .gallery-add { display:inline-flex;align-items:center;justify-content:center;gap:5px; min-height:39px; padding:7px 11px;border-radius:13px;background:rgba(255,255,255,.82);border:1px solid rgba(36,59,83,.15);color:var(--navy);font-weight:800; }
     .moments-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin-top:12px; }
     .moment-tile { border-radius:17px; background:rgba(255,255,255,.94); box-shadow:0 3px 11px rgba(38,58,72,.09); }
-    .moment-image,.moment-image-placeholder { aspect-ratio:1 / .92; }
+    .moment-image { aspect-ratio:auto; } .moment-image-placeholder { aspect-ratio:1 / .92; }
     .moment-copy { padding:10px; }
     .moment-title { font-size:14px; margin-bottom:4px; }
     .moment-person { font-size:11px; margin-bottom:4px; }
@@ -480,11 +480,9 @@
     .moment-text-only .moment-copy { padding:13px; }
     .moment-text-only .moment-title { font-size:16px; }
     .moment-text-only .moment-note { font-size:14px; color:#495e67; -webkit-line-clamp:unset; }
-    .moments-gallery { grid-auto-flow:dense; align-items:stretch; }
-    .moment-photo-tall .moment-image { aspect-ratio: .78 / 1; }
-    .moment-photo-wide { grid-column:span 2; }
-    .moment-photo-wide .moment-image { aspect-ratio: 1.9 / 1; }
-    .moment-text-wide { grid-column:span 2; }
+    .moments-gallery { grid-auto-flow:row; align-items:stretch; }
+    .moment-photo-tall .moment-image,.moment-photo-wide .moment-image { aspect-ratio:auto; object-fit:contain; }
+    .moment-photo-wide,.moment-text-wide { grid-column:auto; }
     .moment-date { display:block;font-size:11px;line-height:1.25;color:#637780;margin:0 0 5px; }
     .home-event-banner { display:flex;gap:10px;align-items:flex-start;padding:12px 13px;margin:8px 0 12px;border-radius:16px;background:linear-gradient(110deg,#faeadf,#e3f0e8);border:1px solid #e8d5c7;color:#243b53; }
     .home-event-banner h3 { margin:0 0 3px; }
@@ -630,6 +628,7 @@
     let toastTimer = null;
     let editingContactId = null;
     let editingMemoryId = null;
+    let pendingMemoryDeleteId = null;
     let editingMedicineId = null;
     let editingAppointmentId = null;
     let editingTaskId = null;
@@ -970,19 +969,16 @@
       return date+time;
     }
     function isMemoryAnniversary(m) { return Boolean(momentAgeLabel(m)); }
-    function renderMomentTile(m,i) {
+    function renderMomentTile(m) {
       const hasPhoto=Boolean(m.photo);
-      const textLength=(String(m.title||'').length+String(m.note||'').length+String(m.person||'').length);
-      const wide=hasPhoto ? (i%4===2) : textLength>155;
-      const tall=hasPhoto && !wide && i%3===1;
-      const classes=['moment-tile',hasPhoto?'moment-photo':'moment-text-only',wide?'moment-photo-wide moment-text-wide':'',tall?'moment-photo-tall':''].filter(Boolean).join(' ');
+      const classes=['moment-tile',hasPhoto?'moment-photo':'moment-text-only'].join(' ');
       const words=[m.title,m.person,m.note].filter(Boolean).join('. ');
       const actions=`<div class="moment-actions">${speakerButton(words,'Hear this moment')}<button class="speaker-button" type="button" data-action="edit-memory" data-id="${esc(m.id)}" aria-label="Edit this moment" title="Edit this moment">${ic('edit',16)}</button>${caregiverUnlocked?`<button class="speaker-button" type="button" data-action="delete-memory" data-id="${esc(m.id)}" aria-label="Remove this moment" title="Remove">${ic('trash',16)}</button>`:''}</div>`;
       return `<article class="${classes}" role="group" tabindex="0" data-action="edit-memory" data-id="${esc(m.id)}" aria-label="Open and edit ${esc(m.title||'this moment')}">${hasPhoto?`<img class="moment-image" src="${m.photo}" alt="${esc(m.title||'A saved moment')}" loading="lazy">`:''}<div class="moment-copy">${momentDateText(m)?`<span class="moment-date">${esc(momentDateText(m))}</span>`:''}<h3 class="moment-title">${esc(m.title||'A little moment')}</h3>${m.person?`<div class="relationship moment-person">${esc(m.person)}${m.relationship?` · ${esc(m.relationship)}`:''}</div>`:''}${m.note?`<p class="moment-note">${esc(m.note)}</p>`:''}${actions}</div></article>`;
     }
     function renderHomeMoments() {
       const all = state.memories.slice().sort((a,b)=>Number(isMemoryAnniversary(b))-Number(isMemoryAnniversary(a)) || (b.momentDate||b.createdAt||'').localeCompare(a.momentDate||a.createdAt||''));
-      const items = all.slice(0,10);
+      const items = all;
       return `<section class="moments-section" aria-label="Moments gallery"><div class="moments-heading"><div><p class="eyebrow">Familiar faces and happy places</p><h2>Moments</h2></div><button type="button" class="gallery-add" data-action="go" data-view="memory-form" aria-label="Add a moment">${ic('plus',17)} Add</button></div>
         ${items.length ? `<div class="moments-gallery home-moments-gallery">${items.map((m,i)=>renderMomentTile(m,i)).join('')}</div>` : `<div class="gallery-empty"><div class="gallery-empty-mark">${ic('image',28)}</div><div><h3>Beautiful moments belong here.</h3><p>Favorite photos and little notes will appear together here, like a gallery.</p><button type="button" class="secondary small-button" data-action="go" data-view="memory-form">${ic('plus',17)} Add your first moment</button></div></div>`}</section>`;
     }
@@ -1201,7 +1197,7 @@
     function renderMemoryForm() {
       const m=editingMemoryId?state.memories.find(x=>x.id===editingMemoryId):null;
       return `${topTitle(m?'Edit a moment':'Add a moment','A photo, a date or a few kind words can help.')}
-        <form class="panel" data-form="memory"><div class="form-grid"><div class="field"><label for="memory-title">Moment title</label><input id="memory-title" name="title" value="${esc(m?.title||'')}" required maxlength="100" placeholder="e.g. Sunday lunch at home"></div><div class="form-grid two"><div class="field"><label for="memory-person">Person or place</label><input id="memory-person" name="person" value="${esc(m?.person||'')}" maxlength="100" placeholder="e.g. Meera and the family"></div><div class="field"><label for="memory-relationship">Relationship (if relevant)</label><input id="memory-relationship" name="relationship" value="${esc(m?.relationship||'')}" maxlength="80" placeholder="e.g. Your daughter"></div></div><div class="field"><label for="memory-note">Helpful note or story</label><textarea id="memory-note" name="note" maxlength="1200" placeholder="Use simple, warm words. What might be comforting to remember?">${esc(m?.note||'')}</textarea></div><div class="form-grid two"><div class="field"><label for="memory-date">Date (optional)</label><input id="memory-date" name="momentDate" type="date" value="${esc(m?.momentDate||'')}"><span class="hint">Useful for looking back on this day in another year.</span></div><div class="field"><label for="memory-time">Time (optional)</label><input id="memory-time" name="momentTime" type="time" value="${esc(m?.momentTime||'')}"></div></div><div class="field"><label for="memory-photo">Add a photo (optional)</label><input id="memory-photo" name="photo" type="file" accept="image/*"><span class="hint">Text-only moments are welcome too. No photo is needed.</span>${m?.photo?`<div class="photo-current"><img class="photo" src="${m.photo}" alt="Current moment photo" style="width:120px;height:120px"><label class="check-label"><input name="removePhoto" type="checkbox" value="yes"> Remove this photo</label></div>`:''}<div id="photo-preview" class="hidden"></div></div></div><div class="form-actions"><button class="primary" type="submit">${ic('heart',20)} ${m?'Save changes':'Save moment'}</button></div></form>`;
+        <form class="panel" data-form="memory"><div class="form-grid"><div class="field"><label for="memory-title">Moment title</label><input id="memory-title" name="title" value="${esc(m?.title||'')}" required maxlength="100" placeholder="e.g. Sunday lunch at home"></div><div class="form-grid two"><div class="field"><label for="memory-person">Person or place</label><input id="memory-person" name="person" value="${esc(m?.person||'')}" maxlength="100" placeholder="e.g. Meera and the family"></div><div class="field"><label for="memory-relationship">Relationship (if relevant)</label><input id="memory-relationship" name="relationship" value="${esc(m?.relationship||'')}" maxlength="80" placeholder="e.g. Your daughter"></div></div><div class="field"><label for="memory-note">Helpful note or story</label><textarea id="memory-note" name="note" maxlength="1200" placeholder="Use simple, warm words. What might be comforting to remember?">${esc(m?.note||'')}</textarea></div><div class="form-grid two"><div class="field"><label for="memory-date">Date (optional)</label><input id="memory-date" name="momentDate" type="date" value="${esc(m?.momentDate||'')}"><span class="hint">Useful for looking back on this day in another year.</span></div><div class="field"><label for="memory-time">Time (optional)</label><input id="memory-time" name="momentTime" type="time" value="${esc(m?.momentTime||'')}"></div></div><div class="field"><label for="memory-photo">Add a photo (optional)</label><input id="memory-photo" name="photo" type="file" accept="image/*"><span class="hint">Text-only moments are welcome too. No photo is needed.</span>${m?.photo?`<div class="photo-current"><img class="photo" src="${m.photo}" alt="Current moment photo" style="width:120px;height:120px"><label class="check-label"><input name="removePhoto" type="checkbox" value="yes"> Remove this photo</label></div>`:''}<div id="photo-preview" class="hidden"></div></div></div><div class="form-actions" style="display:grid;gap:10px"><button class="primary" type="submit">${ic('heart',20)} ${m?'Save changes':'Save moment'}</button>${m?`<button class="danger-button" type="button" data-action="delete-editing-memory">${ic('trash',19)} Delete this moment</button>`:''}</div></form>`;
     }
     function renderMedicineForm() {
       if (!caregiverUnlocked) return renderFamily();
@@ -1360,7 +1356,9 @@
           const pin=String(data.pin||'');
           if(state.profile.caregiverPin) { if(pin!==state.profile.caregiverPin) { showToast('That PIN did not match. Please try again.'); return; } }
           else { if(!/^\d{4}$/.test(pin) || pin!==String(data.pinConfirm||'')) { showToast('Please enter the same 4-digit PIN twice.'); return; } state.profile.caregiverPin=pin; await save(); }
-          caregiverUnlocked=true; currentView='family'; render(); showToast('Family editing is unlocked on this device.'); return;
+          caregiverUnlocked=true;
+          if(pendingMemoryDeleteId) { const id=pendingMemoryDeleteId; pendingMemoryDeleteId=null; await deleteMemoryFromEditor(id); return; }
+          currentView='family'; render(); showToast('Family editing is unlocked on this device.'); return;
         }
         if(type==='profile-photos') {
           const profilePhotoInput=form.querySelector('[name="profilePhoto"]');
@@ -1431,6 +1429,7 @@
     async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else {t.completedDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! One more thing taken care of.'); }
     async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else {m.takenDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! Your medicine is marked as taken.'); }
     async function deleteEntry(listName,id,view,message) { if(!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
+    async function deleteMemoryFromEditor(id) { const item=findItem(state.memories,id); if(!item) { editingMemoryId=null; currentView='home'; render(); return; } if(!confirm(`Delete “${item.title||'this moment'}”? This cannot be undone unless you have a backup.`)) { editingMemoryId=id; currentView='memory-form'; render(); return; } state.memories=state.memories.filter(x=>x.id!==id); editingMemoryId=null; await save(); currentView='home'; render(); showToast('Moment removed.'); }
     async function exportBackup() {
       const payload={app:'carey',schemaVersion:1,exportedAt:new Date().toISOString(),state};
       const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`carey-backup-${todayStr()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Backup created. Keep the file somewhere private.');
@@ -1466,6 +1465,7 @@
       if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); showToast('Checking the weather…'); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is up to date.':'I could not update the weather. Enter your city in Settings or check your connection, then try again.'); return; }
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='delete-editing-memory') { const id=editingMemoryId; if(!id) return; if(!caregiverUnlocked) { pendingMemoryDeleteId=id; requireCaregiver(); return; } await deleteMemoryFromEditor(id); return; }
       if(action==='edit-medicine') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-appointment') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingAppointmentId=el.dataset.id; currentView='appointment-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-task') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingTaskId=el.dataset.id; currentView='task-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
