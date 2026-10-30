@@ -805,7 +805,7 @@
       // Only try the final locality/city components. Street and house-number details are never sent.
       const parts=String(state.profile?.homeAddress||'').split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
       // Setup asks for house, street, area, city. Only use the final area/city components.
-      const safeParts=parts.length>=5?parts.slice(-3):parts.slice(-2);
+      const safeParts=parts.length>=5?parts.slice(-3):parts.length===4?parts.slice(-2):parts.slice(-1);
       const candidates=safeParts.reverse().filter(x=>!/[0-9]/.test(x)&&/[A-Za-z]{3,}/.test(x));
       for(const locality of candidates) {
         try {
@@ -819,7 +819,7 @@
       if(state.preferences?.weatherEnabled===false) { delete document.body.dataset.weather; return false; }
       if(!force) {
         const at=Number(localStorage.getItem('carey-weather-updated')||0), mood=localStorage.getItem('carey-weather-mood')||'';
-        if(mood&&Date.now()-at<90*60*1000) { document.body.dataset.weather=mood; return true; }
+        if(mood&&Date.now()-at<90*60*1000) { document.body.dataset.weather=mood; localStorage.removeItem('carey-weather-error'); return true; }
       }
       if(weatherInFlight) return weatherInFlight;
       weatherInFlight=(async()=>{
