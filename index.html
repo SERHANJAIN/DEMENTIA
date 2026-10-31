@@ -732,6 +732,41 @@
     const DB_NAME = 'withyou-local'; // Kept stable so existing saved data survives the app rename.
     const DB_VERSION = 1;
     const STATE_KEY = 'app-state';
+
+    // Shared Supabase demo sync. Use fictional demo data only.
+    const PAL_SUPABASE_URL = 'https://nukmfdejnionugwqgwgo.supabase.co';
+    const PAL_SUPABASE_KEY = 'sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt';
+    let palRemoteUpdatedAt = '';
+    let palRemoteWriteBusy = false;
+    async function palRemoteRead() {
+      const response = await fetch(PAL_SUPABASE_URL + '/rest/v1/pal_demo?id=eq.shared&select=state,updated_at', { headers: { apikey: PAL_SUPABASE_KEY, Authorization: 'Bearer ' + PAL_SUPABASE_KEY } });
+      if (!response.ok) throw new Error('Supabase read failed (' + response.status + ')');
+      const rows = await response.json();
+      return rows && rows[0] ? rows[0] : null;
+    }
+    async function palRemoteWrite(value) {
+      if (palRemoteWriteBusy) return;
+      palRemoteWriteBusy = true;
+      try {
+        const response = await fetch(PAL_SUPABASE_URL + '/rest/v1/pal_demo?on_conflict=id', { method: 'POST', headers: { apikey: PAL_SUPABASE_KEY, Authorization: 'Bearer ' + PAL_SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify({ id: 'shared', state: value, updated_at: new Date().toISOString() }) });
+        if (!response.ok) throw new Error('Supabase save failed (' + response.status + ')');
+        palRemoteUpdatedAt = new Date().toISOString();
+      } finally { palRemoteWriteBusy = false; }
+    }
+    async function palSyncPull(seedIfEmpty = false) {
+      try {
+        const row = await palRemoteRead();
+        if (row && row.updated_at && row.updated_at !== palRemoteUpdatedAt && row.state && Object.keys(row.state).length) {
+          palRemoteUpdatedAt = row.updated_at;
+          if (row.state.profile && Object.keys(row.state.profile).length) {
+            state = { ...state, ...row.state };
+            try { await dbSet(STATE_KEY, state); } catch (e) {}
+            render();
+          }
+        } else if (!row && seedIfEmpty) { await palRemoteWrite(state); }
+      } catch (error) { console.warn('Pal cloud sync:', error); }
+    }
+
     const main = document.getElementById('main');
     const toastEl = document.getElementById('toast');
     const voiceIconEl = document.getElementById('voice-icon');
@@ -832,7 +867,7 @@
     }
     function dbGet(key) { return new Promise((resolve, reject) => { if (!db) return resolve(null); const tx=db.transaction('records','readonly'); const r=tx.objectStore('records').get(key); r.onsuccess=()=>resolve(r.result ?? null); r.onerror=()=>reject(r.error); }); }
     function dbSet(key, value) { return new Promise((resolve, reject) => { if (!db) { try { localStorage.setItem('withyou-state', JSON.stringify(value)); resolve(); } catch(e) { reject(e); } return; } const tx=db.transaction('records','readwrite'); tx.objectStore('records').put(value,key); tx.oncomplete=()=>resolve(); tx.onerror=()=>reject(tx.error); }); }
-    async function save() { try { await dbSet(STATE_KEY, state); if (window.palStateChannel) window.palStateChannel.postMessage({type:'state-updated',source:'pal'}); } catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); } }
+    async function save() { try { await dbSet(STATE_KEY, state); await palRemoteWrite(state); if (window.palStateChannel) window.palStateChannel.postMessage({type:'state-updated',source:'pal'}); } catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); } }
     async function initStorage() {
       try { db = await openDb(); } catch (e) { db = null; }
       try {
@@ -841,7 +876,9 @@
       } catch (e) { console.warn('Saved data could not be read.', e); }
       if ('BroadcastChannel' in window) { window.palStateChannel = new BroadcastChannel('pal-shared-state'); window.palStateChannel.onmessage = async event => { if (event.data?.type !== 'state-updated' || event.data?.source === 'pal') return; try { const latest = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) { console.warn('Shared family update could not be loaded.', e); } }; }
       window.addEventListener('storage', async event => { if (event.key !== 'withyou-state') return; try { const latest = JSON.parse(event.newValue || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) {} });
+      await palSyncPull(true);
       render();
+      setInterval(() => palSyncPull(false), 5000);
       if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => {});
       setInterval(checkDueReminders, 30000);
       setInterval(applyDailyBackground, 15 * 60 * 1000);
