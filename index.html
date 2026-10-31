@@ -528,6 +528,33 @@
     .home-hero { border-color:rgba(36,59,83,.2); }
     .home-card { box-shadow:0 3px 10px rgba(36,59,83,.08); }
     .today-list { border-radius:14px; }
+    .home-hero { padding:10px 12px 8px; margin-bottom:8px; }
+    .today-list-title { font-size:16px; font-weight:900; gap:7px; }
+    .today-row-actions { display:flex;align-items:center;gap:5px;flex:0 0 auto; }
+    .today-item { align-items:center; }
+    .today-item.is-done .today-item-name { color:#5c7464; }
+    .today-edit { width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;padding:0;border:1px solid #d4ddd8;border-radius:10px;background:#fff;color:#36576a; }
+    .today-edit:active { transform:scale(.94); }
+    .calendar-home-card { align-items:flex-start;text-align:left;justify-content:flex-start;gap:8px; }
+    .calendar-home-card .card-icon { flex:0 0 39px; }
+    .calendar-card-copy { min-width:0;flex:1;display:flex;flex-direction:column;gap:4px; }
+    .calendar-card-event { display:flex;align-items:baseline;gap:6px;font-size:11px;line-height:1.25;color:#455b68;min-width:0; }
+    .calendar-card-event strong { flex:0 0 auto;font-size:11px;color:#29465a; }
+    .calendar-card-event span { min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+    .calendar-card-empty { font-size:11px;color:#61717a; }
+    .record-photo { width:68px;height:68px;flex:0 0 68px;object-fit:cover;object-position:center;border-radius:15px;background:#e7efeb;border:1px solid rgba(36,59,83,.16); }
+    .record-photo-placeholder { width:68px;height:68px;flex:0 0 68px;display:grid;place-items:center;border-radius:15px;background:#e8f0e7;color:#426b54;border:1px solid #cbdcc9; }
+    .record-photo-editor { display:flex;align-items:center;gap:13px;padding:12px;margin:4px 0 14px;border:1px solid #d5e1dc;border-radius:15px;background:rgba(232,241,236,.55); }
+    .record-photo-preview { min-width:0; }
+    .record-photo-preview img { width:76px;height:76px;object-fit:cover;border-radius:14px;border:1px solid #d1ded7; }
+    .form-delete { margin-top:22px;padding-top:16px;border-top:1px solid var(--line); }
+    .calendar-home-card .card-label { margin-bottom:2px; }
+    :root[data-theme="dark"] .calendar-card-event { color:#455b68; }
+    :root[data-theme="dark"] .calendar-card-event strong { color:#29465a; }
+    :root[data-theme="dark"] .calendar-card-empty { color:#61717a; }
+    :root[data-theme="dark"] .today-edit { background:#fff;color:#36576a;border-color:#d4ddd8; }
+    :root[data-theme="dark"] .record-photo-editor { background:#edf4ec;border-color:#cbdcc9; }
+    @media (max-width:640px) { .calendar-home-card { min-height:106px; }
     .today-progress { margin:7px 0 9px; }
     .today-progress-head { display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px;color:#506272;font-size:11px;line-height:1.2; }
     .today-progress-head strong { color:#263e50;font-size:11px;font-weight:800; }
@@ -896,7 +923,7 @@
     }
     function progressMarkup(completed,total,label,tone) {
       const percent=total?Math.round((completed/total)*100):0;
-      const summary=total?`${completed} of ${total} complete`:'Nothing added yet';
+      const summary=total?`${completed}/${total}`:'0/0';
       return `<div class="today-progress ${tone||''}"><div class="today-progress-head"><span>${esc(label)}</span><strong>${summary}</strong></div><div class="today-progress-track" role="progressbar" aria-label="${esc(label)} completed" aria-valuemin="0" aria-valuemax="${Math.max(total,1)}" aria-valuenow="${completed}"><span style="width:${percent}%"></span></div></div>`;
     }
     function areAllTodayItemsComplete() {
@@ -913,6 +940,10 @@
       overlay.addEventListener('click',event=>{if(event.target===overlay) overlay.remove();});
       document.body.appendChild(overlay); overlay.querySelector('button')?.focus();
     }
+    function getHomeCalendarPreview(limit=2) {
+      const today=todayStr();
+      return state.appointments.map(a=>({event:a,date:a.date})).filter(x=>x.date&&x.date>=today).sort((a,b)=>a.date.localeCompare(b.date)||(a.event.time||'').localeCompare(b.event.time||'')).slice(0,limit);
+    }
     function renderHome() {
       const now = new Date();
       const hour = now.getHours(); const hello = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : hour < 21 ? 'Good evening' : 'Good night';
@@ -927,12 +958,12 @@
       const guardianContact = state.contacts.find(c => (c.phone && c.phone.replace(/\D/g,'')===guardianPhone.replace(/\D/g,'')) || (c.name && c.name.toLowerCase()===guardianName.toLowerCase()));
       const todaysEvents = state.appointments.filter(a=>eventOccursToday(a,today));
       const eventBanner = todaysEvents.length ? `<section class="home-event-banner" role="status">${ic('calendar',23)}<div><h3>${todaysEvents.length===1?'Something special today':'Things to remember today'}</h3><p>${todaysEvents.map(a=>`${esc(a.title)}${a.time?' · '+esc(timeLabel(a.time)):''}`).join(' • ')}</p><button type="button" class="small-link" data-action="go" data-view="appointments">Open calendar ${ic('arrow',13)}</button></div></section>` : '';
-      const renderMedRow = m => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(m.name)}</p><div class="today-item-meta">${esc(m.time?timeLabel(m.time):'No time set')}${m.dose?` · ${esc(m.dose)}`:''}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(m.name)} taken today" title="Mark taken" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic('check',17)}</button></div>`;
-      const renderTaskRow = t => `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${esc(t.title)}</p><div class="today-item-meta">${esc(t.time?timeLabel(t.time):(t.repeat==='daily'?'Any time today':'Today'))}</div></div><button class="today-check" type="button" aria-label="Mark ${esc(t.title)} done" title="Mark done" data-action="toggle-task" data-id="${esc(t.id)}">${ic('check',17)}</button></div>`;
-      const medRows = todoMeds.slice(0,3).map(renderMedRow).join('');
-      const taskRows = tasks.slice(0,3).map(renderTaskRow).join('');
-      const medEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${meds.length?'All checked for today':'No medicines added'}</p><div class="today-item-meta">${meds.length?'You’re doing well.':'A family member can add them.'}</div></div></div>`;
-      const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All done for today':'No reminders yet'}</p><div class="today-item-meta">${state.tasks.length?'One step at a time.':'A family member can add them.'}</div></div></div>`;
+      const renderMedRow = m => { const done=(m.takenDates||[]).includes(today); return `<div class="today-item ${done?'is-done':''}"><div class="today-item-copy"><p class="today-item-name">${esc(m.name)}</p><div class="today-item-meta">${esc(m.time?timeLabel(m.time):'No time set')}${m.dose?` · ${esc(m.dose)}`:''}</div></div><div class="today-row-actions"><button class="today-check ${done?'done':''}" type="button" aria-label="${done?'Unmark':'Mark'} ${esc(m.name)} ${done?'not taken':'taken'} today" title="${done?'Undo':'Mark taken'}" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic('check',17)}</button><button class="today-edit" type="button" data-action="edit-medicine" data-id="${esc(m.id)}" aria-label="Edit ${esc(m.name)}" title="Edit medicine">${ic('edit',15)}</button></div></div>`; };
+      const renderTaskRow = t => { const done=(t.completedDates||[]).includes(today); return `<div class="today-item ${done?'is-done':''}"><div class="today-item-copy"><p class="today-item-name">${esc(t.title)}</p><div class="today-item-meta">${esc(t.time?timeLabel(t.time):(t.repeat==='daily'?'Any time today':'Today'))}</div></div><div class="today-row-actions"><button class="today-check ${done?'done':''}" type="button" aria-label="${done?'Unmark':'Mark'} ${esc(t.title)} ${done?'not done':'done'}" title="${done?'Undo':'Mark done'}" data-action="toggle-task" data-id="${esc(t.id)}">${ic('check',17)}</button><button class="today-edit" type="button" data-action="edit-task" data-id="${esc(t.id)}" aria-label="Edit ${esc(t.title)}" title="Edit daily task">${ic('edit',15)}</button></div></div>`; };
+      const medRows = meds.map(renderMedRow).join('');
+      const taskRows = todaysTasks.map(renderTaskRow).join('');
+      const medEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${meds.length?'All medicines checked':'No medicines added yet'}</p></div></div>`;
+      const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All daily tasks checked':'No daily tasks added yet'}</p></div></div>`;
       return `<section class="home-hero">
           <div class="home-intro"><div class="identity-home">
             <button class="avatar-launch" type="button" data-action="chat-open" aria-label="Talk with pal">${renderAvatar(state.preferences?.companionGender || 'woman',true,false,companionMood)}<span class="avatar-launch-label">Tap to talk</span></button>
@@ -942,14 +973,14 @@
         </section>
         ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${p.guardianPhoto?`<img src="${p.guardianPhoto}" alt="Photo of ${esc(guardianName)}">`:guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
         ${eventBanner}
-        <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
-          <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',17)} Medicines</div>${progressMarkup(meds.length-todoMeds.length,meds.length,'Medicines','medicine')}${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
-          <div class="today-list"><div class="today-list-title">${ic('check',17)} Daily reminders</div>${progressMarkup(todaysTasks.length-tasks.length,todaysTasks.length,'Daily reminders','reminders')}${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
+        <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">${esc(now.toLocaleDateString(undefined,{day:"numeric",month:"short"}))}</span></div>
+          <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',18)} Medicine</div>${progressMarkup(meds.filter(m=>(m.takenDates||[]).includes(today)).length,meds.length,'Medicine','medicine')}${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
+          <div class="today-list"><div class="today-list-title">${ic('check',18)} Daily tasks</div>${progressMarkup(todaysTasks.filter(t=>(t.completedDates||[]).includes(today)).length,todaysTasks.length,'Daily tasks','reminders')}${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
         </section>
         <div class="home-grid" aria-label="Main features">
           ${card('Find home','Map and walking directions','route','map','navy')}
           ${card('Contacts','Names and familiar faces','contacts','users','sage')}
-          ${card('Calendar','Appointments and special days','appointments','calendar','sand')}
+          <button type="button" class="home-card tone-sand calendar-home-card" data-action="go" data-view="appointments"><span class="card-icon">${ic('calendar',27)}</span><span class="calendar-card-copy"><span class="card-label">Calendar</span>${getHomeCalendarPreview().length?getHomeCalendarPreview().map(x=>`<span class="calendar-card-event"><strong>${esc(new Date(x.date+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'}))}</strong><span>${esc(x.event.title)}${x.event.time?' · '+esc(timeLabel(x.event.time)):''}</span></span>`).join(''):'<span class="calendar-card-empty">No upcoming events</span>'}</span></button>
           ${card('Emergency help','People and services to call','emergency','siren','rose')}
         </div>
         ${renderHomeMoments()}
