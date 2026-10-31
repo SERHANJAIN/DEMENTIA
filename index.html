@@ -719,6 +719,8 @@
     let viewHistory = [];
     let lastRenderedView = null;
     let skipViewHistory = false;
+    let medicineEditorOrigin = null;
+    let taskEditorOrigin = null;
     let caregiverUnlocked = false;
     let selectedDate = todayStr();
     let calendarMonth = new Date(); calendarMonth.setDate(1);
@@ -1453,13 +1455,14 @@
           if(photoInput?.files?.[0]) photo=await resizeImage(photoInput.files[0]); else if(data.removePhoto==='yes') photo='';
           const entry={...(existing||{}),id:existing?.id||uid(),name:String(data.name||'').trim(),dose:String(data.dose||'').trim(),time:String(data.time||''),notes:String(data.notes||'').trim(),photo,takenDates:existing?.takenDates||[]};
           if(existing) Object.assign(existing,entry); else state.medicines.push(entry);
-          editingMedicineId=null; await save(); skipViewHistory=true; currentView='medicines'; render(); showToast(existing?'Medicine updated.':'Medicine saved.'); return;
+          if(medicineEditorOrigin==='medicines' && viewHistory[viewHistory.length-1]==='medicines') viewHistory.pop();
+          medicineEditorOrigin=null; editingMedicineId=null; await save(); skipViewHistory=true; currentView='medicines'; render(); showToast(existing?'Medicine updated.':'Medicine saved.'); return;
         }
         if(type==='appointment') {
           const existing=editingAppointmentId?state.appointments.find(x=>x.id===editingAppointmentId):null;
           const entry={...(existing||{}),id:existing?.id||uid(),title:String(data.title||'').trim(),category:existing?.category||'appointment',date:String(data.date||selectedDate),time:String(data.time||''),place:String(data.place||'').trim(),notes:String(data.notes||'').trim()};
           if(existing) Object.assign(existing,entry); else state.appointments.push(entry);
-          editingAppointmentId=null; selectedDate=String(data.date||selectedDate); calendarMonth=new Date(`${selectedDate}T12:00:00`); calendarMonth.setDate(1); await save(); skipViewHistory=true; currentView='appointments'; render(); showToast(existing?'Calendar event updated.':'Calendar event saved.'); return;
+          editingAppointmentId=null; selectedDate=String(data.date||selectedDate); calendarMonth=new Date(`${selectedDate}T12:00:00`); calendarMonth.setDate(1); await save(); { const index=viewHistory.lastIndexOf('appointments'); if(index>=0) viewHistory=viewHistory.slice(0,index); } skipViewHistory=true; currentView='appointments'; render(); showToast(existing?'Calendar event updated.':'Calendar event saved.'); return;
         }
         if(type==='task') {
           const existing=editingTaskId?state.tasks.find(x=>x.id===editingTaskId):null;
@@ -1468,7 +1471,8 @@
           if(photoInput?.files?.[0]) photo=await resizeImage(photoInput.files[0]); else if(data.removePhoto==='yes') photo='';
           const entry={...(existing||{}),id:existing?.id||uid(),title:String(data.title||'').trim(),time:String(data.time||''),repeat:String(data.repeat||'daily'),date:String(data.date||todayStr()),notes:String(data.notes||'').trim(),photo,completedDates:existing?.completedDates||[]};
           if(existing) Object.assign(existing,entry); else state.tasks.push(entry);
-          editingTaskId=null; await save(); skipViewHistory=true; currentView='tasks'; render(); showToast(existing?'Reminder updated.':'Reminder saved.'); return;
+          if(taskEditorOrigin==='tasks' && viewHistory[viewHistory.length-1]==='tasks') viewHistory.pop();
+          taskEditorOrigin=null; editingTaskId=null; await save(); skipViewHistory=true; currentView='tasks'; render(); showToast(existing?'Reminder updated.':'Reminder saved.'); return;
         }
         if(type==='route-destination') {
           selectedDestinationAddress=String(data.destination||'').trim()||state.profile.homeAddress;
@@ -1505,8 +1509,8 @@
       if(action==='go') { stopSpeech(); if(el.dataset.view==='contact-form') editingContactId=null; if(el.dataset.view==='memory-form') editingMemoryId=null; if(el.dataset.view==='medicine-form') editingMedicineId=null; if(el.dataset.view==='appointment-form') editingAppointmentId=null; if(el.dataset.view==='task-form') editingTaskId=null; currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); if(currentView==='route') locate(); return; }
       if(action==='chat-open') { stopSpeech(); chatMode='text'; currentView='chat'; render(); window.scrollTo({top:0,behavior:'smooth'}); const input=document.getElementById('chat-message'); if(input) setTimeout(()=>input.focus(),120); return; }
       if(action==='close-celebration') { document.getElementById('daily-celebration')?.remove(); return; }
-      if(action==='delete-medicine-editor') { const id=el.dataset.id; const item=state.medicines.find(x=>x.id===id); if(!item||!confirm(`Delete “${item.name}”? This cannot be undone unless you have a backup.`)) return; state.medicines=state.medicines.filter(x=>x.id!==id); editingMedicineId=null; await save(); skipViewHistory=true; currentView='medicines'; render(); showToast('Medicine deleted.'); return; }
-      if(action==='delete-task-editor') { const id=el.dataset.id; const item=state.tasks.find(x=>x.id===id); if(!item||!confirm(`Delete “${item.title}”? This cannot be undone unless you have a backup.`)) return; state.tasks=state.tasks.filter(x=>x.id!==id); editingTaskId=null; await save(); skipViewHistory=true; currentView='tasks'; render(); showToast('Reminder deleted.'); return; }
+      if(action==='delete-medicine-editor') { const id=el.dataset.id; const item=state.medicines.find(x=>x.id===id); if(!item||!confirm(`Delete “${item.name}”? This cannot be undone unless you have a backup.`)) return; state.medicines=state.medicines.filter(x=>x.id!==id); if(medicineEditorOrigin==='medicines' && viewHistory[viewHistory.length-1]==='medicines') viewHistory.pop(); medicineEditorOrigin=null; editingMedicineId=null; await save(); skipViewHistory=true; currentView='medicines'; render(); showToast('Medicine deleted.'); return; }
+      if(action==='delete-task-editor') { const id=el.dataset.id; const item=state.tasks.find(x=>x.id===id); if(!item||!confirm(`Delete “${item.title}”? This cannot be undone unless you have a backup.`)) return; state.tasks=state.tasks.filter(x=>x.id!==id); if(taskEditorOrigin==='tasks' && viewHistory[viewHistory.length-1]==='tasks') viewHistory.pop(); taskEditorOrigin=null; editingTaskId=null; await save(); skipViewHistory=true; currentView='tasks'; render(); showToast('Reminder deleted.'); return; }
       if(action==='chat-mode') { chatMode=el.dataset.mode==='voice'?'voice':'text'; render(); return; }
       if(action==='start-voice-input') { startVoiceInput(); return; }
       if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
@@ -1515,9 +1519,9 @@
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='delete-editing-memory') { const id=editingMemoryId; if(!id) return; if(!caregiverUnlocked) { pendingMemoryDeleteId=id; requireCaregiver(); return; } await deleteMemoryFromEditor(id); return; }
-      if(action==='edit-medicine') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='edit-medicine') { stopSpeech(); medicineEditorOrigin=currentView; editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-appointment') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingAppointmentId=el.dataset.id; currentView='appointment-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
-      if(action==='edit-task') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingTaskId=el.dataset.id; currentView='task-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='edit-task') { stopSpeech(); taskEditorOrigin=currentView; editingTaskId=el.dataset.id; currentView='task-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='route-home') { selectedDestinationAddress=state.profile.homeAddress; routeCoords=null; homeCoords=null; routePath=null; routeSteps=[]; routeStepIndex=0; locate(); return; }
       if(action==='route-next-step') { if(routeSteps.length){const step=routeSteps[Math.min(routeStepIndex,routeSteps.length-1)]; speak(step.instruction); routeStepIndex=Math.min(routeStepIndex+1,routeSteps.length-1);} else speak('For safe walking directions, open the walking route in your phone map.'); return; }
       if(action==='choose-companion') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.companionGender=el.dataset.gender==='man'?'man':'woman'; state.preferences.companionChosen=true; await save(); currentView='settings'; render(); speak(state.preferences.companionGender==='man'?'Hello, I’m here with you.':'Hello, I’m here with you.'); showToast('Your companion has been changed.'); return; }
