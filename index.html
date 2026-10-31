@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#243b53">
-  <meta name="description" content="carey is a calm, friendly daily companion for memories, reminders, people and directions home.">
+  <meta name="description" content="pal is a gentle daily companion for familiar people, moments, medicines, reminders and finding home.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="carey">
+  <meta name="apple-mobile-web-app-title" content="pal">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>carey — A little help, right when you need it</title>
+  <title>pal — A little help, a brighter day</title>
   <style>
     :root {
       --navy: #243b53;
@@ -229,20 +229,6 @@
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
 
-    /* Local-weather ambience: quiet, low-contrast effects behind the content. */
-    body { position:relative; isolation:isolate; }
-    body::before { content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .7s ease,background .7s ease; }
-    .shell { position:relative; z-index:1; }
-    body[data-weather="sunny"]::before { opacity:.85; background:radial-gradient(ellipse at 88% 5%,rgba(255,211,113,.32),transparent 42%),radial-gradient(ellipse at 10% 80%,rgba(246,194,139,.12),transparent 48%); }
-    body[data-weather="cloudy"]::before { opacity:.75; background:radial-gradient(ellipse at 22% 6%,rgba(190,211,216,.28),transparent 42%),linear-gradient(165deg,rgba(196,211,218,.10),transparent 68%); }
-    body[data-weather="drizzle"]::before { opacity:.58; background:repeating-linear-gradient(112deg,transparent 0 18px,rgba(88,139,157,.075) 18px 19px),linear-gradient(145deg,rgba(158,192,201,.22),transparent 65%); animation:weatherDrift 15s linear infinite; }
-    body[data-weather="rain"]::before { opacity:.68; background:repeating-linear-gradient(112deg,transparent 0 14px,rgba(88,139,157,.085) 14px 15px),linear-gradient(145deg,rgba(110,157,175,.18),transparent 72%); animation:weatherDrift 11s linear infinite; }
-    body[data-weather="snow"]::before { opacity:.7; background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.32) 0 2px,transparent 3px),radial-gradient(circle at 74% 30%,rgba(255,255,255,.28) 0 2px,transparent 3px),linear-gradient(155deg,rgba(221,237,245,.23),transparent 70%); background-size:130px 130px,170px 170px,auto; }
-    body[data-weather="storm"]::before { opacity:.7; background:radial-gradient(ellipse at 55% 0%,rgba(110,132,164,.28),transparent 54%),linear-gradient(155deg,rgba(38,63,90,.12),transparent 75%); }
-    @keyframes weatherDrift { from { background-position:0 0,0 0; } to { background-position:80px 100px,0 0; } }
-    :root[data-theme="dark"] body[data-weather="sunny"]::before { background:radial-gradient(ellipse at 88% 4%,rgba(255,190,84,.15),transparent 44%),radial-gradient(ellipse at 12% 80%,rgba(236,164,113,.08),transparent 50%); }
-    :root[data-theme="dark"] body[data-weather="cloudy"]::before { background:radial-gradient(ellipse at 22% 6%,rgba(140,169,185,.16),transparent 45%); }
-    :root[data-theme="dark"] body[data-weather="drizzle"]::before,:root[data-theme="dark"] body[data-weather="rain"]::before { background:repeating-linear-gradient(112deg,transparent 0 17px,rgba(151,190,205,.065) 17px 18px),linear-gradient(145deg,rgba(72,118,146,.12),transparent 72%); }
     .guardian-mini-photo { width:43px;height:43px;flex:0 0 43px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#d9e8dc;border:2px solid rgba(255,255,255,.92);box-shadow:0 2px 7px rgba(30,60,46,.14);color:#426b54; }
     .guardian-mini-photo img { display:block;width:100%;height:100%;object-fit:cover; }
     .guardian-call-icon { text-decoration:none; }
@@ -536,6 +522,82 @@
     :root[data-theme="dark"] .profile-photo-placeholder,:root[data-theme="dark"] .personal-photo-placeholder { background:#28483f;color:#d0efda; }
     @media(max-width:390px) { .profile-photo-editor { gap:9px;padding:9px; } .profile-photo-thumb { width:68px;height:68px;flex-basis:68px; } }
 
+  
+    /* Pal: clearer controls and calm task feedback. */
+    .home-hero,.home-card,.today-priority,.today-list,.panel,.item,.summary-cell,.moments-section,.moment-tile,.guardian-strip,.notice,.empty,.chat-shell,.theme-option,.companion-choice,.end-of-day-quote { border:1px solid rgba(36,59,83,.18); }
+    .home-hero { border-color:rgba(36,59,83,.2); }
+    .home-card { box-shadow:0 3px 10px rgba(36,59,83,.08); }
+    .today-list { border-radius:14px; }
+    .today-progress { margin:7px 0 9px; }
+    .today-progress-head { display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px;color:#506272;font-size:11px;line-height:1.2; }
+    .today-progress-head strong { color:#263e50;font-size:11px;font-weight:800; }
+    .today-progress-track { width:100%;height:7px;overflow:hidden;border-radius:999px;background:#dfe7e3;border:1px solid rgba(36,59,83,.12); }
+    .today-progress-track span { display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#6f9b78,#8bb69a);transition:width .35s ease; }
+    .today-progress.medicine .today-progress-track span { background:linear-gradient(90deg,#be8266,#dfaa8c); }
+    .today-check.done { position:relative;animation:taskTickPop .28s ease-out; }
+    @keyframes taskTickPop { 0%{transform:scale(.86)} 70%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    .back-button { min-height:43px;padding:7px 12px 7px 10px;border:1px solid rgba(36,59,83,.2);border-radius:13px;background:rgba(255,255,255,.88);box-shadow:0 2px 7px rgba(36,59,83,.05); }
+    .chat-fab { position:fixed;z-index:65;right:max(16px,calc((100vw - 780px)/2 + 16px));bottom:calc(18px + env(safe-area-inset-bottom));display:grid;place-items:center;width:60px;height:60px;padding:0;border:2px solid rgba(255,255,255,.95);border-radius:50%;background:#243b53;color:#fff;box-shadow:0 6px 20px rgba(12,34,52,.28);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease; }
+    .chat-fab:active { transform:scale(.94);box-shadow:0 2px 8px rgba(12,34,52,.2); }
+    .chat-fab svg { display:block; }
+    .toast { padding-right:82px; }
+    .end-of-day-quote { display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;padding:20px 17px;margin:22px 0 15px;border-radius:20px;background:linear-gradient(140deg,#f8eee2,#e9f2e8);color:#29465a;box-shadow:0 4px 13px rgba(36,59,83,.06); }
+    .end-quote-heart { display:grid;place-items:center;width:39px;height:39px;border-radius:50%;background:rgba(255,255,255,.78);font-size:21px; }
+    .end-of-day-quote p { max-width:470px;margin:0;font-size:17px;line-height:1.4;font-weight:800; }
+    .end-of-day-quote > span:last-child { color:#647783;font-size:12px; }
+    .daily-celebration-overlay { position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:22px;background:rgba(7,22,35,.62);backdrop-filter:blur(6px);animation:celebrationFade .22s ease-out; }
+    .daily-celebration-card { width:min(100%,440px);padding:28px 22px 23px;text-align:center;border:1px solid #d4e4d7;border-radius:26px;background:linear-gradient(145deg,#fff9ed,#eaf4e9 58%,#f8e9df);color:#243b53;box-shadow:0 20px 70px rgba(0,0,0,.28);animation:celebrationPop .45s cubic-bezier(.2,1.35,.35,1) both; }
+    .daily-celebration-art { margin:0 0 10px;font-size:34px;letter-spacing:3px; }
+    .daily-celebration-card .eyebrow { margin-bottom:6px;color:#47765a; }
+    .daily-celebration-card h2 { font-size:32px;margin-bottom:8px; }
+    .daily-celebration-card p:not(.eyebrow) { color:#506575; }
+    .daily-celebration-card blockquote { margin:15px 0 20px;padding:12px 15px;border-radius:15px;background:rgba(255,255,255,.72);color:#365a49;font-size:17px;font-weight:800;line-height:1.4; }
+    .daily-celebration-card .primary { border:1px solid #203b54; }
+    @keyframes celebrationFade { from{opacity:0}to{opacity:1} }
+    @keyframes celebrationPop { from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)} }
+
+    /* The navy page background stays; cards return to light-mode pastels. */
+    :root[data-theme="dark"] .home-hero { background:linear-gradient(115deg,#edf3e9,#f8e8dc)!important;color:#203244!important;border-color:#c6d7cd!important; }
+    :root[data-theme="dark"] .home-hero .eyebrow,:root[data-theme="dark"] .home-hero h1,:root[data-theme="dark"] .home-hero .identity-details,:root[data-theme="dark"] .home-hero .identity-link { color:#29465a!important; }
+    :root[data-theme="dark"] .home-card.tone-navy { background:#e8eef4!important;color:#203244!important;border-color:#c1d0dd!important; }
+    :root[data-theme="dark"] .home-card.tone-sage { background:#e8f0e7!important;color:#203244!important;border-color:#c7dac8!important; }
+    :root[data-theme="dark"] .home-card.tone-teal { background:#e4f1ef!important;color:#203244!important;border-color:#c2ddd8!important; }
+    :root[data-theme="dark"] .home-card.tone-peach { background:#faeadf!important;color:#203244!important;border-color:#e8cdbd!important; }
+    :root[data-theme="dark"] .home-card.tone-sand { background:#f1e6d7!important;color:#203244!important;border-color:#dfc9ac!important; }
+    :root[data-theme="dark"] .home-card.tone-rose { background:#f4e5df!important;color:#203244!important;border-color:#e1c6bb!important; }
+    :root[data-theme="dark"] .home-card .card-icon { background:rgba(255,255,255,.72)!important;color:#29465a!important; }
+    :root[data-theme="dark"] .today-priority { background:#fffdf7!important;color:#203244!important;border-color:#d7d8c9!important; }
+    :root[data-theme="dark"] .today-list:nth-child(1) { background:#fbefe7!important;color:#203244!important;border-color:#e9d7c9!important; }
+    :root[data-theme="dark"] .today-list:nth-child(2) { background:#edf4ec!important;color:#203244!important;border-color:#d3e1d1!important; }
+    :root[data-theme="dark"] .today-list-title,:root[data-theme="dark"] .today-footer button,:root[data-theme="dark"] .today-progress-head,:root[data-theme="dark"] .today-progress-head strong { color:#29465a!important; }
+    :root[data-theme="dark"] .today-item-name,:root[data-theme="dark"] .today-item-meta { color:#334b5d!important; }
+    :root[data-theme="dark"] .today-check { background:#e4efe4!important;color:#426b54!important;border-color:#b7cfbb!important; }
+    :root[data-theme="dark"] .today-check.done { background:#426b54!important;color:#fff!important;border-color:#426b54!important; }
+    :root[data-theme="dark"] .panel { background:#fbfcfa!important;color:#203244!important;border-color:#cbd8d2!important; }
+    :root[data-theme="dark"] .panel.soft-sage { background:#edf4ec!important;border-color:#cbdcc9!important; }
+    :root[data-theme="dark"] .panel.soft-peach { background:#fbefe7!important;border-color:#e9d3c5!important; }
+    :root[data-theme="dark"] .panel.soft-teal { background:#e9f4f2!important;border-color:#c9e0dc!important; }
+    :root[data-theme="dark"] .panel.soft-navy { background:#edf1f6!important;border-color:#ced9e5!important; }
+    :root[data-theme="dark"] .panel .muted,:root[data-theme="dark"] .panel p,:root[data-theme="dark"] .panel label,:root[data-theme="dark"] .panel h2,:root[data-theme="dark"] .panel h3 { color:#344c5e!important; }
+    :root[data-theme="dark"] .item,:root[data-theme="dark"] .summary-cell,:root[data-theme="dark"] .moment-tile,:root[data-theme="dark"] .empty,:root[data-theme="dark"] .notice,:root[data-theme="dark"] .chat-shell,:root[data-theme="dark"] .companion-choice,:root[data-theme="dark"] .theme-option { background:#fbfcfa!important;color:#203244!important;border-color:#cbd8d2!important; }
+    :root[data-theme="dark"] .item p,:root[data-theme="dark"] .summary-label,:root[data-theme="dark"] .moment-note,:root[data-theme="dark"] .empty p,:root[data-theme="dark"] .notice p { color:#506575!important; }
+    :root[data-theme="dark"] .moments-section { background:linear-gradient(145deg,#fbf1e6,#edf4ec)!important;border-color:#d7d1c5!important; }
+    :root[data-theme="dark"] .moment-copy,:root[data-theme="dark"] .moment-title { color:#203244!important; }
+    :root[data-theme="dark"] .guardian-strip { background:linear-gradient(105deg,#e8f0e7,#f0f6ec)!important;color:#294f38!important;border-color:#c6d9c7!important; }
+    :root[data-theme="dark"] .guardian-label,:root[data-theme="dark"] .guardian-number,:root[data-theme="dark"] .guardian-name { color:#426b54!important; }
+    :root[data-theme="dark"] .end-of-day-quote { background:linear-gradient(140deg,#f8eee2,#e9f2e8)!important;color:#29465a!important;border-color:#d8d9c9!important; }
+    :root[data-theme="dark"] .end-of-day-quote p { color:#29465a!important; }
+    :root[data-theme="dark"] .end-of-day-quote > span:last-child { color:#647783!important; }
+    :root[data-theme="dark"] .chat-shell { background:linear-gradient(145deg,#edf4ec,#e8f1f3)!important; }
+    :root[data-theme="dark"] .carey-bubble,:root[data-theme="dark"] .chat-compose,:root[data-theme="dark"] .chat-mode-switch,:root[data-theme="dark"] .voice-input-card { background:#fff!important;color:#203244!important;border-color:#d0ded8!important; }
+    :root[data-theme="dark"] .user-bubble { background:#dcefed!important;color:#203244!important; }
+    :root[data-theme="dark"] .chat-fab { background:#e4f1ef;color:#243b53;border-color:#fff; }
+    :root[data-theme="dark"] .secondary { background:#edf1f4!important;color:#243b53!important;border-color:#cbd5dc!important; }
+    :root[data-theme="dark"] .back-button { background:#f9fbf8!important;color:#243b53!important;border-color:#cbd8d2!important; }
+    :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field select { background:#fff!important;color:#203244!important;border-color:#cbd8d2!important; }
+    :root[data-theme="dark"] .today-progress-track { background:#dfe7e3;border-color:#c2d2c9; }
+    :root[data-theme="dark"] .daily-celebration-card { background:linear-gradient(145deg,#fff9ed,#eaf4e9 58%,#f8e9df)!important;color:#243b53!important; }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
@@ -544,15 +606,18 @@
     <header class="topbar">
       <div class="brand-side">
         <button class="settings-top" type="button" data-action="go" data-view="settings" aria-label="Settings" title="Settings"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75 13.5 4a8.4 8.4 0 0 1 1.85.78l1.9-.5 1.72 1.72-.5 1.9a8.4 8.4 0 0 1 .78 1.85L20.5 11.25v2.5L19.25 15a8.4 8.4 0 0 1-.78 1.85l.5 1.9-1.72 1.72-1.9-.5a8.4 8.4 0 0 1-1.85.78L12 22.25 10.75 21a8.4 8.4 0 0 1-1.85-.78l-1.9.5-1.72-1.72.5-1.9A8.4 8.4 0 0 1 5 15l-1.25-1.25v-2.5L5 10a8.4 8.4 0 0 1 .78-1.85l-.5-1.9L7 4.53l1.9.5A8.4 8.4 0 0 1 10.75 4L12 2.75Z"/><circle cx="12" cy="12.5" r="3"/></svg></button>
-        <div class="brand" aria-label="carey — A little help, right when you need it">
+        <div class="brand" aria-label="pal — A little help, a brighter day">
           <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" width="31" height="31"><path d="M24 4 4 21v22h40V21L24 4Z" fill="#fff"/><path d="M24 35.7s-10.4-6.2-10.4-12.3c0-4.3 5-6.2 8.5-2.7l1.9 2 1.9-2c3.5-3.5 8.5-1.6 8.5 2.7 0 6.1-10.4 12.3-10.4 12.3Z" fill="#243b53"/></svg></span>
-          <span class="brand-copy"><span class="brand-name">carey</span><span class="brand-tagline">A little help, right when you need it.</span></span>
+          <span class="brand-copy"><span class="brand-name">pal</span><span class="brand-tagline">a little help, a brighter day</span></span>
         </div>
       </div>
-      <div class="top-actions"><button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear carey" title="Hear carey"><span id="voice-icon"></span></button></div>
+      <div class="top-actions"><button class="speaker-button" type="button" data-action="speak-home" aria-label="Hear pal" title="Hear pal"><span id="voice-icon"></span></button></div>
     </header>
     <main id="main" aria-live="polite"></main>
   </div>
+  <button id="chat-fab" class="chat-fab hidden" type="button" data-action="chat-open" aria-label="Talk with pal" title="Talk with pal">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-4-.9L3 21l1.8-4.5a8.7 8.7 0 1 1 16.2-5Z"/><path d="M8 11h8M8 15h5"/></svg>
+  </button>
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <input class="file-input" id="import-file" type="file" accept="application/json,.json">
   <script src="./voice-config.js"></script>
@@ -612,7 +677,7 @@
     const ic = (name, size=24) => `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.info}</svg>`;
     const defaultState = () => ({
       profile: { name:'', homeAddress:'', phone:'', email:'', emergencyName:'', emergencyPhone:'', emergencyServiceNumber:'112', doctorName:'', doctorPhone:'', policeNumber:'112', fireNumber:'101', womenHelplineNumber:'181', menHelplineNumber:'', caregiverPin:'' },
-      preferences: { companionGender:'', companionChosen:false, theme:'light', weatherEnabled:true },
+      preferences: { companionGender:'', companionChosen:false, theme:'light' },
       contacts: [], memories: [], medicines: [], appointments: [], tasks: []
     });
     let state = defaultState();
@@ -665,11 +730,9 @@
         if (loaded && loaded.profile) { const base=defaultState(); state={...base,...loaded,profile:{...base.profile,...loaded.profile},preferences:{...base.preferences,...(loaded.preferences||{})},contacts:Array.isArray(loaded.contacts)?loaded.contacts:[],memories:Array.isArray(loaded.memories)?loaded.memories:[],medicines:Array.isArray(loaded.medicines)?loaded.medicines:[],appointments:Array.isArray(loaded.appointments)?loaded.appointments:[],tasks:Array.isArray(loaded.tasks)?loaded.tasks:[]}; }
       } catch (e) { console.warn('Saved data could not be read.', e); }
       render();
-      syncWeatherMood(false);
       if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => {});
       setInterval(checkDueReminders, 30000);
       setInterval(applyDailyBackground, 15 * 60 * 1000);
-      setInterval(()=>syncWeatherMood(false), 90 * 60 * 1000);
       checkDueReminders();
     }
     function showToast(message) {
@@ -727,7 +790,7 @@
       currentView='family'; render(); return false;
     }
     function topTitle(title, subtitle='') {
-      return `<button class="back-button" data-action="go" data-view="home">${ic('arrow',19)} Back to home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">carey</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div><button class="avatar-launch avatar-launch-small" type="button" data-action="chat-open" aria-label="Talk with carey">${renderAvatar(state.preferences?.companionGender || 'woman',false,true,companionMood)}</button></div>`;
+      return `<button class="back-button" data-action="go" data-view="home">${ic('home',19)} Home</button><div class="view-head"><div class="head-copy"><p class="eyebrow">pal</p><h1>${esc(title)}</h1>${subtitle ? `<p class="lead">${esc(subtitle)}</p>` : ''}</div><button class="avatar-launch avatar-launch-small" type="button" data-action="chat-open" aria-label="Talk with pal">${renderAvatar(state.preferences?.companionGender || 'woman',false,true,companionMood)}</button></div>`;
     }
     function button(label, action, opts={}) {
       const cls = opts.class || 'secondary'; const iconName = opts.icon ? ic(opts.icon,21) : '';
@@ -794,95 +857,12 @@
       ];
       document.documentElement.style.setProperty('--daily-background', moods[day]);
     }
-    let weatherInFlight = null;
-    async function requestJson(url, timeoutMs=12000) {
-      const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),timeoutMs);
-      try { const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{'Accept':'application/json'}}); if(!response.ok) throw new Error(`Weather service returned ${response.status}`); return await response.json(); }
-      finally { clearTimeout(timer); }
-    }
-    async function geocodeWeatherCity(city, source) {
-      const name=String(city||'').trim();
-      if(!name) return null;
-      const data=await requestJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=10&language=en&format=json`,9000);
-      const places=(data.results||[]).filter(p=>Number.isFinite(Number(p.latitude))&&Number.isFinite(Number(p.longitude)));
-      const place=places.find(p=>/^PPL/.test(String(p.feature_code||'')))||places.find(p=>/^ADM2?$/.test(String(p.feature_code||'')))||places[0];
-      return place?{latitude:Number(place.latitude),longitude:Number(place.longitude),source,placeName:place.name||name}:null;
-    }
-    async function getWeatherCoordinates(force=false) {
-      // A manually entered city is reliable when the user has denied device location.
-      const chosenCity=String(state.preferences?.weatherLocation||'').trim();
-      if(chosenCity) {
-        const chosen=await geocodeWeatherCity(chosenCity,'chosen city');
-        if(chosen) return chosen;
-        throw new Error(`I could not find “${chosenCity}”. Check the city name and try again.`);
-      }
-      if(navigator.geolocation && window.isSecureContext) {
-        try {
-          const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,maximumAge:force?0:15*60*1000,timeout:6500}));
-          return {latitude:position.coords.latitude,longitude:position.coords.longitude,source:'device',placeName:'your area'};
-        } catch(error) { console.info('Device location unavailable; trying the saved city.',error); }
-      }
-      // Only try the final locality/city components. Street and house-number details are never sent.
-      const parts=String(state.profile?.homeAddress||'').split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
-      // Setup asks for house, street, area, city. Only use the final area/city components.
-      const safeParts=parts.length>=5?parts.slice(-3):parts.length===4?parts.slice(-2):parts.slice(-1);
-      const candidates=safeParts.reverse().filter(x=>!/[0-9]/.test(x)&&/[A-Za-z]{3,}/.test(x));
-      for(const locality of candidates) {
-        try {
-          const place=await geocodeWeatherCity(locality,'saved area');
-          if(place) return place;
-        } catch(error) { console.info('Saved city lookup failed.',error); }
-      }
-      throw new Error('Weather needs a city. Open Settings and enter your city or town.');
-    }
-    async function syncWeatherMood(force=false) {
-      if(state.preferences?.weatherEnabled===false) { delete document.body.dataset.weather; return false; }
-      if(!force) {
-        const at=Number(localStorage.getItem('carey-weather-updated')||0), mood=localStorage.getItem('carey-weather-mood')||'';
-        if(mood&&Date.now()-at<90*60*1000) { document.body.dataset.weather=mood; localStorage.removeItem('carey-weather-error'); return true; }
-      }
-      if(weatherInFlight) return weatherInFlight;
-      weatherInFlight=(async()=>{
-        try {
-          const coords=await getWeatherCoordinates(force);
-          const url=`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(coords.latitude)}&longitude=${encodeURIComponent(coords.longitude)}&current=temperature_2m,precipitation,rain,showers,weather_code,is_day&timezone=auto`;
-          const data=await requestJson(url,12000), current=data.current||{};
-          if(!Number.isFinite(Number(current.weather_code))) throw new Error('Weather service returned no current conditions.');
-          const code=Number(current.weather_code), day=Number(current.is_day)===1;
-          let mood='cloudy';
-          if(code===0) mood=day?'sunny':'cloudy';
-          else if([45,48,3].includes(code)) mood='cloudy';
-          else if([51,53,55,56,57].includes(code)) mood='drizzle';
-          else if([95,96,99].includes(code)) mood='storm';
-          else if([71,73,75,77,85,86].includes(code)) mood='snow';
-          else if([61,63,65,66,67,80,81,82].includes(code)||Number(current.precipitation)>0||Number(current.rain)>0||Number(current.showers)>0) mood='rain';
-          else if([1,2].includes(code)&&day) mood='sunny';
-          document.body.dataset.weather=mood;
-          localStorage.setItem('carey-weather-mood',mood); localStorage.setItem('carey-weather-updated',String(Date.now())); localStorage.setItem('carey-weather-source',coords.source); localStorage.setItem('carey-weather-place',coords.placeName||''); localStorage.removeItem('carey-weather-error');
-          return true;
-        } catch(error) {
-          console.warn('Weather ambience update failed.',error);
-          document.body.dataset.weather='cloudy';
-          localStorage.setItem('carey-weather-error',String(error?.message||'Weather could not be reached.'));
-          return false;
-        }
-      })();
-      try { return await weatherInFlight; } finally { weatherInFlight=null; }
-    }
-    function weatherStatusText() {
-      if(state.preferences?.weatherEnabled===false) return 'Weather ambience is turned off.';
-      const error=localStorage.getItem('carey-weather-error');
-      if(error) return 'Live weather could not be reached. Enter your city below and try again.';
-      const mood=document.body.dataset.weather||localStorage.getItem('carey-weather-mood')||'';
-      const names={sunny:'Sunny weather ambience is active',cloudy:'Cloudy weather ambience is active',drizzle:'Light drizzle ambience is active',rain:'Rainy weather ambience is active',storm:'Stormy weather ambience is active',snow:'Snowy weather ambience is active'};
-      const place=localStorage.getItem('carey-weather-place')||'';
-      return mood?(names[mood]||'Weather ambience is active')+(place?' · '+place:''):'Weather is not connected yet. Add your city below, then tap “Use this city”.';
-    }
-
     function render() {
-      document.title = 'carey — A little help, right when you need it';
+      document.title = 'pal — A little help, a brighter day';
       voiceIconEl.innerHTML = ic('volume',20);
       applyTheme();
+      const chatFab=document.getElementById('chat-fab');
+      if(chatFab) chatFab.classList.toggle('hidden',currentView==='chat'||!state.profile.name||!state.profile.homeAddress||!state.preferences?.companionChosen);
       if (!state.profile.name || !state.profile.homeAddress || !state.preferences?.companionChosen) { currentView='setup'; main.innerHTML=renderSetup(); return; }
       const renderers = {
         home: renderHome, setup: renderSetup, route: renderRoute, contacts: renderContacts, memories: renderHome, chat: renderChat,
@@ -897,7 +877,7 @@
     function renderSetup() {
       const selected = state.preferences?.companionGender === 'man' ? 'man' : state.preferences?.companionGender === 'woman' ? 'woman' : '';
       const avatarChoice = selected || 'woman';
-      return `<div class="home-intro"><p class="eyebrow">Welcome to carey</p><div class="identity-home"><div class="identity-copy"><h1>Let’s make this feel like home.</h1><p class="lead">We’ll keep the important things close by.</p></div>${renderAvatar(avatarChoice,true)}</div></div>
+      return `<div class="home-intro"><p class="eyebrow">Welcome to pal</p><div class="identity-home"><div class="identity-copy"><h1>Let’s make this feel like home.</h1><p class="lead">We’ll keep the important things close by.</p></div>${renderAvatar(avatarChoice,true)}</div></div>
         <form data-form="setup" class="panel"><h2>Who would you like by your side?</h2><div class="companion-options">
           <label class="companion-choice"><input type="radio" name="companionGender" value="woman" ${selected==='woman'?'checked':''} required>${renderAvatar('woman')}<strong>Woman</strong></label>
           <label class="companion-choice"><input type="radio" name="companionGender" value="man" ${selected==='man'?'checked':''} required>${renderAvatar('man')}<strong>Man</strong></label>
@@ -910,6 +890,29 @@
           <div class="form-actions"><button class="primary" type="submit">Save and continue ${ic('arrow',20)}</button></div>
         </form>`;
     }
+    function getTodayTaskItems() {
+      const today=todayStr();
+      return state.tasks.filter(t=>t.repeat==='daily'||!t.date||t.date===today);
+    }
+    function progressMarkup(completed,total,label,tone) {
+      const percent=total?Math.round((completed/total)*100):0;
+      const summary=total?`${completed} of ${total} complete`:'Nothing added yet';
+      return `<div class="today-progress ${tone||''}"><div class="today-progress-head"><span>${esc(label)}</span><strong>${summary}</strong></div><div class="today-progress-track" role="progressbar" aria-label="${esc(label)} completed" aria-valuemin="0" aria-valuemax="${Math.max(total,1)}" aria-valuenow="${completed}"><span style="width:${percent}%"></span></div></div>`;
+    }
+    function areAllTodayItemsComplete() {
+      const tasks=getTodayTaskItems(), meds=state.medicines;
+      const total=tasks.length+meds.length;
+      return total>0 && tasks.every(t=>(t.completedDates||[]).includes(todayStr())) && meds.every(m=>(m.takenDates||[]).includes(todayStr()));
+    }
+    function showDailyCompletionCelebration() {
+      document.getElementById('daily-celebration')?.remove();
+      const quotes=['Every little step adds up to a brighter day.','Look at all you have done. You have every reason to feel proud.','One good thing at a time makes a lovely day.','You are doing beautifully. Keep shining, one step at a time.'];
+      const quote=quotes[Math.floor(Math.random()*quotes.length)];
+      const overlay=document.createElement('div'); overlay.id='daily-celebration'; overlay.className='daily-celebration-overlay';
+      overlay.innerHTML=`<section class="daily-celebration-card" role="dialog" aria-modal="true" aria-labelledby="daily-celebration-title" tabindex="-1"><div class="daily-celebration-art" aria-hidden="true">🎉 🌼 💛</div><p class="eyebrow">A lovely little victory</p><h2 id="daily-celebration-title">You did it!</h2><p>All your medicines and daily reminders are complete for today.</p><blockquote>“${esc(quote)}”</blockquote><button type="button" class="primary" data-action="close-celebration">Lovely, thank you</button></section>`;
+      overlay.addEventListener('click',event=>{if(event.target===overlay) overlay.remove();});
+      document.body.appendChild(overlay); overlay.querySelector('button')?.focus();
+    }
     function renderHome() {
       const now = new Date();
       const hour = now.getHours(); const hello = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : hour < 21 ? 'Good evening' : 'Good night';
@@ -917,7 +920,8 @@
       const today = todayStr();
       const meds = state.medicines.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
       const todoMeds = meds.filter(m => !(m.takenDates||[]).includes(today));
-      const tasks = state.tasks.filter(t => (t.repeat==='daily' || !t.date || t.date>=today) && !(t.completedDates||[]).includes(today)).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+      const todaysTasks = getTodayTaskItems();
+      const tasks = todaysTasks.filter(t => !(t.completedDates||[]).includes(today)).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
       const guardianPhone = p.emergencyPhone || '';
       const guardianName = p.emergencyName || 'Your guardian';
       const guardianContact = state.contacts.find(c => (c.phone && c.phone.replace(/\D/g,'')===guardianPhone.replace(/\D/g,'')) || (c.name && c.name.toLowerCase()===guardianName.toLowerCase()));
@@ -931,7 +935,7 @@
       const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All done for today':'No reminders yet'}</p><div class="today-item-meta">${state.tasks.length?'One step at a time.':'A family member can add them.'}</div></div></div>`;
       return `<section class="home-hero">
           <div class="home-intro"><div class="identity-home">
-            <button class="avatar-launch" type="button" data-action="chat-open" aria-label="Talk with carey">${renderAvatar(state.preferences?.companionGender || 'woman',true,false,companionMood)}<span class="avatar-launch-label">Tap to talk</span></button>
+            <button class="avatar-launch" type="button" data-action="chat-open" aria-label="Talk with pal">${renderAvatar(state.preferences?.companionGender || 'woman',true,false,companionMood)}<span class="avatar-launch-label">Tap to talk</span></button>
             <div class="identity-copy"><p class="eyebrow">${esc(now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><div class="identity-details">${esc(p.homeAddress)}${p.phone?` · ${esc(p.phone)}`:''}</div><button class="identity-link" type="button" data-action="go" data-view="about">Personal details ${ic('arrow',12)}</button></div>
             ${speakerButton(`Hello ${sayName()}. ${hello}. I'm glad you're here. What would you like help with today?`,'Hear greeting')}
           </div>${companionMood==='happy'?'<div class="encouragement-bubble">Wonderful! You did it. <span aria-hidden="true">✨</span></div>':''}</div>
@@ -939,8 +943,8 @@
         ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${p.guardianPhoto?`<img src="${p.guardianPhoto}" alt="Photo of ${esc(guardianName)}">`:guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
         ${eventBanner}
         <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">Small steps, at your pace</span></div>
-          <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',17)} Medicines</div>${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
-          <div class="today-list"><div class="today-list-title">${ic('check',17)} Daily reminders</div>${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
+          <div class="today-columns"><div class="today-list"><div class="today-list-title">${ic('pill',17)} Medicines</div>${progressMarkup(meds.length-todoMeds.length,meds.length,'Medicines','medicine')}${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
+          <div class="today-list"><div class="today-list-title">${ic('check',17)} Daily reminders</div>${progressMarkup(todaysTasks.length-tasks.length,todaysTasks.length,'Daily reminders','reminders')}${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
         </section>
         <div class="home-grid" aria-label="Main features">
           ${card('Find home','Map and walking directions','route','map','navy')}
@@ -949,7 +953,7 @@
           ${card('Emergency help','People and services to call','emergency','siren','rose')}
         </div>
         ${renderHomeMoments()}
-        <div class="home-bottom-help"><span class="home-bottom-icon">${ic('heart',22)}</span><div><strong>One step at a time.</strong><p>Carey is here whenever you need a little help.</p></div><button class="speaker-button" type="button" data-action="chat-open" aria-label="Talk with carey">${ic('message',19)}</button></div>`;
+        <section class="end-of-day-quote" aria-label="A little encouragement"><span class="end-quote-heart" aria-hidden="true">💛</span><p>“Every little step is a reason to smile. You made today a little brighter.”</p><span>Sending you a little sunshine.</span></section>`;
     }
     function momentAgeLabel(m) {
       const raw=m.momentDate || (m.createdAt ? m.createdAt.slice(0,10) : '');
@@ -1016,10 +1020,11 @@
     function renderMedicines() {
       const items = state.medicines.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
       const taken = m => (m.takenDates||[]).includes(todayStr());
+      const takenCount=items.filter(taken).length;
       return `${topTitle('Medicines','A clear list to check with your care team.')}
-        <div class="panel soft-peach"><div class="status-line">${ic('alert',22)} <span>Please follow the instructions from your doctor or pharmacist.</span></div><p class="small" style="margin-bottom:0">carey is a reminder list. It does not decide or change your medicine dose.</p></div>
+        <div class="panel soft-peach"><div class="status-line">${ic('alert',22)} <span>Please follow the instructions from your doctor or pharmacist.</span></div><p class="small" style="margin-bottom:0">pal is a reminder list. It does not decide or change your medicine dose.</p></div>
         ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="medicine-form">${ic('plus',21)} Add a medicine</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: update medicines</button>`}
-        ${items.length ? `<div class="summary-strip"><div class="summary-cell"><span class="summary-number">${items.filter(taken).length}</span><span class="summary-label">Marked taken today</span></div><div class="summary-cell"><span class="summary-number">${items.length-items.filter(taken).length}</span><span class="summary-label">Not marked taken today</span></div></div><div class="item-list">${items.map(m=>`<article class="item"><div class="contact-avatar" style="background:var(--peach);color:#7a3c2f">${ic('pill',25)}</div><div class="item-main"><h3>${esc(m.name)}</h3><div class="relationship">${esc(m.dose || 'Dose not added')}${m.time ? ` · ${timeLabel(m.time)}`:''}</div>${m.notes?`<p>${esc(m.notes)}</p>`:''}<button type="button" class="${taken(m)?'secondary':'primary'} small-button" style="margin-top:7px;width:auto" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic(taken(m)?'checkcircle':'check',18)} ${taken(m)?'Taken today':'Mark as taken'}</button>${taken(m)?`<p class="small" style="margin-top:6px;color:var(--sage-deep)">Thank you. This is marked as taken today.</p>`:''}${caregiverUnlocked?`<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-medicine" data-id="${esc(m.id)}">${ic('edit',17)} Edit</button><button class="secondary small-button" style="width:auto" type="button" data-action="delete-medicine" data-id="${esc(m.id)}">${ic('trash',17)} Remove</button></div>`:''}</div></article>`).join('')}</div>` : `<div class="empty" style="margin-top:16px"><div class="empty-icon">${ic('pill',28)}</div><h3>No medicines added yet.</h3><p class="small muted">Ask a family member to add your medicine names and the times your doctor has advised.</p></div>`}
+        ${items.length ? `<div class="summary-strip"><div class="summary-cell"><span class="summary-number">${items.filter(taken).length}</span><span class="summary-label">Marked taken today</span></div><div class="summary-cell"><span class="summary-number">${items.length-items.filter(taken).length}</span><span class="summary-label">Not marked taken today</span></div></div>${progressMarkup(takenCount,items.length,'Medicines','medicine')}<div class="item-list">${items.map(m=>`<article class="item"><div class="contact-avatar" style="background:var(--peach);color:#7a3c2f">${ic('pill',25)}</div><div class="item-main"><h3>${esc(m.name)}</h3><div class="relationship">${esc(m.dose || 'Dose not added')}${m.time ? ` · ${timeLabel(m.time)}`:''}</div>${m.notes?`<p>${esc(m.notes)}</p>`:''}<button type="button" class="${taken(m)?'secondary':'primary'} small-button" style="margin-top:7px;width:auto" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic(taken(m)?'checkcircle':'check',18)} ${taken(m)?'Taken today':'Mark as taken'}</button>${taken(m)?`<p class="small" style="margin-top:6px;color:var(--sage-deep)">Thank you. This is marked as taken today.</p>`:''}${caregiverUnlocked?`<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-medicine" data-id="${esc(m.id)}">${ic('edit',17)} Edit</button><button class="secondary small-button" style="width:auto" type="button" data-action="delete-medicine" data-id="${esc(m.id)}">${ic('trash',17)} Remove</button></div>`:''}</div></article>`).join('')}</div>` : `<div class="empty" style="margin-top:16px"><div class="empty-icon">${ic('pill',28)}</div><h3>No medicines added yet.</h3><p class="small muted">Ask a family member to add your medicine names and the times your doctor has advised.</p></div>`}
         <div class="notice"><span class="notice-icon">${ic('clock',22)}</span><div><strong>One step at a time</strong><p class="small" style="margin-bottom:0">Check the list on your home screen when it is time for your medicines. Follow the instructions from your doctor or pharmacist.</p></div></div>`;
     }
     function renderAppointments() {
@@ -1042,8 +1047,10 @@
     }
     function renderTasks() {
       const items = state.tasks.filter(t=>t.repeat==='daily' || !t.date || t.date>=todayStr()).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+      const todayItems=getTodayTaskItems();
+      const doneToday=todayItems.filter(t=>(t.completedDates||[]).includes(todayStr())).length;
       return `${topTitle('Daily reminders','Small steps, one at a time.')}
-        <div class="panel soft-sage"><div class="status-line">${ic('checkcircle',22)} <span>Tick a task when you have done it.</span></div><p class="small" style="margin-bottom:0">A family member using this same device can see which tasks you have checked.</p></div>
+        <div class="panel soft-sage"><div class="status-line">${ic('checkcircle',22)} <span>Tick a task when you have done it.</span></div><p class="small" style="margin-bottom:0">A family member using this same device can see which tasks you have checked.</p></div>${progressMarkup(doneToday,todayItems.length,'Daily reminders','reminders')}
         ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="task-form">${ic('plus',21)} Add a reminder</button>` : `<button type="button" class="secondary" data-action="go" data-view="family">${ic('plus',21)} Family: add reminders</button>`}
         <div class="item-list" style="margin-top:16px">${items.length ? items.map(t=>{const done=(t.completedDates||[]).includes(todayStr());return `<article class="item"><button type="button" class="task-check ${done?'done':''}" aria-label="${done?'Mark not done':'Mark done'}: ${esc(t.title)}" data-action="toggle-task" data-id="${esc(t.id)}">${ic(done?'check':'check',23)}</button><div class="task-body"><h3 style="${done?'text-decoration:line-through;color:#5c7464':''}">${esc(t.title)}</h3><p>${t.time?`${timeLabel(t.time)} · `:''}${t.repeat==='daily'?'Every day':`For ${dateLabel(t.date)}`}</p>${t.notes?`<p>${esc(t.notes)}</p>`:''}${done?`<span class="done-label">Done today — well done.</span>`:''}${caregiverUnlocked?`<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-task" data-id="${esc(t.id)}">${ic('edit',17)} Edit</button><button class="secondary small-button" style="width:auto" type="button" data-action="delete-task" data-id="${esc(t.id)}">${ic('trash',17)} Remove</button></div>`:''}</div></article>`}).join('') : `<div class="empty"><div class="empty-icon">${ic('check',27)}</div><h3>Nothing here just yet.</h3><p class="small muted">A family member can add helpful reminders, like drinking water or watering plants.</p></div>`}</div>
         <div class="notice"><span class="notice-icon">${ic('info',22)}</span><div><strong>Family check-ins</strong><p class="small" style="margin-bottom:0">Checked tasks are saved on this phone. This simple version does not send task updates to family members on a different phone.</p></div></div>`;
@@ -1096,18 +1103,18 @@
     function renderSettings() {
       const selected=state.preferences?.companionGender==='man'?'man':'woman';
       const theme=state.preferences?.theme==='dark'?'dark':'light';
-      return `${topTitle('Settings','Make carey feel right for you.')}
+      return `${topTitle('Settings','Make things easy to see and use.')}
         <section class="panel settings-appearance"><h2>Appearance</h2><p class="small muted">Choose the colors that feel comfortable.</p><div class="theme-options"><button type="button" class="theme-option ${theme==='light'?'is-active':''}" data-action="set-theme" data-theme="light" aria-pressed="${theme==='light'}">${ic('sun',21)}<span><strong>Light mode</strong><small>Soft and bright</small></span>${theme==='light'?ic('checkcircle',19):''}</button><button type="button" class="theme-option ${theme==='dark'?'is-active':''}" data-action="set-theme" data-theme="dark" aria-pressed="${theme==='dark'}">${ic('moon',21)}<span><strong>Dark mode</strong><small>Navy blue background</small></span>${theme==='dark'?ic('checkcircle',19):''}</button></div></section>
-        <section class="panel ambient-panel"><div class="panel-title-row"><div><h3>Weather ambience</h3><p class="small muted" style="margin:0">carey uses your phone’s location when allowed. Otherwise, enter your city below. Only the city name is sent to the weather service; your full home address is not.</p><p class="weather-status" role="status">${weatherStatusText()}</p></div></div><div class="field weather-location-field"><label for="weather-location">City or town</label><input id="weather-location" type="text" maxlength="80" value="${esc(state.preferences?.weatherLocation||'')}" placeholder="Enter your city (for example, Bengaluru)" autocomplete="off"><span class="hint">Useful when location access is turned off.</span></div><div class="button-row"><button class="primary small-button" type="button" data-action="save-weather-location">Use this city</button><button class="secondary small-button" type="button" data-action="weather-refresh">${ic('refresh',17)} Refresh weather</button><button class="secondary small-button" type="button" data-action="weather-toggle">${state.preferences?.weatherEnabled===false?'Turn weather effects on':'Turn weather effects off'}</button></div></section>
+
         <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true,false,companionMood)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice ${selected==='woman'?'is-selected':''}" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice ${selected==='man'?'is-selected':''}" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
         <div class="panel ambient-panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
-        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so carey can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button></div>
+        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so Pal can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button></div>
         <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contact photos, Moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
     }
 
     function renderChat() {
       const gender=state.preferences?.companionGender==='man'?'man':'woman';
-      const history=chatMessages.length ? chatMessages : [{role:'carey',text:`Hello ${sayName()}. I'm glad you're here. You can ask me about medicines, daily reminders, contacts, Moments, appointments, finding home, or using carey. We can take it one step at a time.`}];
+      const history=chatMessages.length ? chatMessages : [{role:'carey',text:`Hello ${sayName()}. I'm glad you're here. You can ask me about medicines, daily reminders, contacts, Moments, appointments, finding home, or using pal. We can take it one step at a time.`}];
       const messageHtml=history.map((m,i)=>`<div class="chat-row ${m.role==='user'?'chat-row-user':'chat-row-carey'}">${m.role==='carey'?`<div class="chat-avatar-mini">${renderAvatar(gender,false,true)}</div>`:''}<div class="chat-bubble ${m.role==='user'?'user-bubble':'carey-bubble'}"><p>${esc(m.text)}</p>${m.role==='carey'?`<div class="chat-message-actions">${speakerButton(m.text,'Hear carey’s reply')}${m.view?`<button class="chat-open-link" type="button" data-action="chat-go" data-view="${esc(m.view)}">${esc(m.viewLabel||'Open this section')} ${ic('arrow',14)}</button>`:''}</div>`:''}</div></div>`).join('');
       return `${topTitle('Talk with carey','You can type or speak. Take your time.')}
         <section class="chat-shell"><div class="chat-welcome">${renderAvatar(gender,true,false,companionMood)}<div><h2>I'm here with you.</h2><p>What would you like help with today?</p></div></div>
@@ -1309,7 +1316,7 @@
           const eventType=({doctor:'Doctor visit',appointment:'Appointment',birthday:'Birthday',special:'Special day'}[event.category||'doctor']||'Calendar event');
           const message=`Today: ${eventType.toLowerCase()} — ${event.title}${event.time?' at '+timeLabel(event.time):''}.`;
           showToast(message);
-          if('Notification' in window && Notification.permission==='granted' && document.visibilityState==='visible') { try { new Notification('carey calendar reminder',{body:message,icon:'./icons/icon-192.png',tag:eventKey}); } catch(e) {} }
+          if('Notification' in window && Notification.permission==='granted' && document.visibilityState==='visible') { try { new Notification('pal calendar reminder',{body:message,icon:'./icons/icon-192.png',tag:eventKey}); } catch(e) {} }
         }
       }
       for(const item of all) {
@@ -1349,7 +1356,7 @@
           const base=defaultState();
           state.profile={...base.profile,...state.profile,name:String(data.name||'').trim(),homeAddress:String(data.homeAddress||'').trim(),phone:String(data.phone||'').trim(),email:String(data.email||'').trim(),emergencyName:String(data.emergencyName||'').trim(),emergencyPhone:String(data.emergencyPhone||'').trim()};
           state.preferences={...base.preferences,...state.preferences,companionGender:data.companionGender==='man'?'man':'woman',companionChosen:true};
-          await save(); currentView='home'; render(); syncWeatherMood(false); speak(`Hello ${state.profile.name}. I’m glad you’re here. What would you like help with today?`); return;
+          await save(); currentView='home'; render(); speak(`Hello ${state.profile.name}. I’m glad you’re here. What would you like help with today?`); return;
         }
         if(type==='chat') { sendChatMessage(data.message,false); return; }
         if(type==='family-unlock') {
@@ -1426,19 +1433,19 @@
       companionMood='happy'; clearTimeout(moodTimer);
       moodTimer=setTimeout(()=>{companionMood='neutral'; if(currentView==='home'||currentView==='tasks'||currentView==='medicines') render();},5200);
     }
-    async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else {t.completedDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! One more thing taken care of.'); }
-    async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else {m.takenDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) showToast('Well done! Your medicine is marked as taken.'); }
+    async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; const wasComplete=areAllTodayItemsComplete(); t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else {t.completedDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) { showToast('👍 Well done! One more thing taken care of.'); if(!wasComplete&&areAllTodayItemsComplete()) setTimeout(showDailyCompletionCelebration,650); } else showToast('That reminder is unchecked.'); }
+    async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; const wasComplete=areAllTodayItemsComplete(); m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else {m.takenDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) { showToast('👍 Well done! Your medicine is marked as taken.'); if(!wasComplete&&areAllTodayItemsComplete()) setTimeout(showDailyCompletionCelebration,650); } else showToast('This medicine is unchecked.'); }
     async function deleteEntry(listName,id,view,message) { if(!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
     async function deleteMemoryFromEditor(id) { const item=findItem(state.memories,id); if(!item) { editingMemoryId=null; currentView='home'; render(); return; } if(!confirm(`Delete “${item.title||'this moment'}”? This cannot be undone unless you have a backup.`)) { editingMemoryId=id; currentView='memory-form'; render(); return; } state.memories=state.memories.filter(x=>x.id!==id); editingMemoryId=null; await save(); currentView='home'; render(); showToast('Moment removed.'); }
     async function exportBackup() {
-      const payload={app:'carey',schemaVersion:1,exportedAt:new Date().toISOString(),state};
-      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`carey-backup-${todayStr()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Backup created. Keep the file somewhere private.');
+      const payload={app:'pal',schemaVersion:1,exportedAt:new Date().toISOString(),state};
+      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`pal-backup-${todayStr()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Backup created. Keep the file somewhere private.');
     }
     function importBackup() { importInput.click(); }
     importInput.addEventListener('change', async () => {
       if(!importInput.files || !importInput.files[0]) return;
       if(!caregiverUnlocked) { importInput.value=''; requireCaregiver(); return; }
-      try { const txt=await importInput.files[0].text(); const payload=JSON.parse(txt); const data=payload.state||payload; if(!data.profile || !Array.isArray(data.contacts) || !Array.isArray(data.memories)) throw new Error('That does not look like a carey backup.'); if(!confirm('Replace the information on this phone with the backup? Export a backup first if you want to keep the current information.')) return; state={...defaultState(),...data,profile:{...defaultState().profile,...data.profile}}; await save(); currentView='home'; render(); showToast('Backup imported.'); } catch(err) { showToast(err.message||'I could not import that backup.'); } finally { importInput.value=''; }
+      try { const txt=await importInput.files[0].text(); const payload=JSON.parse(txt); const data=payload.state||payload; if(!data.profile || !Array.isArray(data.contacts) || !Array.isArray(data.memories)) throw new Error('That does not look like a pal backup.'); if(!confirm('Replace the information on this phone with the backup? Export a backup first if you want to keep the current information.')) return; state={...defaultState(),...data,profile:{...defaultState().profile,...data.profile}}; await save(); currentView='home'; render(); showToast('Backup imported.'); } catch(err) { showToast(err.message||'I could not import that backup.'); } finally { importInput.value=''; }
     });
     document.addEventListener('click', async event => {
       const el=event.target.closest('[data-action]'); if(!el)return;
@@ -1446,23 +1453,12 @@
       if(action!=='speak') stopSpeech();
       if(action==='go') { stopSpeech(); if(el.dataset.view==='contact-form') editingContactId=null; if(el.dataset.view==='memory-form') editingMemoryId=null; if(el.dataset.view==='medicine-form') editingMedicineId=null; if(el.dataset.view==='appointment-form') editingAppointmentId=null; if(el.dataset.view==='task-form') editingTaskId=null; currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); if(currentView==='route') locate(); return; }
       if(action==='chat-open') { stopSpeech(); chatMode='text'; currentView='chat'; render(); window.scrollTo({top:0,behavior:'smooth'}); const input=document.getElementById('chat-message'); if(input) setTimeout(()=>input.focus(),120); return; }
+      if(action==='close-celebration') { document.getElementById('daily-celebration')?.remove(); return; }
       if(action==='chat-mode') { chatMode=el.dataset.mode==='voice'?'voice':'text'; render(); return; }
       if(action==='start-voice-input') { startVoiceInput(); return; }
       if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
       if(action==='chat-go') { stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='set-theme') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
-      if(action==='weather-toggle') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=state.preferences.weatherEnabled===false; if(!state.preferences.weatherEnabled) {delete document.body.dataset.weather; localStorage.removeItem('carey-weather-mood');localStorage.removeItem('carey-weather-updated');localStorage.removeItem('carey-weather-source'); localStorage.removeItem('carey-weather-place'); localStorage.removeItem('carey-weather-error'); await save(); render(); showToast('Weather ambience is off.'); return;} await save(); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is on.':'Weather is on, but current conditions could not be reached. Check location access or your connection.'); return; }
-      if(action==='save-weather-location') {
-        const field=document.getElementById('weather-location');
-        const city=String(field?.value||'').trim();
-        if(!city) { showToast('Enter your city or town first.'); return; }
-        state.preferences=state.preferences||{}; state.preferences.weatherLocation=city; state.preferences.weatherEnabled=true;
-        await save(); showToast('Checking the weather for '+city+'…');
-        const ok=await syncWeatherMood(true); render();
-        showToast(ok?'Weather ambience is now set for '+city+'.':'I could not find that city or reach the weather service. Check the spelling and your internet connection.');
-        return;
-      }
-      if(action==='weather-refresh') { state.preferences=state.preferences||{}; state.preferences.weatherEnabled=true; await save(); showToast('Checking the weather…'); const ok=await syncWeatherMood(true); render(); showToast(ok?'Weather ambience is up to date.':'I could not update the weather. Enter your city in Settings or check your connection, then try again.'); return; }
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='delete-editing-memory') { const id=editingMemoryId; if(!id) return; if(!caregiverUnlocked) { pendingMemoryDeleteId=id; requireCaregiver(); return; } await deleteMemoryFromEditor(id); return; }
