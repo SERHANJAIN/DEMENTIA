@@ -1,7 +1,7 @@
 {
-  "name": "carey — A little help, right when you need it",
-  "short_name": "carey",
-  "description": "A calm, friendly daily companion for familiar people, moments, medicines, reminders and directions home.",
+  "name": "pal — A little help, a brighter day",
+  "short_name": "pal",
+  "description": "A gentle daily companion for familiar people, moments, medicines, reminders and finding home.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
