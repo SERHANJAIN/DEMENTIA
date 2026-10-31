@@ -631,6 +631,49 @@
     .record-photo-editor .field { flex:1;min-width:0; }
     .record-photo-editor .field input[type=file] { min-height:44px;font-size:14px;padding:8px; }
     .form-delete .danger-button { min-height:46px; }
+
+    /* Dark-mode contrast pass: keep the navy page, brighten key content surfaces. */
+    :root[data-theme="dark"] .moments-section,
+    :root[data-theme="dark"] .moments-heading,
+    :root[data-theme="dark"] .moments-section .eyebrow,
+    :root[data-theme="dark"] .moments-heading h2,
+    :root[data-theme="dark"] .moments-section h3,
+    :root[data-theme="dark"] .moments-section p { color:#f4f7fa!important; }
+    :root[data-theme="dark"] .moments-section .eyebrow { color:#d6e6ef!important;font-weight:800;letter-spacing:.06em; }
+    :root[data-theme="dark"] .moments-section .moment-tile,
+    :root[data-theme="dark"] .moments-section .gallery-empty { background:#e8f0e7!important;color:#203244!important;border:1px solid #c2d6c5!important; }
+    :root[data-theme="dark"] .moments-section .moment-tile h3,
+    :root[data-theme="dark"] .moments-section .moment-tile p,
+    :root[data-theme="dark"] .moments-section .gallery-empty h3,
+    :root[data-theme="dark"] .moments-section .gallery-empty p { color:#203244!important; }
+    :root[data-theme="dark"] .home-hero { padding:8px 10px 6px!important;margin-bottom:8px!important; }
+    :root[data-theme="dark"] .home-hero .identity-copy h1 { font-size:clamp(22px,4.8vw,29px)!important;line-height:1.12; }
+    :root[data-theme="dark"] .home-hero .identity-details { color:#29465a!important; }
+    :root[data-theme="dark"] .home-hero .avatar-launch svg { max-height:58px; }
+    :root[data-theme="dark"] .panel.soft-sage,
+    :root[data-theme="dark"] .panel.soft-teal,
+    :root[data-theme="dark"] .panel.soft-peach,
+    :root[data-theme="dark"] .panel.soft-sand,
+    :root[data-theme="dark"] .panel.soft-rose { background:#e8f0e7!important;color:#203244!important;border:1px solid #c4d7c5!important; }
+    :root[data-theme="dark"] .panel.soft-sage *,
+    :root[data-theme="dark"] .panel.soft-teal *,
+    :root[data-theme="dark"] .panel.soft-peach *,
+    :root[data-theme="dark"] .panel.soft-sand *,
+    :root[data-theme="dark"] .panel.soft-rose * { color:#203244!important; }
+    :root[data-theme="dark"] .today-priority,
+    :root[data-theme="dark"] .today-list,
+    :root[data-theme="dark"] .home-event-banner,
+    :root[data-theme="dark"] .guardian-strip,
+    :root[data-theme="dark"] .end-of-day-quote { color:#203244!important;border:1px solid #c6d7cd!important; }
+    :root[data-theme="dark"] .today-priority *,
+    :root[data-theme="dark"] .today-list *,
+    :root[data-theme="dark"] .home-event-banner *,
+    :root[data-theme="dark"] .guardian-strip *,
+    :root[data-theme="dark"] .end-of-day-quote * { color:#203244!important; }
+    :root[data-theme="dark"] .view-head .eyebrow { color:#d6e6ef!important; }
+    :root[data-theme="dark"] .home-hero .identity-link { color:#244f70!important;text-decoration:underline;text-underline-offset:2px; }
+    :root[data-theme="dark"] .home-hero .avatar-launch-label { color:#29465a!important; }
+    :root[data-theme="dark"] .moments-section .gallery-add { background:#fff!important;color:#203244!important;border:1px solid #b9cfc4!important; }
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
@@ -961,7 +1004,7 @@
     }
     function renderHome() {
       const now = new Date();
-      const hour = now.getHours(); const hello = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : hour < 21 ? 'Good evening' : 'Good night';
+      const hour = now.getHours(); const hello = hour >= 5 && hour < 12 ? 'Good morning' : hour >= 12 && hour < 17 ? 'Good afternoon' : hour >= 17 && hour < 21 ? 'Good evening' : 'Good night';
       const p = state.profile;
       const today = todayStr();
       const meds = state.medicines.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
@@ -979,7 +1022,7 @@
       const taskRows = todaysTasks.map(renderTaskRow).join('');
       const medEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${meds.length?'All medicines checked':'No medicines added yet'}</p></div></div>`;
       const taskEmpty = `<div class="today-item"><div class="today-item-copy"><p class="today-item-name">${state.tasks.length?'All daily tasks checked':'No daily tasks added yet'}</p></div></div>`;
-      return `<section class="home-hero">
+      return `<section class="home-hero" aria-label="${hello} greeting">
           <div class="home-intro"><div class="identity-home">
             <button class="avatar-launch" type="button" data-action="chat-open" aria-label="Talk with pal">${renderAvatar(state.preferences?.companionGender || 'woman',true,false,companionMood)}<span class="avatar-launch-label">Tap to talk</span></button>
             <div class="identity-copy"><p class="eyebrow">${esc(now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))}</p><h1>${hello}, ${esc(sayName())}.</h1><div class="identity-details">${esc(p.homeAddress)}${p.phone?` · ${esc(p.phone)}`:''}</div><button class="identity-link" type="button" data-action="go" data-view="about">Personal details ${ic('arrow',12)}</button></div>
@@ -1089,7 +1132,7 @@
           <div class="button-row" style="margin-top:15px"><button class="secondary small-button" type="button" data-action="calendar-today">${ic('calendar',17)} Today</button>${caregiverUnlocked?`<button class="primary small-button" type="button" data-action="go" data-view="appointment-form">${ic('plus',17)} Add event</button>`:''}</div>
         </div>
         <h2 style="margin-top:22px">${esc(dateLabel(selectedDate))}</h2>
-        ${selected.length ? `<div class="item-list">${selected.map(a=>`<article class="item"><div class="contact-avatar" style="background:var(--teal);color:var(--teal-deep)">${ic('calendar',25)}</div><div class="item-main"><h3>${esc(a.title)}</h3><div class="relationship">${({doctor:'Doctor visit',appointment:'Appointment',birthday:'Birthday',special:'Special day'}[a.category||'doctor']||'Calendar event')}${a.time?` · ${timeLabel(a.time)}`:''}${a.place?` · ${esc(a.place)}`:''}</div>${a.notes?`<p>${esc(a.notes)}</p>`:''}${caregiverUnlocked?`<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-appointment" data-id="${esc(a.id)}">${ic('edit',17)} Edit</button><button class="secondary small-button" style="width:auto" type="button" data-action="delete-appointment" data-id="${esc(a.id)}">${ic('trash',17)} Remove</button></div>`:''}</div></article>`).join('')}</div>` : `<div class="empty"><div class="empty-icon">${ic('calendar',27)}</div><h3>Nothing planned for this day.</h3><p class="small muted">That’s okay. Choose another day to check your visits.</p></div>`}`;
+        ${selected.length ? `<div class="item-list">${selected.map(a=>`<article class="item"><div class="contact-avatar" style="background:var(--teal);color:var(--teal-deep)">${ic('calendar',25)}</div><div class="item-main"><h3>${esc(a.title)}</h3><div class="relationship">${({doctor:'Doctor visit',appointment:'Appointment',birthday:'Birthday',special:'Special day'}[a.category||'doctor']||'Calendar event')}${a.time?` · ${timeLabel(a.time)}`:''}${a.place?` · ${esc(a.place)}`:''}</div>${a.notes?`<p>${esc(a.notes)}</p>`:''}<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-appointment" data-id="${esc(a.id)}">${ic('edit',17)} Edit</button><button class="secondary small-button" style="width:auto" type="button" data-action="delete-appointment" data-id="${esc(a.id)}">${ic('trash',17)} Delete</button></div></div></article>`).join('')}</div>` : `<div class="empty"><div class="empty-icon">${ic('calendar',27)}</div><h3>Nothing planned for this day.</h3><p class="small muted">That’s okay. Choose another day to check your visits.</p></div>`}`;
     }
     function renderTasks() {
       const items = state.tasks.filter(t=>t.repeat==='daily' || !t.date || t.date>=todayStr()).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
@@ -1258,7 +1301,6 @@
         <form class="panel" data-form="medicine"><div class="form-grid"><div class="field"><label for="medicine-name">Medicine name</label><input id="medicine-name" name="name" value="${esc(m?.name||'')}" required maxlength="100" placeholder="Name written on the package"></div><div class="field"><label for="medicine-dose">Dose / instructions</label><input id="medicine-dose" name="dose" value="${esc(m?.dose||'')}" maxlength="120" placeholder="As prescribed by the doctor"></div><div class="field"><label for="medicine-time">Usual reminder time</label><input id="medicine-time" name="time" type="time" value="${esc(m?.time||'')}"><span class="hint">This is a reminder time, not a dose recommendation.</span></div><div class="field"><label for="medicine-notes">Extra notes</label><textarea id="medicine-notes" name="notes" maxlength="500" placeholder="Only include instructions confirmed by the care team.">${esc(m?.notes||'')}</textarea></div></div><div class="record-photo-editor"><div class="record-photo-preview" id="medicine-photo-preview">${m?.photo?`<img src="${m.photo}" alt="Current medicine photo">`:''}</div><div class="field"><label for="medicine-photo">Photo (optional)</label><input id="medicine-photo" name="photo" type="file" accept="image/*"><span class="hint">A familiar photo can help identify this medicine.</span>${m?.photo?`<label class="check-label"><input type="checkbox" name="removePhoto" value="yes"> Remove saved photo</label>`:''}</div></div><div class="form-actions"><button class="primary" type="submit">${ic('check',20)} ${m?'Save changes':'Save medicine'}</button></div>${m?`<div class="form-delete"><button type="button" class="danger-button" data-action="delete-medicine-editor" data-id="${esc(m.id)}">${ic('trash',18)} Delete this medicine</button></div>`:''}</form>`;
     }
     function renderAppointmentForm() {
-      if (!caregiverUnlocked) return renderFamily();
       const a=editingAppointmentId?state.appointments.find(x=>x.id===editingAppointmentId):null;
       return `${topTitle(a?'Edit calendar event':'Add a calendar event','Add a visit, birthday or a special day.')}
         <form class="panel" data-form="appointment"><div class="form-grid"><div class="field"><label for="appt-title">What is happening?</label><input id="appt-title" name="title" value="${esc(a?.title||'')}" required maxlength="120" placeholder="e.g. Check-up with Dr. Rao"></div><div class="form-grid two"><div class="field"><label for="appt-date">Date</label><input id="appt-date" name="date" type="date" required value="${esc(a?.date||selectedDate)}"></div><div class="field"><label for="appt-time">Time (optional)</label><input id="appt-time" name="time" type="time" value="${esc(a?.time||'')}"></div></div><div class="field"><label for="appt-place">Place (optional)</label><input id="appt-place" name="place" value="${esc(a?.place||'')}" maxlength="200" placeholder="Clinic name or address"></div><div class="field"><label for="appt-notes">Helpful notes</label><textarea id="appt-notes" name="notes" maxlength="600" placeholder="What to bring, who will come along, etc.">${esc(a?.notes||'')}</textarea></div></div><div class="form-actions"><button class="primary" type="submit">${ic('calendar',20)} ${a?'Save changes':'Save event'}</button></div></form>`;
@@ -1394,7 +1436,7 @@
     async function handleSubmit(event) {
       const form=event.target.closest('form[data-form]'); if(!form) return;
       event.preventDefault(); const fd=new FormData(form); const data=Object.fromEntries(fd.entries()); const type=form.dataset.form;
-      if(type!=='setup' && type!=='family-unlock' && type!=='chat' && type!=='route-destination' && type!=='memory' && type!=='profile-photos' && type!=='medicine' && type!=='task' && !caregiverUnlocked) { requireCaregiver(); return; }
+      if(type!=='setup' && type!=='family-unlock' && type!=='chat' && type!=='route-destination' && type!=='memory' && type!=='profile-photos' && type!=='medicine' && type!=='task' && type!=='appointment' && !caregiverUnlocked) { requireCaregiver(); return; }
       try {
         if(type==='setup') {
           const base=defaultState();
@@ -1487,7 +1529,7 @@
     }
     async function toggleTask(id) { const t=findItem(state.tasks,id); if(!t) return; const wasComplete=areAllTodayItemsComplete(); t.completedDates=t.completedDates||[]; const i=t.completedDates.indexOf(todayStr()); if(i>=0)t.completedDates.splice(i,1);else {t.completedDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) { showToast('👍 Well done! One more thing taken care of.'); if(!wasComplete&&areAllTodayItemsComplete()) setTimeout(showDailyCompletionCelebration,650); } else showToast('That reminder is unchecked.'); }
     async function toggleMedicine(id) { const m=findItem(state.medicines,id); if(!m)return; const wasComplete=areAllTodayItemsComplete(); m.takenDates=m.takenDates||[]; const i=m.takenDates.indexOf(todayStr()); if(i>=0)m.takenDates.splice(i,1);else {m.takenDates.push(todayStr());celebrateCarey();} await save(); render(); if(i<0) { showToast('👍 Well done! Your medicine is marked as taken.'); if(!wasComplete&&areAllTodayItemsComplete()) setTimeout(showDailyCompletionCelebration,650); } else showToast('This medicine is unchecked.'); }
-    async function deleteEntry(listName,id,view,message) { if(!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
+    async function deleteEntry(listName,id,view,message) { if(listName!=='appointments'&&!caregiverUnlocked){requireCaregiver();return;} const item=state[listName].find(x=>x.id===id); if(!item)return; if(!confirm(`Remove “${item.name||item.title}”? This cannot be undone unless you have a backup.`))return; state[listName]=state[listName].filter(x=>x.id!==id); await save(); currentView=view; render(); showToast(message); }
     async function deleteMemoryFromEditor(id) { const item=findItem(state.memories,id); if(!item) { editingMemoryId=null; currentView='home'; render(); return; } if(!confirm(`Delete “${item.title||'this moment'}”? This cannot be undone unless you have a backup.`)) { editingMemoryId=id; currentView='memory-form'; render(); return; } state.memories=state.memories.filter(x=>x.id!==id); editingMemoryId=null; await save(); currentView='home'; render(); showToast('Moment removed.'); }
     async function exportBackup() {
       const payload={app:'pal',schemaVersion:1,exportedAt:new Date().toISOString(),state};
@@ -1520,7 +1562,7 @@
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='delete-editing-memory') { const id=editingMemoryId; if(!id) return; if(!caregiverUnlocked) { pendingMemoryDeleteId=id; requireCaregiver(); return; } await deleteMemoryFromEditor(id); return; }
       if(action==='edit-medicine') { stopSpeech(); medicineEditorOrigin=currentView; editingMedicineId=el.dataset.id; currentView='medicine-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
-      if(action==='edit-appointment') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingAppointmentId=el.dataset.id; currentView='appointment-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='edit-appointment') { stopSpeech(); editingAppointmentId=el.dataset.id; currentView='appointment-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-task') { stopSpeech(); taskEditorOrigin=currentView; editingTaskId=el.dataset.id; currentView='task-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='route-home') { selectedDestinationAddress=state.profile.homeAddress; routeCoords=null; homeCoords=null; routePath=null; routeSteps=[]; routeStepIndex=0; locate(); return; }
       if(action==='route-next-step') { if(routeSteps.length){const step=routeSteps[Math.min(routeStepIndex,routeSteps.length-1)]; speak(step.instruction); routeStepIndex=Math.min(routeStepIndex+1,routeSteps.length-1);} else speak('For safe walking directions, open the walking route in your phone map.'); return; }
