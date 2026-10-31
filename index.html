@@ -1559,8 +1559,15 @@ async function palEnablePush(role) {
 }
 
     async function askNotifications() {
-      if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside pal.'); return; }
-      try { await palEnablePush('pal'); showToast('Background notifications are enabled on this browser.'); } catch(e) { showToast(e.message || 'Notifications could not be enabled.'); }
+      if (!('Notification' in window)) { alert('Notifications are not available in this browser.'); return; }
+      try {
+        const permission = Notification.permission;
+        if (permission === 'denied') throw new Error('Notifications are blocked for this Home Screen app. Check iPhone Settings.');
+        await palEnablePush('pal');
+        alert('Success! This iPhone is subscribed to Pal background notifications.');
+      } catch(e) {
+        alert('Pal notification setup failed: ' + (e && e.message ? e.message : String(e)));
+      }
     }
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
