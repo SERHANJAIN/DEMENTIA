@@ -1271,7 +1271,7 @@
 
         <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true,false,companionMood)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice ${selected==='woman'?'is-selected':''}" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice ${selected==='man'?'is-selected':''}" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
         <div class="panel ambient-panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
-        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so Pal can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button><p id="pal-notification-status" class="small muted" role="status" aria-live="polite">Tap the button to connect this iPhone to background reminders.</p></div>
+        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so Pal can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications-direct" onclick="window.palStartNotifications(event)">${ic('volume',19)} Turn on notifications</button><p id="pal-notification-status" class="small muted" role="status" aria-live="polite">Tap to connect this device to background reminders.</p></div>
         <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contact photos, Moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
     }
 
@@ -1569,26 +1569,45 @@ async function palEnablePush(role) {
         alert('Pal notification setup failed: ' + (e && e.message ? e.message : String(e)));
       }
     }
-    // Capture this control directly so the notification action cannot be swallowed
-    // by another delegated click handler or a stale nested control.
-    document.addEventListener('click', event => {
-      const target = event.target && event.target.closest ? event.target.closest('[data-action="notifications"]') : null;
-      if (!target) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
+    // Direct button handler: keep progress and errors visible inside the app.
+    window.palStartNotifications = async function(event) {
+      if (event) { event.preventDefault(); event.stopPropagation(); }
+      const button = event && event.currentTarget;
       const status = document.getElementById('pal-notification-status');
-      target.disabled = true;
-      target.textContent = 'Connecting notifications…';
-      if (status) status.textContent = 'Connecting this iPhone to Pal. Please wait…';
-      Promise.resolve(askNotifications()).then(() => {
-        if (status && Notification.permission === 'granted') status.textContent = 'Notification permission is allowed. Checking the subscription…';
-      }).catch(error => {
-        if (status) status.textContent = 'Could not enable notifications: ' + (error?.message || String(error));
-      }).finally(() => {
-        target.disabled = false;
-        target.textContent = 'Turn on notifications';
-      });
-    }, true);
+      const show = message => { if (status) status.textContent = message; };
+      if (button) { button.disabled = true; button.textContent = 'Connecting notifications…'; }
+      show('Checking Safari notification support…');
+      try {
+        if (!('Notification' in window)) throw new Error('Notifications are not available in this app context. Open Pal from its Home Screen icon.');
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) throw new Error('This iPhone app does not expose Web Push. Confirm Pal was added to the Home Screen and opened from its icon.');
+        if (Notification.permission === 'denied') throw new Error('Notifications are blocked for Pal. Check iPhone Settings → Notifications.');
+        show('Requesting notification permission…');
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') throw new Error('Permission was not granted. Current status: ' + permission);
+        show('Registering Pal background service…');
+        await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
+        const registration = await navigator.serviceWorker.ready;
+        if (!registration.pushManager) throw new Error('Safari did not provide PushManager for this Home Screen app.');
+        show('Creating secure push subscription…');
+        let subscription = await registration.pushManager.getSubscription();
+        if (!subscription) subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: palUrlBase64ToUint8Array(PAL_PUSH_PUBLIC_KEY)
+        });
+        show('Saving this iPhone subscription…');
+        const response = await fetch(PAL_PUSH_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': PAL_SUPABASE_KEY, 'Authorization': 'Bearer ' + PAL_SUPABASE_KEY },
+          body: JSON.stringify({ action: 'subscribe', role: 'pal', subscription: subscription.toJSON() })
+        });
+        if (!response.ok) throw new Error('Supabase could not save the subscription (HTTP ' + response.status + ').');
+        show('Success! This iPhone is connected to Pal background notifications.');
+      } catch (error) {
+        show('Setup failed: ' + (error && error.message ? error.message : String(error)));
+      } finally {
+        if (button) { button.disabled = false; button.textContent = 'Turn on notifications'; }
+      }
+    };
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
         if(!file) return resolve('');
