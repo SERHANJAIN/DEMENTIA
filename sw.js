@@ -1,9 +1,10 @@
-/* pal service worker — v9 refreshes the updated app shell and current assets. */
-const CACHE_NAME = 'pal-shell-v9';
+/* pal service worker — v10 caches both the person and family interfaces. */
+const CACHE_NAME = 'pal-shell-v10';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [
   BASE_URL.href,
   new URL('index.html', BASE_URL).href,
+  new URL('family.html', BASE_URL).href,
   new URL('voice-config.js', BASE_URL).href,
   new URL('manifest.webmanifest', BASE_URL).href,
   new URL('icons/icon.svg', BASE_URL).href,
