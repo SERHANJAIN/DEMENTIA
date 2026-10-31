@@ -1622,7 +1622,7 @@
       if(action==='chat-mode') { chatMode=el.dataset.mode==='voice'?'voice':'text'; render(); return; }
       if(action==='start-voice-input') { startVoiceInput(); return; }
       if(action==='chat-suggest') { sendChatMessage(el.dataset.message||'',chatMode==='voice'); return; }
-      if(action==='chat-go') { stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+      if(action==='chat-go') { stopFamilyLocationWatch(); stopSpeech(); currentView=el.dataset.view||'home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='set-theme') { stopSpeech(); state.preferences=state.preferences||{}; state.preferences.theme=el.dataset.theme==='dark'?'dark':'light'; await save(); render(); showToast(state.preferences.theme==='dark'?'Dark mode is on.':'Light mode is on.'); return; }
       if(action==='edit-contact') { if(!caregiverUnlocked){requireCaregiver();return;} stopSpeech(); editingContactId=el.dataset.id; currentView='contact-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='edit-memory') { stopSpeech(); editingMemoryId=el.dataset.id; currentView='memory-form'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
