@@ -831,13 +831,15 @@
     }
     function dbGet(key) { return new Promise((resolve, reject) => { if (!db) return resolve(null); const tx=db.transaction('records','readonly'); const r=tx.objectStore('records').get(key); r.onsuccess=()=>resolve(r.result ?? null); r.onerror=()=>reject(r.error); }); }
     function dbSet(key, value) { return new Promise((resolve, reject) => { if (!db) { try { localStorage.setItem('withyou-state', JSON.stringify(value)); resolve(); } catch(e) { reject(e); } return; } const tx=db.transaction('records','readwrite'); tx.objectStore('records').put(value,key); tx.oncomplete=()=>resolve(); tx.onerror=()=>reject(tx.error); }); }
-    async function save() { try { await dbSet(STATE_KEY, state); } catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); } }
+    async function save() { try { await dbSet(STATE_KEY, state); if (window.palStateChannel) window.palStateChannel.postMessage({type:'state-updated',source:'pal'}); } catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); } }
     async function initStorage() {
       try { db = await openDb(); } catch (e) { db = null; }
       try {
         const loaded = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null');
         if (loaded && loaded.profile) { const base=defaultState(); state={...base,...loaded,profile:{...base.profile,...loaded.profile},preferences:{...base.preferences,...(loaded.preferences||{})},contacts:Array.isArray(loaded.contacts)?loaded.contacts:[],memories:Array.isArray(loaded.memories)?loaded.memories:[],medicines:Array.isArray(loaded.medicines)?loaded.medicines:[],appointments:Array.isArray(loaded.appointments)?loaded.appointments:[],tasks:Array.isArray(loaded.tasks)?loaded.tasks:[]}; }
       } catch (e) { console.warn('Saved data could not be read.', e); }
+      if ('BroadcastChannel' in window) { window.palStateChannel = new BroadcastChannel('pal-shared-state'); window.palStateChannel.onmessage = async event => { if (event.data?.type !== 'state-updated' || event.data?.source === 'pal') return; try { const latest = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) { console.warn('Shared family update could not be loaded.', e); } }; }
+      window.addEventListener('storage', async event => { if (event.key !== 'withyou-state') return; try { const latest = JSON.parse(event.newValue || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) {} });
       render();
       if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => {});
       setInterval(checkDueReminders, 30000);
@@ -1393,6 +1395,8 @@
       showToast('Finding your location. Please allow location access if asked.');
       navigator.geolocation.getCurrentPosition(async pos=>{
         routeCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};
+        state.lastLocation={lat:pos.coords.latitude,lon:pos.coords.longitude,accuracy:Number.isFinite(pos.coords.accuracy)?pos.coords.accuracy:null,updatedAt:new Date().toISOString()};
+        await save();
         const destinationAddress=selectedDestinationAddress||state.profile.homeAddress;
         homeCoords=await geocodeAddress(destinationAddress);
         if(homeCoords) await fetchWalkingRoute(routeCoords,homeCoords);
