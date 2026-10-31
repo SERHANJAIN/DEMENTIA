@@ -1526,9 +1526,41 @@
         showToast(msg);
       }
     }
+
+const PAL_PUSH_PUBLIC_KEY = 'BBSJVXxMnKUCLJuZG3KSLx4DcTYHJXHdTvpdqAlDJxGnYThXWfHLGXutpVlbDSxKfF6xAy6bvVCv7Q55b_JW-zw';
+const PAL_PUSH_ENDPOINT = 'https://nukmfdejnionugwqgwgo.supabase.co/functions/v1/send-pal-push';
+function palUrlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const raw = atob((base64String + padding).replace(/-/g, '+').replace(/_/g, '/'));
+  return Uint8Array.from([...raw].map(char => char.charCodeAt(0)));
+}
+async function palEnablePush(role) {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
+    throw new Error('This browser does not support background notifications.');
+  }
+  const permission = await Notification.requestPermission();
+  if (permission !== 'granted') throw new Error('Please allow notifications in your browser settings.');
+  const registration = await navigator.serviceWorker.register('./sw.js');
+  const ready = await navigator.serviceWorker.ready;
+  let subscription = await ready.pushManager.getSubscription();
+  if (!subscription) {
+    subscription = await ready.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: palUrlBase64ToUint8Array(PAL_PUSH_PUBLIC_KEY)
+    });
+  }
+  const response = await fetch(PAL_PUSH_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': PAL_SUPABASE_KEY, 'Authorization': 'Bearer ' + PAL_SUPABASE_KEY },
+    body: JSON.stringify({ action: 'subscribe', role, subscription: subscription.toJSON() })
+  });
+  if (!response.ok) throw new Error('Could not save this browser subscription (' + response.status + ').');
+  return true;
+}
+
     async function askNotifications() {
       if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside pal.'); return; }
-      try { const result=await Notification.requestPermission(); showToast(result==='granted'?'Notifications are enabled while pal is open. Background alerts need extra push setup.': 'Notifications were not enabled. You can still check reminders inside pal.'); } catch(e) { showToast('This browser could not enable notifications.'); }
+      try { await palEnablePush('pal'); showToast('Background notifications are enabled on this browser.'); } catch(e) { showToast(e.message || 'Notifications could not be enabled.'); }
     }
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
