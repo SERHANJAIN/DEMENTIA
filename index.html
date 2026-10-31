@@ -189,6 +189,11 @@
     .today-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
     .today-list { background: rgba(248,247,242,.78); border-radius: 12px; padding: 7px; min-width: 0; }
     .today-list-title { display: flex; align-items: center; gap: 5px; color: var(--navy); font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+    .today-title-row { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:5px; }
+    .today-title-row .today-list-title { margin:0; }
+    .today-add-button { display:inline-flex; align-items:center; justify-content:center; gap:3px; min-height:28px; padding:4px 8px; border:1px solid rgba(36,59,83,.16); border-radius:9px; background:#e8f0e7; color:#294f46; font-size:11px; font-weight:800; line-height:1; white-space:nowrap; }
+    .today-add-button:focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
+    .today-add-button:active { transform:scale(.97); }
     .today-item { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 5px 0; border-top: 1px solid rgba(36,59,83,.08); }
     .today-item:first-of-type { border-top: 0; }
     .today-item-copy { min-width: 0; flex: 1; }
@@ -1100,8 +1105,8 @@
         ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${p.guardianPhoto?`<img src="${p.guardianPhoto}" alt="Photo of ${esc(guardianName)}">`:guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
         ${eventBanner}
         <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">${esc(now.toLocaleDateString(undefined,{day:"numeric",month:"short"}))}</span></div>
-          <div class="today-columns" style="grid-template-columns:1fr;gap:10px"><div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Medicines" data-action="go" data-view="medicines"><div class="today-list-title">${ic('pill',18)} Medicines</div>${progressMarkup(meds.filter(m=>(m.takenDates||[]).includes(today)).length,meds.length,'Medicine','medicine')}${medRows || medEmpty}</div>
-          <div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Reminders" data-action="go" data-view="tasks"><div class="today-list-title">${ic('check',18)} Reminders</div>${progressMarkup(todaysTasks.filter(t=>(t.completedDates||[]).includes(today)).length,todaysTasks.length,'Reminders','reminders')}${taskRows || taskEmpty}</div></div>
+          <div class="today-columns" style="grid-template-columns:1fr;gap:10px"><div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Medicines" data-action="go" data-view="medicines"><div class="today-title-row"><div class="today-list-title">${ic('pill',18)} Medicines</div><button type="button" class="today-add-button" data-action="go" data-view="medicine-form" aria-label="Add a medicine">${ic('plus',14)} Add</button></div>${progressMarkup(meds.filter(m=>(m.takenDates||[]).includes(today)).length,meds.length,'Medicine','medicine')}${medRows || medEmpty}</div>
+          <div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Reminders" data-action="go" data-view="tasks"><div class="today-title-row"><div class="today-list-title">${ic('check',18)} Reminders</div><button type="button" class="today-add-button" data-action="go" data-view="task-form" aria-label="Add a reminder">${ic('plus',14)} Add</button></div>${progressMarkup(todaysTasks.filter(t=>(t.completedDates||[]).includes(today)).length,todaysTasks.length,'Reminders','reminders')}${taskRows || taskEmpty}</div></div>
         </section>
         <div class="home-grid" aria-label="Main features">
           ${card('Find home','Map and walking directions','route','map','navy')}
