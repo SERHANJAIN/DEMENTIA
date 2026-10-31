@@ -796,6 +796,7 @@
     let selectedDate = todayStr();
     let calendarMonth = new Date(); calendarMonth.setDate(1);
     let routeCoords = null;
+    let familyLocationWatchId = null;
     let homeCoords = null;
     let leafletMap = null;
     let firedReminders = new Set();
@@ -1119,6 +1120,7 @@
         <div class="panel soft-navy"><div class="status-line">${ic('home',22)} <span>Saved home address</span></div><p style="font-size:18px;font-weight:800;margin-bottom:0">${esc(state.profile.homeAddress)}</p></div>
         <form class="panel" data-form="route-destination"><div class="field"><label for="route-destination">Where would you like to go?</label><input id="route-destination" name="destination" value="${esc(targetAddress)}" required maxlength="300" placeholder="Home or another address"></div><div class="button-row" style="margin-top:10px"><button class="secondary small-button" type="button" data-action="route-home">${ic('home',18)} Go home</button><button class="primary small-button" type="submit">${ic('pin',18)} Start</button></div></form>
         ${mapContent}
+        <p class="map-note">Your location is shared with family while Find my way is open. Leave this page to pause sharing. Location updates stop when the app is in the background.</p>
         <div class="panel"><div class="status-line">${ic('compass',22)} <span>Simple directions</span></div><p id="distance-copy" style="margin-bottom:8px">${esc(distanceText)}</p>${routeSteps.length?`<ol class="route-steps">${routeSteps.slice(0,3).map((s,i)=>`<li><strong>Step ${i+1}.</strong> ${esc(s.instruction)}</li>`).join('')}</ol><button class="secondary small-button" style="margin-top:10px" type="button" data-action="route-next-step">${ic('volume',18)} Hear next direction</button>`:`<p class="small muted">For turn-by-turn walking directions, use the map app button below. If the simple walking route is unavailable, it will still open the destination in your phone’s map.</p>`}</div>
         <div class="panel soft-sage"><h3>Ready to start?</h3><p class="small">The walking route is marked on the map when route data is available. Follow the spoken step or open your phone’s map for full turn-by-turn guidance.</p><a class="primary" href="${esc(mapUrl)}" target="_blank" rel="noopener">${ic('map',21)} Open walking directions</a><div style="margin-top:8px">${speakerButton(`Your destination is ${targetAddress}. ${routeSteps[0]?.instruction||'Tap Start to find your location, then open walking directions for turn by turn guidance.'}`,'Hear directions')}</div></div>
         <div class="notice"><span class="notice-icon">${ic('phone',22)}</span><div><strong>Feeling unsure?</strong><p class="small" style="margin-bottom:0">Stop somewhere safe and call your guardian or emergency contact.</p><button class="small-link" type="button" data-action="go" data-view="emergency">Open Emergency help ${ic('arrow',16)}</button></div></div>`;
@@ -1392,8 +1394,36 @@
       const meters=Number(step.distance||0); if(meters>=80 && type!=='arrive') text+=` Go about ${Math.round(meters/10)*10} metres.`;
       return text;
     }
+    function stopFamilyLocationWatch() {
+      if (familyLocationWatchId !== null && navigator.geolocation?.clearWatch) {
+        try { navigator.geolocation.clearWatch(familyLocationWatchId); } catch(e) {}
+      }
+      familyLocationWatchId = null;
+    }
+    function startFamilyLocationWatch() {
+      if (!navigator.geolocation?.watchPosition || familyLocationWatchId !== null) return;
+      familyLocationWatchId = navigator.geolocation.watchPosition(async pos => {
+        const previous = state.lastLocation;
+        const next = { lat:pos.coords.latitude, lon:pos.coords.longitude, accuracy:Number.isFinite(pos.coords.accuracy)?pos.coords.accuracy:null, updatedAt:new Date().toISOString() };
+        const moved = !previous || distanceKm(Number(previous.lat),Number(previous.lon),next.lat,next.lon)*1000 >= 35;
+        const aged = !previous?.updatedAt || Date.now()-new Date(previous.updatedAt).getTime() >= 60000;
+        if (!moved && !aged) return;
+        routeCoords={lat:next.lat,lon:next.lon};
+        state.lastLocation=next;
+        routePath=null;
+        routeSteps=[];
+        await save();
+        if (currentView==='route') render();
+      }, err => { if (err.code===1) showToast('Location sharing paused because location permission was not allowed.'); }, {enableHighAccuracy:true,timeout:20000,maximumAge:15000});
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState==='hidden') stopFamilyLocationWatch();
+      else if (currentView==='route') startFamilyLocationWatch();
+    });
+    window.addEventListener('pagehide', stopFamilyLocationWatch);
     async function locate() {
       if (!navigator.geolocation) { showToast('This phone cannot share its location with the browser. You can still open walking directions.'); return; }
+      stopFamilyLocationWatch();
       showToast('Finding your location. Please allow location access if asked.');
       navigator.geolocation.getCurrentPosition(async pos=>{
         routeCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};
@@ -1403,10 +1433,11 @@
         homeCoords=await geocodeAddress(destinationAddress);
         if(homeCoords) await fetchWalkingRoute(routeCoords,homeCoords);
         render();
+        startFamilyLocationWatch();
         if(homeCoords && routePath) speak(`Your walking route is ready. ${routeSteps[0]?.instruction||'Follow the route marked on the map.'}`);
         else if(homeCoords) speak(`I found your location and destination. Open walking directions for a full street route, as the simple walking route could not load.`);
         else speak('I found your location, but could not find that address. Please check the destination spelling or ask your guardian for help.');
-      }, err=>{ showToast(err.code===1?'Location permission was not allowed. You can still open walking directions.':'I could not find your location. Please try again or open walking directions.'); }, {enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+      }, err=>{ showToast(err.code===1?'Location permission was not allowed. You can still open walking directions.':'I could not find your location. Please try again or open walking directions.'); }, {enableHighAccuracy:true,timeout:12000,maximumAge:0});
     }
     function drawMap() {
       const mapEl=document.getElementById('map'); if(!mapEl) return;
@@ -1579,6 +1610,7 @@
       const el=event.target.closest('[data-action]'); if(!el)return;
       const action=el.dataset.action;
       if(action!=='speak') stopSpeech();
+      if(action==='home' || action==='back' || action==='calendar-back' || (action==='go' && el.dataset.view!=='route')) stopFamilyLocationWatch();
       if(action==='home') { stopSpeech(); viewHistory=[]; skipViewHistory=true; currentView='home'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
       if(action==='back') { stopSpeech(); const previous=viewHistory.pop()||'home'; skipViewHistory=true; currentView=previous; render(); window.scrollTo({top:0,behavior:'smooth'}); if(currentView==='route') locate(); return; }
       if(action==='calendar-back') { stopSpeech(); const index=viewHistory.lastIndexOf('appointments'); if(index>=0) viewHistory=viewHistory.slice(0,index); skipViewHistory=true; currentView='appointments'; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
