@@ -763,7 +763,7 @@
             try { await dbSet(STATE_KEY, state); } catch (e) {}
             render();
           }
-        } else if (!row && seedIfEmpty) { await palRemoteWrite(state); }
+        } else if ((!row || !row.state || !Object.keys(row.state).length) && seedIfEmpty) { await palRemoteWrite(state); }
       } catch (error) { console.warn('Pal cloud sync:', error); }
     }
 
