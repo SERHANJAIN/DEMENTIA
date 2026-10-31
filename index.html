@@ -1115,8 +1115,8 @@
     function renderChat() {
       const gender=state.preferences?.companionGender==='man'?'man':'woman';
       const history=chatMessages.length ? chatMessages : [{role:'carey',text:`Hello ${sayName()}. I'm glad you're here. You can ask me about medicines, daily reminders, contacts, Moments, appointments, finding home, or using pal. We can take it one step at a time.`}];
-      const messageHtml=history.map((m,i)=>`<div class="chat-row ${m.role==='user'?'chat-row-user':'chat-row-carey'}">${m.role==='carey'?`<div class="chat-avatar-mini">${renderAvatar(gender,false,true)}</div>`:''}<div class="chat-bubble ${m.role==='user'?'user-bubble':'carey-bubble'}"><p>${esc(m.text)}</p>${m.role==='carey'?`<div class="chat-message-actions">${speakerButton(m.text,'Hear carey’s reply')}${m.view?`<button class="chat-open-link" type="button" data-action="chat-go" data-view="${esc(m.view)}">${esc(m.viewLabel||'Open this section')} ${ic('arrow',14)}</button>`:''}</div>`:''}</div></div>`).join('');
-      return `${topTitle('Talk with carey','You can type or speak. Take your time.')}
+      const messageHtml=history.map((m,i)=>`<div class="chat-row ${m.role==='user'?'chat-row-user':'chat-row-carey'}">${m.role==='carey'?`<div class="chat-avatar-mini">${renderAvatar(gender,false,true)}</div>`:''}<div class="chat-bubble ${m.role==='user'?'user-bubble':'carey-bubble'}"><p>${esc(m.text)}</p>${m.role==='carey'?`<div class="chat-message-actions">${speakerButton(m.text,'Hear pal’s reply')}${m.view?`<button class="chat-open-link" type="button" data-action="chat-go" data-view="${esc(m.view)}">${esc(m.viewLabel||'Open this section')} ${ic('arrow',14)}</button>`:''}</div>`:''}</div></div>`).join('');
+      return `${topTitle('Talk with pal','You can type or speak. Take your time.')}
         <section class="chat-shell"><div class="chat-welcome">${renderAvatar(gender,true,false,companionMood)}<div><h2>I'm here with you.</h2><p>What would you like help with today?</p></div></div>
           <div class="chat-mode-switch"><button type="button" class="chat-mode-button ${chatMode==='text'?'active':''}" data-action="chat-mode" data-mode="text">${ic('message',18)} Text</button><button type="button" class="chat-mode-button ${chatMode==='voice'?'active':''}" data-action="chat-mode" data-mode="voice">${ic('volume',18)} Voice</button></div>
           <div class="chat-messages" id="chat-messages">${messageHtml}</div>
@@ -1149,7 +1149,7 @@
       if (/emergency|police|fire|helpline|urgent|unsafe/.test(q)) return {text:'If you are in immediate danger or need urgent help, please call your guardian or local emergency services now. The Emergency help page has the numbers saved on this phone.',view:'emergency',viewLabel:'Open Emergency help'};
       if (/setting|dark mode|light mode|appearance|voice/.test(q)) return {text:'You can choose light or dark mode and change your companion in Settings. The gear symbol is at the top left of the screen.',view:'settings',viewLabel:'Open Settings'};
       if (/thank/.test(q)) return {text:'You’re very welcome. You’re doing well, and we can take things one step at a time.'};
-      return {text:'I’m here to help with carey. We can look at your medicines, reminders, contacts, Moments, doctor visits, home directions, emergency help, or settings. Which one would you like to talk about?'};
+      return {text:'I’m here to help with pal. We can look at your medicines, reminders, contacts, Moments, doctor visits, home directions, emergency help, or settings. Which one would you like to talk about?'};
     }
     function sendChatMessage(raw, voiceReply=false) {
       const text=String(raw||'').trim(); if(!text)return;
@@ -1326,16 +1326,16 @@
         if(item._kind==='Reminder' && (item.completedDates||[]).includes(today)) continue;
         const k=`${today}-${item._kind}-${item.id}-${hhmm}`;
         if(firedReminders.has(k)) continue; firedReminders.add(k);
-        const msg=`carey reminder: ${item._kind.toLowerCase()} time. ${item.name||item.title}.`;
+        const msg=`pal reminder: ${item._kind.toLowerCase()} time. ${item.name||item.title}.`;
         if('Notification' in window && Notification.permission==='granted' && document.visibilityState==='visible') {
-          try { new Notification('carey reminder',{body:msg,icon:'./icons/icon-192.png',tag:k}); } catch(e) {}
+          try { new Notification('pal reminder',{body:msg,icon:'./icons/icon-192.png',tag:k}); } catch(e) {}
         }
         showToast(msg);
       }
     }
     async function askNotifications() {
-      if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside carey.'); return; }
-      try { const result=await Notification.requestPermission(); showToast(result==='granted'?'Notifications are enabled while carey is open. Background alerts need extra push setup.': 'Notifications were not enabled. You can still check reminders inside carey.'); } catch(e) { showToast('This browser could not enable notifications.'); }
+      if (!('Notification' in window)) { showToast('Notifications are not available in this browser. You can still see reminders inside pal.'); return; }
+      try { const result=await Notification.requestPermission(); showToast(result==='granted'?'Notifications are enabled while pal is open. Background alerts need extra push setup.': 'Notifications were not enabled. You can still check reminders inside pal.'); } catch(e) { showToast('This browser could not enable notifications.'); }
     }
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
