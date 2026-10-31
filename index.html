@@ -1271,7 +1271,7 @@
 
         <div class="panel soft-teal"><div class="identity-home">${renderAvatar(selected,true,false,companionMood)}<div class="identity-copy"><h2>Choose your companion</h2><p class="small muted">Choose the face you feel most comfortable with.</p></div></div><div class="companion-options"><button type="button" class="companion-choice ${selected==='woman'?'is-selected':''}" data-action="choose-companion" data-gender="woman" aria-pressed="${selected==='woman'}">${renderAvatar('woman')}<strong>Woman</strong></button><button type="button" class="companion-choice ${selected==='man'?'is-selected':''}" data-action="choose-companion" data-gender="man" aria-pressed="${selected==='man'}">${renderAvatar('man')}<strong>Man</strong></button></div></div>
         <div class="panel ambient-panel"><h3>Personal details and important numbers</h3><p class="small muted">Update your home address, guardian, doctor and local emergency numbers.</p><button class="secondary" type="button" data-action="go" data-view="${caregiverUnlocked?'profile-form':'family'}">${ic('user',19)} Update details</button></div>
-        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so Pal can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button></div>
+        <div class="panel soft-sage"><h3>Gentle reminders</h3><p class="small muted">Allow notifications so Pal can show date and time alerts while the app is open. Background alerts may need additional setup.</p><button class="secondary" type="button" data-action="notifications">${ic('volume',19)} Turn on notifications</button><p id="pal-notification-status" class="small muted" role="status" aria-live="polite">Tap the button to connect this iPhone to background reminders.</p></div>
         <div class="panel"><h3>Family & setup</h3><p class="small muted">Add contact photos, Moments, medicines, appointments and daily reminders, or make a backup.</p><button class="primary" type="button" data-action="go" data-view="family">${ic('settings',19)} Open Family & setup</button></div>`;
     }
 
@@ -1576,7 +1576,18 @@ async function palEnablePush(role) {
       if (!target) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      askNotifications();
+      const status = document.getElementById('pal-notification-status');
+      target.disabled = true;
+      target.textContent = 'Connecting notifications…';
+      if (status) status.textContent = 'Connecting this iPhone to Pal. Please wait…';
+      Promise.resolve(askNotifications()).then(() => {
+        if (status && Notification.permission === 'granted') status.textContent = 'Notification permission is allowed. Checking the subscription…';
+      }).catch(error => {
+        if (status) status.textContent = 'Could not enable notifications: ' + (error?.message || String(error));
+      }).finally(() => {
+        target.disabled = false;
+        target.textContent = 'Turn on notifications';
+      });
     }, true);
     function resizeImage(file) {
       return new Promise((resolve,reject)=>{
