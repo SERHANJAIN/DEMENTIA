@@ -674,6 +674,34 @@
     :root[data-theme="dark"] .home-hero .identity-link { color:#244f70!important;text-decoration:underline;text-underline-offset:2px; }
     :root[data-theme="dark"] .home-hero .avatar-launch-label { color:#29465a!important; }
     :root[data-theme="dark"] .moments-section .gallery-add { background:#fff!important;color:#203244!important;border:1px solid #b9cfc4!important; }
+
+    /* Dark-mode legibility pass: strengthen secondary text across every screen. */
+    :root[data-theme="dark"] .moments-heading .eyebrow,
+    :root[data-theme="dark"] .moments-heading h2,
+    :root[data-theme="dark"] .moments-section,
+    :root[data-theme="dark"] .moments-section p,
+    :root[data-theme="dark"] .moments-section h3,
+    :root[data-theme="dark"] .moments-section .moment-copy,
+    :root[data-theme="dark"] .moments-section .moment-title,
+    :root[data-theme="dark"] .moments-section .moment-note,
+    :root[data-theme="dark"] .moments-section .moment-date,
+    :root[data-theme="dark"] .moments-section .gallery-empty { color:#f4f7fb !important; }
+    :root[data-theme="dark"] .muted,:root[data-theme="dark"] .small,:root[data-theme="dark"] .hint,
+    :root[data-theme="dark"] .eyebrow,:root[data-theme="dark"] .lead,:root[data-theme="dark"] .relationship,
+    :root[data-theme="dark"] .item p,:root[data-theme="dark"] .profile-key,:root[data-theme="dark"] .card-sub,
+    :root[data-theme="dark"] .calendar-card-empty,:root[data-theme="dark"] .calendar-card-event,
+    :root[data-theme="dark"] .today-item-meta,:root[data-theme="dark"] .date-small,
+    :root[data-theme="dark"] .summary-label,:root[data-theme="dark"] .notice p,
+    :root[data-theme="dark"] .empty p,:root[data-theme="dark"] .gallery-empty p,
+    :root[data-theme="dark"] .family-footer p,:root[data-theme="dark"] .footer-note { color:#d9e5ef !important; }
+    :root[data-theme="dark"] .moments-section .eyebrow { color:#d9e9f5 !important; }
+    :root[data-theme="dark"] .moment-tile { border-color:#668096; }
+    .today-list-link { cursor:pointer; }
+    .today-list-link:focus-visible { outline:3px solid #9fd5e4; outline-offset:3px; }
+    .calendar-home-card { text-align:center; align-items:center; justify-content:center; }
+    .calendar-home-card .calendar-card-copy { align-items:center; text-align:center; width:100%; }
+    .calendar-home-card .card-icon { margin-inline:auto; }
+    .calendar-home-card .card-label { text-align:center; width:100%; }
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
@@ -1032,8 +1060,8 @@
         ${guardianPhone ? `<div class="guardian-strip"><span class="guardian-mini-photo">${p.guardianPhoto?`<img src="${p.guardianPhoto}" alt="Photo of ${esc(guardianName)}">`:guardianContact?.photo?`<img src="${guardianContact.photo}" alt="Photo of ${esc(guardianName)}">`:ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian · call anytime</span><span class="guardian-name">${esc(guardianName)}</span><span class="guardian-number">${esc(guardianPhone)}</span></span><a class="guardian-call-icon" href="tel:${esc(guardianPhone)}" aria-label="Call ${esc(guardianName)}">${ic('phone',22)}</a></div>` : `<button class="guardian-strip" type="button" data-action="go" data-view="profile-form"><span class="guardian-mini-photo">${ic('user',23)}</span><span class="guardian-copy"><span class="guardian-label">Your guardian</span><span class="guardian-name">Add guardian’s number</span></span><span class="guardian-call-icon">${ic('arrow',18)}</span></button>`}
         ${eventBanner}
         <section class="today-priority" aria-label="Today's medicines and reminders"><div class="today-heading"><h2>Today</h2><span class="date-small">${esc(now.toLocaleDateString(undefined,{day:"numeric",month:"short"}))}</span></div>
-          <div class="today-columns" style="grid-template-columns:1fr;gap:10px"><div class="today-list"><div class="today-list-title">${ic('pill',18)} Medicines</div>${progressMarkup(meds.filter(m=>(m.takenDates||[]).includes(today)).length,meds.length,'Medicine','medicine')}${medRows || medEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="medicines">All medicines ${ic('arrow',12)}</button></div></div>
-          <div class="today-list"><div class="today-list-title">${ic('check',18)} Reminders</div>${progressMarkup(todaysTasks.filter(t=>(t.completedDates||[]).includes(today)).length,todaysTasks.length,'Reminders','reminders')}${taskRows || taskEmpty}<div class="today-footer"><button type="button" data-action="go" data-view="tasks">All reminders ${ic('arrow',12)}</button></div></div></div>
+          <div class="today-columns" style="grid-template-columns:1fr;gap:10px"><div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Medicines" data-action="go" data-view="medicines"><div class="today-list-title">${ic('pill',18)} Medicines</div>${progressMarkup(meds.filter(m=>(m.takenDates||[]).includes(today)).length,meds.length,'Medicine','medicine')}${medRows || medEmpty}</div>
+          <div class="today-list today-list-link" role="link" tabindex="0" aria-label="Open Reminders" data-action="go" data-view="tasks"><div class="today-list-title">${ic('check',18)} Reminders</div>${progressMarkup(todaysTasks.filter(t=>(t.completedDates||[]).includes(today)).length,todaysTasks.length,'Reminders','reminders')}${taskRows || taskEmpty}</div></div>
         </section>
         <div class="home-grid" aria-label="Main features">
           ${card('Find home','Map and walking directions','route','map','navy')}
@@ -1112,7 +1140,7 @@
       const takenCount=items.filter(taken).length;
       return `${topTitle('Medicines','A clear list to check with your care team.')}
         <div class="panel soft-peach"><div class="status-line">${ic('alert',22)} <span>Please follow the instructions from your doctor or pharmacist.</span></div><p class="small" style="margin-bottom:0">pal is a reminder list. It does not decide or change your medicine dose.</p></div>
-        ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="medicine-form">${ic('plus',21)} Add a medicine</button>` : ''}
+        <button type="button" class="primary" data-action="go" data-view="medicine-form">${ic('plus',21)} Add a medicine</button>
         ${items.length ? `<div class="summary-strip"><div class="summary-cell"><span class="summary-number">${items.filter(taken).length}</span><span class="summary-label">Marked taken today</span></div><div class="summary-cell"><span class="summary-number">${items.length-items.filter(taken).length}</span><span class="summary-label">Not marked taken today</span></div></div>${progressMarkup(takenCount,items.length,'Medicines','medicine')}<div class="item-list">${items.map(m=>`<article class="item">${m.photo?`<img class="record-photo" src="${m.photo}" alt="Photo of ${esc(m.name)}" loading="lazy">`:`<div class="record-photo-placeholder">${ic('pill',27)}</div>`}<div class="item-main"><h3>${esc(m.name)}</h3><div class="relationship">${esc(m.dose || 'Dose not added')}${m.time ? ` · ${timeLabel(m.time)}`:''}</div>${m.notes?`<p>${esc(m.notes)}</p>`:''}<button type="button" class="${taken(m)?'secondary':'primary'} small-button" style="margin-top:7px;width:auto" data-action="toggle-medicine" data-id="${esc(m.id)}">${ic(taken(m)?'checkcircle':'check',18)} ${taken(m)?'Taken today':'Mark as taken'}</button>${taken(m)?`<p class="small" style="margin-top:6px;color:var(--sage-deep)">Thank you. This is marked as taken today.</p>`:''}<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-medicine" data-id="${esc(m.id)}">${ic('edit',17)} Edit</button></div></div></article>`).join('')}</div>` : `<div class="empty" style="margin-top:16px"><div class="empty-icon">${ic('pill',28)}</div><h3>No medicines added yet.</h3><p class="small muted">Ask a family member to add your medicine names and the times your doctor has advised.</p></div>`}
         <div class="notice"><span class="notice-icon">${ic('clock',22)}</span><div><strong>One step at a time</strong><p class="small" style="margin-bottom:0">Check the list on your home screen when it is time for your medicines. Follow the instructions from your doctor or pharmacist.</p></div></div>`;
     }
@@ -1140,7 +1168,7 @@
       const doneToday=todayItems.filter(t=>(t.completedDates||[]).includes(todayStr())).length;
       return `${topTitle('Reminders','Things to remember throughout your day.')}
         <div class="panel soft-sage"><div class="status-line">${ic('checkcircle',22)} <span>Tick a task when you have done it.</span></div><p class="small" style="margin-bottom:0">A family member using this same device can see which tasks you have checked.</p></div>${progressMarkup(doneToday,todayItems.length,'Reminders','reminders')}
-        ${caregiverUnlocked ? `<button type="button" class="primary" data-action="go" data-view="task-form">${ic('plus',21)} Add a reminder</button>` : ''}
+        <button type="button" class="primary" data-action="go" data-view="task-form">${ic('plus',21)} Add a reminder</button>
         <div class="item-list" style="margin-top:16px">${items.length ? items.map(t=>{const done=(t.completedDates||[]).includes(todayStr());return `<article class="item">${t.photo?`<img class="record-photo" src="${t.photo}" alt="Photo for ${esc(t.title)}" loading="lazy">`:`<div class="record-photo-placeholder">${ic('check',27)}</div>`}<button type="button" class="task-check ${done?'done':''}" aria-label="${done?'Mark not done':'Mark done'}: ${esc(t.title)}" data-action="toggle-task" data-id="${esc(t.id)}">${ic(done?'check':'check',23)}</button><div class="task-body"><h3 style="${done?'text-decoration:line-through;color:#5c7464':''}">${esc(t.title)}</h3><p>${t.time?`${timeLabel(t.time)} · `:''}${t.repeat==='daily'?'Every day':`For ${dateLabel(t.date)}`}</p>${t.notes?`<p>${esc(t.notes)}</p>`:''}${done?`<span class="done-label">Done today — well done.</span>`:''}<div class="button-row" style="margin-top:8px"><button class="secondary small-button" style="width:auto" type="button" data-action="edit-task" data-id="${esc(t.id)}">${ic('edit',17)} Edit</button></div></div></article>`}).join('') : `<div class="empty"><div class="empty-icon">${ic('check',27)}</div><h3>Nothing here just yet.</h3><p class="small muted">A family member can add helpful reminders, like drinking water or watering plants.</p></div>`}</div>
         <div class="notice"><span class="notice-icon">${ic('info',22)}</span><div><strong>Family check-ins</strong><p class="small" style="margin-bottom:0">Checked tasks are saved on this phone. This simple version does not send task updates to family members on a different phone.</p></div></div>`;
     }
