@@ -1,5 +1,5 @@
-/* pal service worker — v10 caches both the person and family interfaces. */
-const CACHE_NAME = 'pal-shell-v12';
+/* pal service worker — v13 refreshes the demo shell while retaining push notifications. */
+const CACHE_NAME = 'pal-shell-v13';
 const BASE_URL = new URL('./', self.location.href);
 const CORE_ASSETS = [
   BASE_URL.href,
