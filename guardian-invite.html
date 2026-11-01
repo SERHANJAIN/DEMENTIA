@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#243b53"><title>Accept Pal invitation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f2f6f1;color:#243746;font:16px/1.5 Arial,sans-serif}.panel{width:min(100%,440px);padding:28px;border:1px solid #d8e1dc;border-radius:22px;background:white;box-shadow:0 12px 35px #243b5315}h1{margin:0;color:#243b53}p{color:#61747c}.field{display:block;width:100%;padding:13px;margin:9px 0 14px;border:1px solid #ccd8d1;border-radius:11px;font:inherit}button{width:100%;padding:13px;margin-top:9px;border:0;border-radius:11px;background:#243b53;color:white;font:700 16px Arial;cursor:pointer}.secondary{background:#e8f0e7;color:#243b53}.status{padding:12px;border-radius:10px;background:#f3f5f2;color:#405b50;white-space:pre-wrap}.hidden{display:none}.small{font-size:13px}
+</style>
+</head>
+<body>
+<main class="panel">
+<h1>Welcome to Pal</h1>
+<p id="intro">Sign in or create an account using the email address that received this invitation.</p>
+<div id="auth">
+<label for="email">Email address</label><input class="field" id="email" type="email" autocomplete="email" required>
+<label for="password">Password</label><input class="field" id="password" type="password" autocomplete="current-password" minlength="8" required>
+<button id="signin">Sign in</button>
+<button id="signup" class="secondary">Create account</button>
+</div>
+<button id="accept" class="hidden">Accept guardian invitation</button>
+<p id="status" class="status" role="status">Your invitation link is ready.</p>
+<p class="small">Use the same email address the invitation was sent to. Invitation links expire after 48 hours.</p>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const SUPABASE_URL="https://nukmfdejnionugwqgwgo.supabase.co";
+const SUPABASE_KEY="sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+const token=new URLSearchParams(location.hash.slice(1)).get("invite");
+const $=id=>document.getElementById(id);
+const status=(message)=>$("status").textContent=message;
+if(!token){status("This invitation link is missing its invitation code. Please open the original email again.");$("accept").classList.add("hidden");}
+async function showSession(){
+ const {data:{session}}=await supabase.auth.getSession();
+ if(session){
+   $("auth").classList.add("hidden");
+   $("accept").classList.remove("hidden");
+   $("intro").textContent="You're signed in as "+session.user.email+". Accept the invitation to connect with your Pal.";
+ }else{
+   $("auth").classList.remove("hidden");
+   $("accept").classList.add("hidden");
+ }
+}
+$("signin").addEventListener("click",async()=>{
+ const email=$("email").value.trim().toLowerCase(),password=$("password").value;
+ if(!email||!password){status("Enter your email and password.");return;}
+ status("Signing in…");
+ const {error}=await supabase.auth.signInWithPassword({email,password});
+ if(error){status(error.message);return;}
+ await showSession();status("Signed in. You can now accept the invitation.");
+});
+$("signup").addEventListener("click",async()=>{
+ const email=$("email").value.trim().toLowerCase(),password=$("password").value;
+ if(!email||!password){status("Enter your email and choose a password.");return;}
+ if(password.length<8){status("Use a password with at least 8 characters.");return;}
+ status("Creating your account…");
+ const {data,error}=await supabase.auth.signUp({email,password});
+ if(error){status(error.message);return;}
+ if(data.session){await showSession();status("Account created. You can now accept the invitation.");}
+ else{status("Account created. Check your email to confirm your address, then return here and sign in.");}
+});
+$("accept").addEventListener("click",async()=>{
+ if(!token){status("Invitation code is missing.");return;}
+ status("Accepting invitation…");
+ const {data,error}=await supabase.rpc("accept_pal_invitation",{invitation_token:token});
+ if(error){status(error.message);return;}
+ history.replaceState(null,"",location.pathname);
+ status("Invitation accepted. You are now connected as a guardian. Open the Family page to continue.");
+ const link=document.createElement("a");link.href="./family.html";link.textContent="Open Pal Family";link.style.display="block";link.style.marginTop="14px";link.style.fontWeight="bold";$("status").appendChild(link);
+});
+supabase.auth.onAuthStateChange(()=>showSession());
+showSession();
+</script>
+</body></html>
