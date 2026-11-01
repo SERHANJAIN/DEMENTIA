@@ -736,7 +736,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(async function(){
+document.addEventListener('DOMContentLoaded',async function(){
  const URL='https://nukmfdejnionugwqgwgo.supabase.co', KEY='sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt';
  const gate=document.getElementById('pal-entry-gate');
  try{
@@ -746,7 +746,7 @@
   gate.hidden=true;gate.style.display='none';
   window.palAuthClient=client;window.palAuthSession=session;
  }catch(e){console.error(e);gate.hidden=false;gate.style.display='grid';}
-})();
+});
 </script>
 </head>
 <body>
