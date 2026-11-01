@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#243b53">
+<title>Pal · Welcome</title>
+<link rel="icon" href="https://serhanjain.github.io/DEMENTIA-FAMILY/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#243b53;--sage:#e8f0e7;--sage-deep:#426b54;--teal:#dcefed;--peach:#f7e6d9;--terracotta:#a65c48;--ink:#243746;--muted:#61747c}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#edf3ed,#f7f2eb 58%,#e8f0f1);color:var(--ink);font:16px/1.5 "Atkinson Hyperlegible","Trebuchet MS",Arial,sans-serif}
+main{width:min(100%,480px);text-align:center}.brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px}.mark{width:58px;height:58px;border-radius:18px;background:var(--navy);display:grid;place-items:center;box-shadow:0 8px 22px #243b5325}.mark img{width:43px;height:43px}.brand-name{font-size:39px;line-height:1;font-weight:800;letter-spacing:-1.8px;color:var(--navy);text-align:left}.tagline{font-size:13px;color:var(--muted);text-align:left;margin-top:5px}
+.panel{padding:30px 24px 24px;border:1px solid #d8e2dc;border-radius:26px;background:#ffffffdf;box-shadow:0 18px 50px #243b5312}h1{margin:0;color:var(--navy);font-size:27px;line-height:1.2} .intro{margin:9px 0 23px;color:var(--muted);font-size:15px}
+.choices{display:grid;gap:13px}.choice{display:flex;align-items:center;gap:15px;width:100%;padding:17px;text-align:left;border:1px solid #d7e2dc;border-radius:18px;background:#f5f8f4;color:var(--ink);text-decoration:none;transition:transform .15s,box-shadow .15s}.choice.family{background:#f0f3f8;border-color:#d8e0eb}.choice:hover,.choice:focus-visible{transform:translateY(-2px);box-shadow:0 8px 20px #243b5317;outline:3px solid #9bbcaf;outline-offset:2px}.symbol{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border-radius:15px;background:#e1ece2;color:var(--sage-deep);font-size:27px}.family .symbol{background:#e0e8f2;color:var(--navy)}.choice-copy{flex:1}.choice-title{display:block;font-size:18px;font-weight:800;color:var(--navy)}.choice-desc{display:block;margin-top:2px;font-size:13px;color:var(--muted)}.arrow{font-size:22px;color:#71837f}
+.note{margin:18px 4px 0;color:#718087;font-size:11px}.footer{margin-top:18px;color:#718087;font-size:12px}
+@media(max-width:390px){.panel{padding:25px 17px 20px}.choice{padding:14px}.choice-title{font-size:17px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <div class="mark"><img src="https://serhanjain.github.io/DEMENTIA-FAMILY/icon.svg" alt=""></div>
+    <div><div class="brand-name">Pal</div><div class="tagline">Care, connection and peace of mind.</div></div>
+  </div>
+  <section class="panel" aria-labelledby="welcome">
+    <h1 id="welcome">Welcome to Pal</h1>
+    <p class="intro">Choose how you would like to continue.</p>
+    <div class="choices">
+      <a class="choice" href="https://serhanjain.github.io/DEMENTIA-USER/" aria-label="Continue as Pal user">
+        <span class="symbol" aria-hidden="true">♡</span>
+        <span class="choice-copy"><span class="choice-title">Pal User</span><span class="choice-desc">For the person using Pal for daily support.</span></span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+      <a class="choice family" href="https://serhanjain.github.io/DEMENTIA-FAMILY/" aria-label="Continue as family or guardian">
+        <span class="symbol" aria-hidden="true">⌂</span>
+        <span class="choice-copy"><span class="choice-title">Family / Guardian</span><span class="choice-desc">For family members and caregivers.</span></span>
+        <span class="arrow" aria-hidden="true">›</span>
+      </a>
+    </div>
+    <p class="note">This selects the experience to open. Secure individual accounts and passwords are not enabled yet.</p>
+  </section>
+  <div class="footer">Pal · Made to make everyday care feel simpler.</div>
+</main>
+</body>
+</html>
