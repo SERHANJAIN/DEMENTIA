@@ -1851,5 +1851,19 @@ async function palEnablePush(role) {
   })();
   </script>
 
+<script>
+document.addEventListener('DOMContentLoaded',async()=>{
+ try{
+  const client=window.palAuthClient||window.supabase.createClient('https://nukmfdejnionugwqgwgo.supabase.co','sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt');
+  const {data:{session}}=await client.auth.getSession();if(!session)return;
+  const {data:profile}=await client.from('pal_profiles').select('role').eq('id',session.user.id).single();
+  if(profile?.role!=='pal')return;
+  const b=document.createElement('button');b.type='button';b.textContent='Invite a guardian';b.setAttribute('aria-label','Invite a guardian by email');
+  b.style.cssText='position:fixed;right:16px;bottom:18px;z-index:9998;border:0;border-radius:999px;padding:14px 19px;background:#243b53;color:white;font:700 15px Arial;box-shadow:0 5px 18px #243b5340;cursor:pointer';
+  b.onclick=async()=>{const email=prompt('Enter your guardian’s email address:');if(!email)return;b.disabled=true;b.textContent='Sending…';try{const {data,error}=await client.functions.invoke('send-pal-invitation',{body:{guardian_email:email.trim()}});if(error)throw error;if(data?.error)throw new Error(data.error);alert('Invitation email sent. Ask your guardian to check their inbox and spam folder.');}catch(e){alert(e.message||'Could not send the invitation. Please try again.');}finally{b.disabled=false;b.textContent='Invite a guardian';}};
+  document.body.appendChild(b);
+ }catch(e){console.warn('Guardian invitation control:',e);}
+});
+</script>
 </body>
 </html>
