@@ -707,10 +707,36 @@
     .calendar-home-card .calendar-card-copy { align-items:center; text-align:center; width:100%; }
     .calendar-home-card .card-icon { margin-inline:auto; }
     .calendar-home-card .card-label { text-align:center; width:100%; }
-</style>
+/* Pal unified welcome gate */
+#pal-entry-gate{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#edf3ed,#f7f2eb 58%,#e8f0f1);font-family:"Atkinson Hyperlegible","Trebuchet MS",Arial,sans-serif;color:#243746}
+#pal-entry-gate[hidden]{display:none}
+#pal-entry-gate .entry-panel{width:min(100%,460px);padding:30px 24px 24px;border:1px solid #d8e2dc;border-radius:26px;background:#ffffffed;box-shadow:0 18px 50px #243b5312;text-align:center}
+#pal-entry-gate .entry-brand{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 25px}
+#pal-entry-gate .entry-mark{width:58px;height:58px;border-radius:18px;background:#243b53;display:grid;place-items:center}
+#pal-entry-gate .entry-mark img{width:43px;height:43px}
+#pal-entry-gate .entry-brand-copy{text-align:left}
+#pal-entry-gate .entry-name{font-size:39px;line-height:1;font-weight:800;letter-spacing:-1.8px;color:#243b53}
+#pal-entry-gate .entry-tag{font-size:13px;color:#61747c;margin-top:5px}
+#pal-entry-gate h1{margin:0;color:#243b53;font-size:27px;line-height:1.2}
+#pal-entry-gate .entry-intro{margin:9px 0 23px;color:#61747c;font-size:15px}
+#pal-entry-gate .entry-choices{display:grid;gap:13px}
+#pal-entry-gate .entry-choice{display:flex;align-items:center;gap:15px;width:100%;padding:17px;text-align:left;border:1px solid #d7e2dc;border-radius:18px;background:#f5f8f4;color:#203244;text-decoration:none;cursor:pointer}
+#pal-entry-gate .entry-choice.family{background:#f0f3f8;border-color:#d8e0eb}
+#pal-entry-gate .entry-choice:focus-visible{outline:3px solid #426b54;outline-offset:3px}
+#pal-entry-gate .entry-symbol{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border-radius:15px;background:#e1ece2;color:#426b54;font-size:27px}
+#pal-entry-gate .family .entry-symbol{background:#e0e8f2;color:#243b53}
+#pal-entry-gate .entry-copy{flex:1}
+#pal-entry-gate .entry-title{display:block;font-size:18px;font-weight:800;color:#243b53}
+#pal-entry-gate .entry-desc{display:block;margin-top:2px;font-size:13px;color:#61747c}
+#pal-entry-gate .entry-arrow{font-size:22px;color:#71837f}
+#pal-entry-gate .entry-note{margin:18px 4px 0;color:#718087;font-size:11px}
+@media(max-width:390px){#pal-entry-gate .entry-panel{padding:25px 17px 20px}#pal-entry-gate .entry-choice{padding:14px}}
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
+<div id="pal-entry-gate" role="dialog" aria-modal="true" aria-labelledby="pal-entry-heading"><section class="entry-panel"><div class="entry-brand"><div class="entry-mark"><img src="./icons/icon.svg" alt=""></div><div class="entry-brand-copy"><div class="entry-name">Pal</div><div class="entry-tag">Care, connection and peace of mind.</div></div></div><h1 id="pal-entry-heading">Welcome to Pal</h1><p class="entry-intro">Choose how you would like to continue.</p><div class="entry-choices"><button class="entry-choice" id="pal-enter-user" type="button"><span class="entry-symbol" aria-hidden="true">♡</span><span class="entry-copy"><span class="entry-title">Pal User</span><span class="entry-desc">Daily support, reminders and familiar moments.</span></span><span class="entry-arrow" aria-hidden="true">›</span></button><a class="entry-choice family" href="./family.html"><span class="entry-symbol" aria-hidden="true">⌂</span><span class="entry-copy"><span class="entry-title">Family / Guardian</span><span class="entry-desc">Family dashboard, check-ins and care updates.</span></span><span class="entry-arrow" aria-hidden="true">›</span></a></div><p class="entry-note">Choose the experience you need. Secure individual accounts and passwords are not enabled yet.</p></section></div>
+
   <div class="shell">
     <header class="topbar">
       <div class="brand-side">
@@ -1791,5 +1817,6 @@ async function palEnablePush(role) {
     initStorage();
   })();
   </script>
+<script>(function(){const gate=document.getElementById('pal-entry-gate');const enter=document.getElementById('pal-enter-user');if(enter&&gate)enter.addEventListener('click',()=>{gate.hidden=true;});})();</script>
 </body>
 </html>
