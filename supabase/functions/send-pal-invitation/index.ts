@@ -64,7 +64,7 @@ Deno.serve(async (req: Request) => {
     return json(400, { error: inviteError?.message ?? "Could not create invitation." });
   }
 
-  const inviteUrl = `https://serhanjain.github.io/DEMENTIA-USER/family.html#invite=${encodeURIComponent(token)}`;
+  const inviteUrl = `https://serhanjain.github.io/DEMENTIA-USER/guardian-invite.html#invite=${encodeURIComponent(token)}`;
   const emailResponse = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
