@@ -734,26 +734,10 @@
 
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-document.addEventListener('DOMContentLoaded',async function(){
- const URL='https://nukmfdejnionugwqgwgo.supabase.co', KEY='sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt';
- const gate=document.getElementById('pal-entry-gate');
- try{
-  const client=window.supabase.createClient(URL,KEY);
-  const {data:{session}}=await client.auth.getSession();
-  if(!session){gate.hidden=false;gate.style.display='grid';return;}
-  const {data:profile}=await client.from('pal_profiles').select('role').eq('id',session.user.id).single();
-  if(profile?.role==='guardian'){location.replace('./family.html');return;}
-  if(profile?.role!=='pal'){gate.hidden=false;gate.style.display='grid';return;}
-  gate.hidden=true;gate.style.display='none';
-  window.palAuthClient=client;window.palAuthSession=session;
- }catch(e){console.error(e);gate.hidden=false;gate.style.display='grid';}
-});
-</script>
+
 </head>
 <body>
-<div id="pal-entry-gate" role="dialog" aria-modal="true" aria-labelledby="pal-entry-heading" style="position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#edf3ed,#f7f2eb 58%,#e8f0f1);color:#243746;visibility:visible;opacity:1"><section class="entry-panel"><div class="entry-brand"><div class="entry-mark"><img src="./icon.svg" alt="Pal logo" width="43" height="43" style="display:block;object-fit:contain"></div><div class="entry-brand-copy"><div class="entry-name">Pal</div><div class="entry-tag">Care, connection and peace of mind.</div></div></div><h1 id="pal-entry-heading">Welcome to Pal</h1><p class="entry-intro">Choose how you would like to continue.</p><div class="entry-choices"><a class="entry-choice" href="./auth.html?role=pal&next=index.html"><span class="entry-symbol" aria-hidden="true">♡</span><span class="entry-copy"><span class="entry-title">Pal User</span><span class="entry-desc">Daily support, reminders and familiar moments.</span></span><span class="entry-arrow" aria-hidden="true">›</span></a><a class="entry-choice family" href="./auth.html?role=guardian&next=family.html"><span class="entry-symbol" aria-hidden="true">⌂</span><span class="entry-copy"><span class="entry-title">Family / Guardian</span><span class="entry-desc">Family dashboard, check-ins and care updates.</span></span><span class="entry-arrow" aria-hidden="true">›</span></a></div><p class="entry-note">Sign in securely to continue. Guardians need an invitation from a Pal user.</p></section></div>
+<div id="pal-entry-gate" role="dialog" aria-modal="true" aria-labelledby="pal-entry-heading" style="position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#edf3ed,#f7f2eb 58%,#e8f0f1);color:#243746;visibility:visible;opacity:1"><section class="entry-panel"><div class="entry-brand"><div class="entry-mark"><img src="./icon.svg" alt="Pal logo" width="43" height="43" style="display:block;object-fit:contain"></div><div class="entry-brand-copy"><div class="entry-name">Pal</div><div class="entry-tag">Care, connection and peace of mind.</div></div></div><h1 id="pal-entry-heading">Welcome to Pal</h1><p class="entry-intro">Choose how you would like to continue.</p><div class="entry-choices"><a class="entry-choice" href="./index.html"><span class="entry-symbol" aria-hidden="true">♡</span><span class="entry-copy"><span class="entry-title">Pal User</span><span class="entry-desc">Daily support, reminders and familiar moments.</span></span><span class="entry-arrow" aria-hidden="true">›</span></a><a class="entry-choice family" href="./family.html"><span class="entry-symbol" aria-hidden="true">⌂</span><span class="entry-copy"><span class="entry-title">Family / Guardian</span><span class="entry-desc">Family dashboard, check-ins and care updates.</span></span><span class="entry-arrow" aria-hidden="true">›</span></a></div><p class="entry-note">Demo mode · No account or email needed.</p></section></div>
 
   <div class="shell">
     <header class="topbar">
@@ -782,55 +766,9 @@ document.addEventListener('DOMContentLoaded',async function(){
     const DB_VERSION = 1;
     const STATE_KEY = 'app-state';
 
-    // Private per-account Supabase storage. Never read or write the shared demo row.
+    // Demo mode: data stays on this device and is shared with the Family dashboard.
     const PAL_SUPABASE_URL = 'https://nukmfdejnionugwqgwgo.supabase.co';
     const PAL_SUPABASE_KEY = 'sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt';
-    let palRemoteUpdatedAt = '';
-    let palRemoteWriteBusy = false;
-    async function palSession() {
-      const client = window.palAuthClient || window.supabase.createClient(PAL_SUPABASE_URL, PAL_SUPABASE_KEY);
-      const { data, error } = await client.auth.getSession();
-      if (error || !data.session) throw new Error('Please sign in to save your Pal data.');
-      window.palAuthClient = client;
-      window.palAuthSession = data.session;
-      return { client, session: data.session };
-    }
-    async function palRemoteRead() {
-      const { session } = await palSession();
-      const response = await fetch(PAL_SUPABASE_URL + '/rest/v1/pal_user_data?user_id=eq.' + encodeURIComponent(session.user.id) + '&select=state,updated_at', {
-        headers: { apikey: PAL_SUPABASE_KEY, Authorization: 'Bearer ' + session.access_token }
-      });
-      if (!response.ok) throw new Error('Private Pal data could not be loaded (' + response.status + ').');
-      const rows = await response.json();
-      return rows && rows[0] ? rows[0] : null;
-    }
-    async function palRemoteWrite(value) {
-      if (palRemoteWriteBusy) return;
-      palRemoteWriteBusy = true;
-      try {
-        const { session } = await palSession();
-        const response = await fetch(PAL_SUPABASE_URL + '/rest/v1/pal_user_data?on_conflict=user_id', {
-          method: 'POST',
-          headers: { apikey: PAL_SUPABASE_KEY, Authorization: 'Bearer ' + session.access_token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
-          body: JSON.stringify({ user_id: session.user.id, state: value, updated_at: new Date().toISOString() })
-        });
-        if (!response.ok) throw new Error('Private Pal data could not be saved (' + response.status + ').');
-        palRemoteUpdatedAt = new Date().toISOString();
-      } finally { palRemoteWriteBusy = false; }
-    }
-    async function palSyncPull(seedIfEmpty = false) {
-      try {
-        const row = await palRemoteRead();
-        if (row && row.updated_at && row.updated_at !== palRemoteUpdatedAt && row.state && Object.keys(row.state).length) {
-          palRemoteUpdatedAt = row.updated_at;
-          state = { ...defaultState(), ...row.state, profile: { ...defaultState().profile, ...(row.state.profile || {}) }, preferences: { ...defaultState().preferences, ...(row.state.preferences || {}) } };
-          try { await dbSet(STATE_KEY, state); } catch (e) {}
-          render();
-        } else if ((!row || !row.state || !Object.keys(row.state).length) && seedIfEmpty) {
-          await palRemoteWrite(state);
-        }
-      } catch (error) { console.warn('Pal private cloud sync:', error); }
-    }
 
     const main = document.getElementById('main');
     const toastEl = document.getElementById('toast');
@@ -932,20 +870,18 @@ document.addEventListener('DOMContentLoaded',async function(){
     }
     function dbGet(key) { return new Promise((resolve, reject) => { if (!db) return resolve(null); const tx=db.transaction('records','readonly'); const r=tx.objectStore('records').get(key); r.onsuccess=()=>resolve(r.result ?? null); r.onerror=()=>reject(r.error); }); }
     function dbSet(key, value) { return new Promise((resolve, reject) => { if (!db) { try { localStorage.setItem('withyou-state', JSON.stringify(value)); resolve(); } catch(e) { reject(e); } return; } const tx=db.transaction('records','readwrite'); tx.objectStore('records').put(value,key); tx.oncomplete=()=>resolve(); tx.onerror=()=>reject(tx.error); }); }
-    async function save() { try { await palRemoteWrite(state); await dbSet(STATE_KEY, state); if (window.palStateChannel) window.palStateChannel.postMessage({type:'state-updated',source:'pal'}); } catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); } }
+    async function save() {
+      try { await dbSet(STATE_KEY, state); if (window.palStateChannel) window.palStateChannel.postMessage({type:'state-updated',source:'pal'}); }
+      catch(err) { showToast('I could not save this change. Please export a backup and try again.'); console.error(err); }
+    }
     async function initStorage() {
       try { db = await openDb(); } catch (e) { db = null; }
-      try {
-        const remote = await palRemoteRead();
-        if (remote && remote.state) { state = { ...defaultState(), ...remote.state, profile: { ...defaultState().profile, ...(remote.state.profile || {}) }, preferences: { ...defaultState().preferences, ...(remote.state.preferences || {}) } }; palRemoteUpdatedAt = remote.updated_at || ''; }
-        else { const loaded = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null');
-        if (loaded && loaded.profile) { const base=defaultState(); state={...base,...loaded,profile:{...base.profile,...loaded.profile},preferences:{...base.preferences,...(loaded.preferences||{})},contacts:Array.isArray(loaded.contacts)?loaded.contacts:[],memories:Array.isArray(loaded.memories)?loaded.memories:[],medicines:Array.isArray(loaded.medicines)?loaded.medicines:[],appointments:Array.isArray(loaded.appointments)?loaded.appointments:[],tasks:Array.isArray(loaded.tasks)?loaded.tasks:[]}; } }
-      } catch (e) { console.warn('Saved data could not be read.', e); }
+      try { const loaded = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null');
+        if (loaded && loaded.profile) { const base=defaultState(); state={...base,...loaded,profile:{...base.profile,...loaded.profile},preferences:{...base.preferences,...(loaded.preferences||{})},contacts:Array.isArray(loaded.contacts)?loaded.contacts:[],memories:Array.isArray(loaded.memories)?loaded.memories:[],medicines:Array.isArray(loaded.medicines)?loaded.medicines:[],appointments:Array.isArray(loaded.appointments)?loaded.appointments:[],tasks:Array.isArray(loaded.tasks)?loaded.tasks:[]}; }
+      } catch (e) { console.warn('Saved demo data could not be read.', e); }
       if ('BroadcastChannel' in window) { window.palStateChannel = new BroadcastChannel('pal-shared-state'); window.palStateChannel.onmessage = async event => { if (event.data?.type !== 'state-updated' || event.data?.source === 'pal') return; try { const latest = db ? await dbGet(STATE_KEY) : JSON.parse(localStorage.getItem('withyou-state') || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) { console.warn('Shared family update could not be loaded.', e); } }; }
       window.addEventListener('storage', async event => { if (event.key !== 'withyou-state') return; try { const latest = JSON.parse(event.newValue || 'null'); if (latest?.profile) { state = { ...defaultState(), ...latest, profile: { ...defaultState().profile, ...latest.profile }, preferences: { ...defaultState().preferences, ...(latest.preferences || {}) } }; render(); } } catch(e) {} });
-      await palSyncPull(true);
       render();
-      setInterval(() => palSyncPull(false), 5000);
       if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => {});
       setInterval(checkDueReminders, 30000);
       setInterval(applyDailyBackground, 15 * 60 * 1000);
@@ -1854,19 +1790,6 @@ async function palEnablePush(role) {
   })();
   </script>
 
-<script>
-document.addEventListener('DOMContentLoaded',async()=>{
- try{
-  const client=window.palAuthClient||window.supabase.createClient('https://nukmfdejnionugwqgwgo.supabase.co','sb_publishable_HWpCOnO4lnT6cRMTB9zVxg_gSlZ-Rpt');
-  const {data:{session}}=await client.auth.getSession();if(!session)return;
-  const {data:profile}=await client.from('pal_profiles').select('role').eq('id',session.user.id).single();
-  if(profile?.role!=='pal')return;
-  const b=document.createElement('button');b.type='button';b.textContent='Invite a guardian';b.setAttribute('aria-label','Invite a guardian by email');
-  b.style.cssText='position:fixed;right:16px;bottom:18px;z-index:9998;border:0;border-radius:999px;padding:14px 19px;background:#243b53;color:white;font:700 15px Arial;box-shadow:0 5px 18px #243b5340;cursor:pointer';
-  b.onclick=async()=>{const email=prompt('Enter your guardian’s email address:');if(!email)return;b.disabled=true;b.textContent='Sending…';try{const {data,error}=await client.functions.invoke('send-pal-invitation',{body:{guardian_email:email.trim()}});if(error)throw error;if(data?.error)throw new Error(data.error);alert('Invitation email sent. Ask your guardian to check their inbox and spam folder.');}catch(e){alert(e.message||'Could not send the invitation. Please try again.');}finally{b.disabled=false;b.textContent='Invite a guardian';}};
-  document.body.appendChild(b);
- }catch(e){console.warn('Guardian invitation control:',e);}
-});
-</script>
+
 </body>
 </html>
