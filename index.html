@@ -743,6 +743,9 @@ document.addEventListener('DOMContentLoaded',async function(){
   const client=window.supabase.createClient(URL,KEY);
   const {data:{session}}=await client.auth.getSession();
   if(!session){gate.hidden=false;gate.style.display='grid';return;}
+  const {data:profile}=await client.from('pal_profiles').select('role').eq('id',session.user.id).single();
+  if(profile?.role==='guardian'){location.replace('./family.html');return;}
+  if(profile?.role!=='pal'){gate.hidden=false;gate.style.display='grid';return;}
   gate.hidden=true;gate.style.display='none';
   window.palAuthClient=client;window.palAuthSession=session;
  }catch(e){console.error(e);gate.hidden=false;gate.style.display='grid';}
