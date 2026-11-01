@@ -1,0 +1,2 @@
+[functions.send-pal-invitation]
+verify_jwt = true
